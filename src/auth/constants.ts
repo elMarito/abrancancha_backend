@@ -1,0 +1,1 @@
+export const jwtConstants = {secret: 'Super_$_S3cr3et_#_Key_@_123'}
