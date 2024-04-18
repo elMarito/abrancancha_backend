@@ -32,7 +32,7 @@ import { AuthModule } from './auth/auth.module';
       entities: [        
         "dist/**/**.entity{.ts,.js}"
       ],
-      synchronize: false,
+      synchronize: true,
     }),
     UserModule,
     AdministratorModule,
