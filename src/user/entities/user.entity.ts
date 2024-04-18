@@ -31,8 +31,8 @@ private id: number;
   @Column()
   private avatar: string;
 
-  @Column()
-  private idStatus: number;
+  // @Column()
+  // private idStatus: number;
 
   @ManyToOne(() => StatusOfUser, statusOfUser => statusOfUser.users)
   @JoinColumn()
@@ -60,7 +60,7 @@ constructor(
   this.email = email;
   this.phone = phone;
   this.avatar = avatar;
-  this.idStatus = 1; //idStatus;
+  // this.idStatus = 1; //idStatus;
 
     // "nombre": "Usuario Uno",
     // "password": "aA@1234",
@@ -110,6 +110,6 @@ constructor(
   public getAvatar(): string {    return this.avatar;  }
   public  setAvatar(value: string): void {    this.avatar = value;  }
 
-  public getIdStatus(): number {    return this.idStatus;  }
-  public  setIdStatus(value: number): void {    this.idStatus = value;  }
-}
+//   public getIdStatus(): number {    return this.idStatus;  }
+//   public  setIdStatus(value: number): void {    this.idStatus = value;  }
+ }

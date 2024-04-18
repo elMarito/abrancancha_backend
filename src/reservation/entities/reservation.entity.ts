@@ -10,8 +10,8 @@ export class Reservation {
   @PrimaryGeneratedColumn()
   private id: number;
 
-  @Column()
-  private idUser: number;
+  //@Column()
+  //private idUser: number;
 
   // "id": 1,
   // "idUser": 1,
@@ -27,8 +27,8 @@ export class Reservation {
   // "estado": "confirmada"
   // puedes generar el codigo del archivo entity correspondiente para nest?
 
-  @Column()
-  private idCourt: number;
+  // @Column()
+  // private idCourt: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   private timedate: Date;
@@ -39,8 +39,8 @@ export class Reservation {
   // @Column()
   // private status: string;
 
-  @Column()
-  private idStatus: number;
+  // @Column()
+  // private idStatus: number;
   
   @ManyToOne(() => User, user => user.reservations)
   @JoinColumn()
@@ -61,8 +61,8 @@ export class Reservation {
     price: number,
     // status: string,
   ) {
-    this.idUser = idUser;
-    this.idCourt = idCourt;
+    // this.idUser = idUser;
+    // this.idCourt = idCourt;
     this.timedate = timedate;
     this.price = price;
     // this.status = status;
@@ -76,21 +76,21 @@ export class Reservation {
     this.id = id;
   }
 
-  getIdUser(): number {
-    return this.idUser;
-  }
+  // getIdUser(): number {
+  //   return this.idUser;
+  // }
 
-  setIdUser(idUser: number): void {
-    this.idUser = idUser;
-  }
+  // setIdUser(idUser: number): void {
+  //   this.idUser = idUser;
+  // }
 
-  getIdCourt(): number {
-    return this.idCourt;
-  }
+  // getIdCourt(): number {
+  //   return this.idCourt;
+  // }
 
-  setIdCourt(idCourt: number): void {
-    this.idCourt = idCourt;
-  }
+  // setIdCourt(idCourt: number): void {
+  //   this.idCourt = idCourt;
+  // }
 
   getTimedate(): Date {
     return this.timedate;

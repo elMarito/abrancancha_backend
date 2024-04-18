@@ -22,7 +22,7 @@ export class Administrator {
   // private authorizationLevel: number;
 
   @OneToOne(() => User, (user) => user.administrator)
-  @JoinColumn()
+  //@JoinColumn()
   public user: User;
   //---------------------------------------------------------------------------
     constructor( idUser: number) {

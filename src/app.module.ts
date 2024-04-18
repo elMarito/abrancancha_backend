@@ -18,6 +18,8 @@ import { StatusOfCourtModule } from './status-of-court/status-of-court.module';
 import { ExceptionTimedateModule } from './exception-timedate/exception-timedate.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { AuthModule } from './auth/auth.module';
+import { StatusOfUser } from './status-of-user/entities/status-of-user.entity';
+import { User } from './user/entities/user.entity';
 
 @Module({
   imports: [
@@ -27,12 +29,12 @@ import { AuthModule } from './auth/auth.module';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'mauri',
-      database: 'escolar',
+      password: '1234',
+      database: 'abrancancha',
       entities: [        
         "dist/**/**.entity{.ts,.js}"
       ],
-      synchronize: false,
+      synchronize: true,
     }),
     UserModule,
     AdministratorModule,

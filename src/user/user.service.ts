@@ -67,6 +67,7 @@ export class UserService {
       );
     }
   }
+  
   //---------------------------------------------------------------
   async findOne2(username: string): Promise<User | undefined> {
     return this.users.find((user) => user.getFullname() === username);
