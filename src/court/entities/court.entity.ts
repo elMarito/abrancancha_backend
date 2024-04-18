@@ -115,6 +115,7 @@ export class Court {
   // getIdTariff(): number {
   //   return this.idTariff;
   // }
+
   getRating(): string {
     return this.rating;
   }

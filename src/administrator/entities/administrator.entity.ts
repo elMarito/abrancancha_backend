@@ -22,6 +22,7 @@ export class Administrator {
   // private accessLevel: number;
   // private authorizationLevel: number;
 
+
   @OneToOne(() => User, user => user.administrator)
   // @JoinColumn() //<-esta solo de un lado
   @JoinColumn( { name: 'idUser', referencedColumnName: 'id' }) //<-esta solo de un lado

@@ -1,4 +1,4 @@
-//export class StatusOfUser {}
+//export class StatusOfUser 
 import { User } from 'src/user/entities/user.entity';
 import {
   Entity,
