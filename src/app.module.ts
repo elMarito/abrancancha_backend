@@ -27,12 +27,12 @@ import { AuthModule } from './auth/auth.module';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'mauri',
-      database: 'escolar',
+      password: 'root',
+      database: 'abrancancha',
       entities: [        
         "dist/**/**.entity{.ts,.js}"
       ],
-      synchronize: false,
+      synchronize: true,
     }),
     UserModule,
     AdministratorModule,
