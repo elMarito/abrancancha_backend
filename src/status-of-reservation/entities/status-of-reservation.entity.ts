@@ -14,7 +14,7 @@ export class StatusOfReservation {
   @Column()
   private name: string;
 
-  @OneToMany(() => Reservation, (reservation) => reservation.status)
+  @OneToMany(() => Reservation, reservation => reservation.status)
   public reservations: Reservation[];
   //---------------------------------------------------------------------------
   constructor(name: string) {

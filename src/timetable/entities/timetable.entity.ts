@@ -15,10 +15,10 @@ export class Timetable {
   @Column()
   private name: string;
 
-  @OneToMany(() => Court, (court) => court.timetable)
+  @OneToMany(() => Court, court => court.timetable)
   public courts: Court[];
 
-  @OneToMany(() => Schedule, (schedule) => schedule.timetable)
+  @OneToMany(() => Schedule, schedule => schedule.timetable)
   public schedules: Schedule[];
   //---------------------------------------------------------------------------
   constructor(name: string) {

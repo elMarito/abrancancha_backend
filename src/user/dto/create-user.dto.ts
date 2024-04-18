@@ -4,24 +4,27 @@ export class CreateUserDto {
   @IsString()
   readonly fullname: string;
 
-  //@IsHash()
-  @IsString()
-  readonly passwordHash: string;
-
-//   @IsHash()
-  @IsString()
-  readonly salt: string;
-
   @IsString()
   readonly email: string;
-
+  
+  @IsHash('sha256')
   @IsString()
-  readonly phone: string;
+  readonly password: string;
 
-  @IsOptional()
-  @IsString()
-  readonly avatar: string;
+//   @IsHash()
+// @IsOptional()
+// @IsString()
+//   readonly salt: string;
 
+  // @IsOptional()
+  // @IsString()
+  // readonly phone: string;
+
+  // @IsOptional()
+  // @IsString()
+  // readonly avatar: string;
+
+//@IsInt()
   // @IsNumber()
   // readonly idStatus: number;
 }

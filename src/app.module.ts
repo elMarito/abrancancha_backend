@@ -28,7 +28,7 @@ import { AuthModule } from './auth/auth.module';
       port: 3306,
       username: 'root',
       password: 'root',
-      database: 'abrancancha',
+      database: 'abranCancha',
       entities: [        
         "dist/**/**.entity{.ts,.js}"
       ],

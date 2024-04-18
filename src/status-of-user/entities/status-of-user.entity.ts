@@ -15,7 +15,7 @@ export class StatusOfUser {
   @Column()
   private name: string;
 
-  @OneToMany(() => User, (user) => user.status)
+  @OneToMany(() => User, user => user.status)
   public users: User[];
   //---------------------------------------------------------------------------
   constructor(name: string) {
