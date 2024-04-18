@@ -6,8 +6,8 @@ export class Schedule {
   @PrimaryGeneratedColumn()
   private id: number;
 
-  @Column()
-  private idTimetable: number;
+  // @Column()
+  // private idTimetable: number;
 
   @Column()
   private dayOfWeek: number;
@@ -18,8 +18,8 @@ export class Schedule {
   @Column({ type: 'time' })
   private timeTo: Date;
 
-  @ManyToOne(() => Timetable, (timetable) => timetable.schedules)
-  @JoinColumn()
+  @ManyToOne(() => Timetable, timetable => timetable.schedules)
+  @JoinColumn( { name: 'idTimetable', referencedColumnName: 'id' })
   public timetable: Timetable;
   //---------------------------------------------------------------------------
   constructor(
@@ -28,7 +28,7 @@ export class Schedule {
     timeFrom: Date,
     timeTo: Date,
   ) {
-    this.idTimetable = idTimetable;
+    // this.idTimetable = idTimetable;
     this.dayOfWeek = dayOfWeek;
     this.timeFrom = timeFrom;
     this.timeTo = timeTo;
@@ -39,13 +39,13 @@ export class Schedule {
     return this.id;
   }
 
-  getIdTimetable(): number {
-    return this.idTimetable;
-  }
+  // getIdTimetable(): number {
+  //   return this.idTimetable;
+  // }
 
-  setIdTimetable(idTimetable: number): void {
-    this.idTimetable = idTimetable;
-  }
+  // setIdTimetable(idTimetable: number): void {
+  //   this.idTimetable = idTimetable;
+  // }
 
   getDayOfWeek(): number {
     return this.dayOfWeek;

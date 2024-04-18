@@ -22,34 +22,45 @@ export class Court {
 
   @Column()
   private name: string;
-  
+
+  // @Column()
+  // private idType: number;
+
+  // @Column()
+  // private idTimetable: number;
+
+  // @Column()
+  // private idTariff: number;
+
   @Column()
   private rating: string;
 
   @Column()
   private observations: string;
 
+  // @Column()
+  // private idStatus: number;
 
   @Column()
   private active: boolean;
 
-  @OneToMany(() => Reservation, (reservation) => reservation.court)
+  @OneToMany(() => Reservation, reservation => reservation.court)
   public reservations: Reservation[];
 
-  @ManyToOne(() => TypeOfCourt, (typeOfCourt) => typeOfCourt.courts)
-  @JoinColumn()
+  @ManyToOne(() => TypeOfCourt, typeOfCourt => typeOfCourt.courts)
+  @JoinColumn( { name: 'idType', referencedColumnName: 'id' })
   public type: TypeOfCourt;
 
-  @ManyToOne(() => Timetable, (timetable) => timetable.courts)
-  @JoinColumn()
+  @ManyToOne(() => Timetable, timetable => timetable.courts)
+  @JoinColumn( { name: 'idTimetable', referencedColumnName: 'id' })
   public timetable: Timetable;
 
-  @ManyToOne(() => Tariff, (tariff) => tariff.courts)
-  @JoinColumn()
+  @ManyToOne(() => Tariff, tariff => tariff.courts)
+  @JoinColumn( { name: 'idTariff', referencedColumnName: 'id' })
   public tariff: Tariff;
 
-  @ManyToOne(() => StatusOfCourt, (typeOfCourt) => typeOfCourt.courts)
-  @JoinColumn()
+  @ManyToOne(() => StatusOfCourt, typeOfCourt => typeOfCourt.courts)
+  @JoinColumn( { name: 'idStatus', referencedColumnName: 'id' })
   public status: StatusOfCourt;
   //---------------------------------------------------------------------------
   // "idClub": 1,
@@ -74,11 +85,12 @@ export class Court {
   ) {
     this.numb = numb;
     this.name = name;
-    
-    
+    // this.idType = idType;
+    // this.idTimetable = idTimetable;
+    // this.idTariff = idTariff;
     this.rating = rating;
     this.observations = observations;
-    
+    // this.idStatus = idStatus;
     // this.active = active;
   }
   //---------------------------------------------------------------------------
@@ -94,14 +106,25 @@ export class Court {
   getName(): string {
     return this.name;
   }
-  
+  // getIdType(): number {
+  //   return this.idType;
+  // }
+  // getIdTimetable(): number {
+  //   return this.idTimetable;
+  // }
+  // getIdTariff(): number {
+  //   return this.idTariff;
+  // }
+
   getRating(): string {
     return this.rating;
   }
   getObservations(): string {
     return this.observations;
   }
-  
+  // getIdStatus(): number {
+  //   return this.idStatus;
+  // }
   //   getActive(): boolean {    return this.active;  }
   // Setters
   setNumb(numb: string): void {
@@ -110,15 +133,23 @@ export class Court {
   setName(name: string): void {
     this.name = name;
   }
-  
-  
-  
+  // setIdType(idType: number): void {
+  //   this.idType = idType;
+  // }
+  // setIdTimetable(idTimetable: number): void {
+  //   this.idTimetable = idTimetable;
+  // }
+  // setIdTariff(idTariff: number): void {
+  //   this.idTariff = idTariff;
+  // }
   setRating(rating: string): void {
     this.rating = rating;
   }
   setObservations(observations: string): void {
     this.observations = observations;
   }
-  
+  // setIdStatus(idStatus: number): void {
+  //   this.idStatus = idStatus;
+  // }
   //   setActive(active: boolean): void {    this.active = active;  }
 }

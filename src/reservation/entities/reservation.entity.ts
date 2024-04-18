@@ -10,8 +10,8 @@ export class Reservation {
   @PrimaryGeneratedColumn()
   private id: number;
 
-  //@Column()
-  //private idUser: number;
+  // @Column()
+  // private idUser: number;
 
   // "id": 1,
   // "idUser": 1,
@@ -43,15 +43,15 @@ export class Reservation {
   // private idStatus: number;
   
   @ManyToOne(() => User, user => user.reservations)
-  @JoinColumn()
+  @JoinColumn( { name: 'idUser', referencedColumnName: 'id' })
   public user: User;
 
   @ManyToOne(() => Court, court => court.reservations)
-  @JoinColumn()
+  @JoinColumn( { name: 'idCourt', referencedColumnName: 'id' })
   public court: Court;
 
   @ManyToOne(() => StatusOfReservation, statusOfReservation => statusOfReservation.reservations)
-  @JoinColumn()
+  @JoinColumn( { name: 'idStatus', referencedColumnName: 'id' })
   public status: StatusOfReservation;
   //---------------------------------------------------------------------------
   constructor(
@@ -63,7 +63,7 @@ export class Reservation {
   ) {
     // this.idUser = idUser;
     // this.idCourt = idCourt;
-    this.timedate = timedate;
+    // this.timedate = timedate;
     this.price = price;
     // this.status = status;
   }
