@@ -14,7 +14,7 @@ export class TypeOfCourt {
   @Column()
   private name: string;
 
-  @OneToMany(() => Court, (court) => court.type)
+  @OneToMany(() => Court, court => court.type)
   public courts: Court[];
   //---------------------------------------------------------------------------
   constructor(name: string) {

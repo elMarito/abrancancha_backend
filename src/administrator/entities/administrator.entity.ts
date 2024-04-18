@@ -2,6 +2,7 @@ import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   OneToOne,
   PrimaryColumn,
@@ -13,21 +14,33 @@ export class Administrator {
   @PrimaryGeneratedColumn()
   private id: number;
 
-  @Column()
-  private idUser: number;
+  // @Column()
+  // private idUser: number;
 
   // Otros campos del administrador
   // @Column()
   // private accessLevel: number;
   // private authorizationLevel: number;
 
-  @OneToOne(() => User, (user) => user.administrator)
-  @JoinColumn()
+  @OneToOne(() => User, user => user.administrator)
+  // @JoinColumn() //<-esta solo de un lado
+  @JoinColumn( { name: 'idUser', referencedColumnName: 'id' }) //<-esta solo de un lado
+  @Index({ unique: true })
   public user: User;
+
+
+
+
+
+  
+
+    // // Aquí establecemos la unicidad de la columna
+    // @Column({ unique: true })
+    // idUser: number;
   //---------------------------------------------------------------------------
     constructor( idUser: number) {
       // this.id = id;
-      this.idUser = idUser;
+      // this.idUser = idUser;
     }
   //---------------------------------------------------------------------------
     // Getters and Setters
@@ -39,12 +52,12 @@ export class Administrator {
     //   this.id = id;
     // }
   
-    getIdUser(): number {
-      return this.idUser;
-    }
+    // getIdUser(): number {
+    //   return this.idUser;
+    // }
   
-    setIdUser(idUser: number): void {
-      this.idUser = idUser;
-    }
+    // setIdUser(idUser: number): void {
+    //   this.idUser = idUser;
+    // }
   
 }

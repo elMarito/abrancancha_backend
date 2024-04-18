@@ -1,64 +1,56 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import {
+  BadGatewayException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+// import { CreateAuthDto } from './dto/create-auth.dto';
+// import { UpdateAuthDto } from './dto/update-auth.dto';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
-// import { UsersService } from . /users/users . service '
+import { RegisterDto } from './dto/register-auth.dto';
+import { LoginDto } from './dto/login-auth.dto';
+import * as bcryptjs from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UserService,
+    private userService: UserService,
     private jwtService: JwtService,
   ) {}
-//   async registerUser(username: string, pass: string): RegisterDto {
-//     const newUser = await this.usersService.create({});
-// return newUser;
-//   }
-  async signIn(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne2(username);
+  //---------------------------------------------------------------------------
+  async registerUser({ fullname, email, password }: RegisterDto) {
+    const user = await this.userService.getUserByEmail(email);
+    if (user)
+      throw new BadGatewayException(
+        'Ya existe un usuario registrado con el email:' + email,
+      );
 
-    if (user?.getPasswordHash() !== pass) throw new UnauthorizedException();
-    const { getPasswordHash, ...result } = user;
-    // TODO: Generate a JWT and return it here
-    // instead of the user object
-    return result;
+    const newUser = await this.userService.create({
+      fullname,
+      email,
+      password,
+    });
+
+    return newUser;
   }
-  async login(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne2(username);
+  //---------------------------------------------------------------------------
+  async login({ email, password }: LoginDto): Promise<any> {
+  // async login({ email, password }: LoginDto): Promise<Record<string, string>> {
+    const user = await this.userService.getUserByEmail(email);
+    if (!user) throw new UnauthorizedException('Email invalido');
 
-    if (user?.getPasswordHash() !== pass) throw new UnauthorizedException();
+    const isPasswordValid = await bcryptjs.compare(
+      password,
+      user.getPasswordHash(),
+    );
+    if (!isPasswordValid) throw new UnauthorizedException('Password inválida');
 
-    //----------------
-    // const isPasswordValid = await bcryptjs.compare(password,user.getPassword()
-    // if (!isPasswordValid) throw new UnauthorizedException("Password Invalido")
-      
-    // TODO: Generate a JWT and return it here
-    // instead of the user object
-    const payload = { sub: user.getId()
-      , name: user.getFullname()
-      , email: user.getEmail() };
-    return { access_token: await this.jwtService.signAsync(payload) };
-    //-------------
+    const payload = { sub: user.getId(), email: user.getEmail() };
+    // const { getPasswordHash, ...result } = user;
+    // return result;
+    const accesToken = await this.jwtService.signAsync(payload);
+    return {
+      token: accesToken,
+    };
   }
-  //   create(createAuthDto: CreateAuthDto) {
-  //     return 'This action adds a new auth';
-  //   }
-
-  //   findAll() {
-  //     return `This action returns all auth`;
-  //   }
-
-  //   findOne(id: number) {
-  //     return `This action returns a #${id} auth`;
-  //   }
-
-  //   update(id: number, updateAuthDto: UpdateAuthDto) {
-  //     return `This action updates a #${id} auth`;
-  //   }
-
-  //   remove(id: number) {
-  //     return `This action removes a #${id} auth`;
-  //   }
-  // }
 }

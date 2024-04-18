@@ -14,7 +14,7 @@ export class StatusOfCourt {
   @Column()
   private name: string;
 
-  @OneToMany(() => Court, (court) => court.status)
+  @OneToMany(() => Court, court => court.status)
   public courts: Court[];
   //---------------------------------------------------------------------------
   constructor(name: string) {
