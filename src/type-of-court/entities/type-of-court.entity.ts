@@ -3,12 +3,12 @@ import {
   Column,
   Entity,
   OneToMany,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity('typesOfCourt')
 export class TypeOfCourt {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   private id: number;
 
   @Column()
@@ -17,12 +17,12 @@ export class TypeOfCourt {
   @OneToMany(() => Court, court => court.type)
   public courts: Court[];
   //---------------------------------------------------------------------------
-  constructor(name: string) {
+  constructor(name:string) {
     this.name = name;
   }
   //---------------------------------------------------------------------------
   // Getters and Setters
-  public getId(): number {
+  public getIdTypeOfCourt(): number {
     return this.id;
   }
   //public setId(id: number): void { this.id = id; }

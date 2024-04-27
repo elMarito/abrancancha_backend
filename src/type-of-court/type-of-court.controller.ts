@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TypeOfCourtService } from './type-of-court.service';
 import { CreateTypeOfCourtDto } from './dto/create-type-of-court.dto';
 import { UpdateTypeOfCourtDto } from './dto/update-type-of-court.dto';
+import { TypeOfCourt } from './entities/type-of-court.entity';
 
 @Controller('type-of-court')
 export class TypeOfCourtController {
@@ -14,7 +15,7 @@ export class TypeOfCourtController {
 
   @Get()
   findAll() {
-    return this.typeOfCourtService.findAll();
+    return this.typeOfCourtService.getAll();
   }
 
   @Get(':id')
@@ -24,11 +25,11 @@ export class TypeOfCourtController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTypeOfCourtDto: UpdateTypeOfCourtDto) {
-    return this.typeOfCourtService.update(+id, updateTypeOfCourtDto);
+    return this.typeOfCourtService.updateTypeOfCourt( {...updateTypeOfCourtDto , id:Number(id)});
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.typeOfCourtService.remove(+id);
+  private eliminartypeOfCourt(@Param('id') id:string): TypeOfCourt[]|any {
+return this.typeOfCourtService.deleteTypeOfCourt(Number(id))
   }
 }
