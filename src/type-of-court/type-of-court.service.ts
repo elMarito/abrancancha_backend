@@ -50,8 +50,8 @@ export class TypeOfCourtService {
     try {
       const criterio: FindOneOptions = { where:{ id: idTypeOfCourt }};
       let typeOfCourt: TypeOfCourt = await this.typeOfCourtRepository.findOne(criterio);
+      this.typeOfCourts = [];
       if (typeOfCourt){
-        this.typeOfCourts = [];
         this.typeOfCourts.push(typeOfCourt)
       }
       else throw new Error('no se encuentran TypeOfCourts');
