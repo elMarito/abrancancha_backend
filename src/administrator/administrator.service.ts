@@ -102,7 +102,7 @@ export class AdministratorService {
      }
      }
 
-     public async deleteAdministrator(idadministrator:number) : Promise<boolean> {
+     public async deleteAdministrator(idadministrator:number) : Promise<string> {
       try {
          let criterio : FindOneOptions = {where:{id:idadministrator}};
          let administrator : Administrator = await this.administratorRepository.findOne(criterio);
@@ -110,7 +110,7 @@ export class AdministratorService {
             throw new DOMException('No se encuentra la administrator');
          else
             await this.administratorRepository.delete(administrator.getId());
-         return (true)
+         return ("El administrador fue cambiado correctamente. ")
       } catch (error) {
             throw new HttpException( { status : HttpStatus.NOT_FOUND, 
                   error : 'Error en la eliminacion de administrator '+error}, HttpStatus.NOT_FOUND);
