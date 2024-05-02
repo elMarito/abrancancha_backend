@@ -4,7 +4,7 @@ import { UpdateTypeOfCourtDto } from './dto/update-type-of-court.dto';
 import { TypeOfCourt } from './entities/type-of-court.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository } from 'typeorm';
-import { log } from 'console';
+
 
 @Injectable()
 export class TypeOfCourtService {
@@ -50,8 +50,8 @@ export class TypeOfCourtService {
     try {
       const criterio: FindOneOptions = { where:{ id: idTypeOfCourt }};
       let typeOfCourt: TypeOfCourt = await this.typeOfCourtRepository.findOne(criterio);
+      this.typeOfCourts = [];
       if (typeOfCourt){
-        this.typeOfCourts = [];
         this.typeOfCourts.push(typeOfCourt)
       }
       else throw new Error('no se encuentran TypeOfCourts');
@@ -80,7 +80,7 @@ export class TypeOfCourtService {
      }
      }
 
-     public async deleteTypeOfCourt(idTypeOfCourt:number) : Promise<boolean> {
+     public async eliminarTypeOfCourt(idTypeOfCourt:number) : Promise<string> {
       try {
          let criterio : FindOneOptions = {where:{id:idTypeOfCourt}};
          let typeOfCourt : TypeOfCourt = await this.typeOfCourtRepository.findOne(criterio);
@@ -88,7 +88,7 @@ export class TypeOfCourtService {
             throw new DOMException('No se encuentra la typeOfCourt');
          else
             await this.typeOfCourtRepository.delete(typeOfCourt.getIdTypeOfCourt());
-         return (true)
+         return ("El tipo de cancha fue cambiado correctamente .")
       } catch (error) {
             throw new HttpException( { status : HttpStatus.NOT_FOUND, 
                   error : 'Error en la eliminacion de typeOfCourt '+error}, HttpStatus.NOT_FOUND);

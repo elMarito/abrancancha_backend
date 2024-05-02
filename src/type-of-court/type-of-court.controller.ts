@@ -29,7 +29,7 @@ export class TypeOfCourtController {
   }
 
   @Delete(':id')
-  private eliminartypeOfCourt(@Param('id') id:string): TypeOfCourt[]|any {
-return this.typeOfCourtService.deleteTypeOfCourt(Number(id))
+   eliminartypeOfCourt(@Param('id') id:string): TypeOfCourt[]|any {
+return this.typeOfCourtService.eliminarTypeOfCourt(Number(id))
   }
 }

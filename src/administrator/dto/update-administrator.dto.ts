@@ -6,7 +6,7 @@ export class UpdateAdministratorDto extends PartialType(CreateAdministratorDto) 
 
 // import { IsOptional, IsNumber } from 'class-validator';
 
-// export class UpdateAdministratorDto {
+// export class UpdateAdministrator {
 //   @IsOptional()
 //   @IsNumber()
 //   readonly idUser?: number;
