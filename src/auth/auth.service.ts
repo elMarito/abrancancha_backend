@@ -1,5 +1,6 @@
 import {
-  BadGatewayException,
+    ConflictException,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -10,6 +11,13 @@ import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register-auth.dto';
 import { LoginDto } from './dto/login-auth.dto';
 import * as bcryptjs from 'bcryptjs';
+import { log } from 'console';
+
+// export class EmailAlreadyExistsException extends ConflictException {
+//   constructor() {
+//     super('Email already exists');
+//   }
+// }
 
 @Injectable()
 export class AuthService {
@@ -19,25 +27,26 @@ export class AuthService {
   ) {}
   //---------------------------------------------------------------------------
   async registerUser({ fullname, email, password }: RegisterDto) {
+    console.log({fullname});
     const user = await this.userService.getUserByEmail(email);
     if (user)
-      throw new BadGatewayException(
-        'Ya existe un usuario registrado con el email:' + email,
+      throw new ConflictException(
+        'Ya existe otro usuario registrado con el email: ' + email
       );
 
     const newUser = await this.userService.create({
       fullname,
       email,
-      password,
+      password
     });
 
     return newUser;
   }
   //---------------------------------------------------------------------------
   async login({ email, password }: LoginDto): Promise<any> {
-  // async login({ email, password }: LoginDto): Promise<Record<string, string>> {
+    // async login({ email, password }: LoginDto): Promise<Record<string, string>> {
     const user = await this.userService.getUserByEmail(email);
-    if (!user) throw new UnauthorizedException('Email invalido');
+    if (!user) throw new UnauthorizedException('Email inválido.\n El email proporcionado no se encuentra resitrado.');
 
     const isPasswordValid = await bcryptjs.compare(
       password,
@@ -53,4 +62,10 @@ export class AuthService {
       token: accesToken,
     };
   }
+  //---------------------------------------------------------------------------
+  // TODO
+  // definir aca? un metodo para diferenciar si que typo de usuario es
+  // throw new ForbiddenException('Acceso denegado');
+
+  //NotImplementedException
 }
