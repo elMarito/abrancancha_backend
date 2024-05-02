@@ -30,11 +30,11 @@ import { User } from './user/entities/user.entity';
       port: 3306,
       username: 'root',
       password: 'root',
-      database: 'abranCancha',
+      database: 'abrancancha',
       entities: [        
         "dist/**/**.entity{.ts,.js}"
       ],
-      synchronize: true,
+      synchronize: false,
     }),
     UserModule,
     AdministratorModule,
