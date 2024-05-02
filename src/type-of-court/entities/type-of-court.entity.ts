@@ -3,12 +3,12 @@ import {
   Column,
   Entity,
   OneToMany,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity('typesOfCourt')
 export class TypeOfCourt {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   private id: number;
 
   @Column()
