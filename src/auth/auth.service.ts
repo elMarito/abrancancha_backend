@@ -27,12 +27,12 @@ export class AuthService {
   ) {}
   //---------------------------------------------------------------------------
   async registerUser({ fullname, email, password }: RegisterDto) {
-    console.log({fullname});
-    const user = await this.userService.getUserByEmail(email);
-    if (user)
-      throw new ConflictException(
-        'Ya existe otro usuario registrado con el email: ' + email
-      );
+    // console.log({fullname});
+    // const user = await this.userService.getUserByEmail(email);
+    // if (user)
+    //   throw new ConflictException(
+    //     'Ya existe otro usuario registrado con el email: ' + email
+    //   );
 
     const newUser = await this.userService.create({
       fullname,
