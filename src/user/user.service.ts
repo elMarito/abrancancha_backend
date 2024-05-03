@@ -106,7 +106,7 @@ export class UserService {
         new User(
           datos.fullname,
           hashedPassword,
-          datos.email /*  datos.phone, datos.avatar, */,
+          datos.email,  datos.phone, datos.avatar
         ),
       );
 
