@@ -6,6 +6,9 @@ import { CreateClubDto } from './create-club.dto';
 import { IsString, IsOptional } from 'class-validator';
 
 export class UpdateClubDto {
+    
+  readonly id:number;
+
   @IsOptional()
   @IsString()
   readonly name?: string;

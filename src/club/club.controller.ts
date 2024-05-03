@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ClubService } from './club.service';
 import { CreateClubDto } from './dto/create-club.dto';
 import { UpdateClubDto } from './dto/update-club.dto';
+import { Club } from './entities/club.entity';
 
 @Controller('club')
 export class ClubController {
@@ -14,7 +15,7 @@ export class ClubController {
 
   @Get()
   findAll() {
-    return this.clubService.findAll();
+    return this.clubService.getAll();
   }
 
   @Get(':id')
@@ -24,11 +25,12 @@ export class ClubController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateClubDto: UpdateClubDto) {
-    return this.clubService.update(+id, updateClubDto);
+  return this.clubService.updateClub({...updateClubDto, id:Number(id)  });
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.clubService.remove(+id);
+  eliminarClub(@Param('id') id:string): Club[]|any{
+    return this.clubService.eliminarClub(Number(id))
+  
   }
 }
