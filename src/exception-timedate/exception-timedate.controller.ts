@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ExceptionTimedateService } from './exception-timedate.service';
 import { CreateExceptionTimedateDto } from './dto/create-exception-timedate.dto';
 import { UpdateExceptionTimedateDto } from './dto/update-exception-timedate.dto';
+import { ExceptionTimedate } from './entities/exception-timedate.entity';
 
 @Controller('exception-timedate')
 export class ExceptionTimedateController {
@@ -14,7 +15,7 @@ export class ExceptionTimedateController {
 
   @Get()
   findAll() {
-    return this.exceptionTimedateService.findAll();
+    return this.exceptionTimedateService.getAll();
   }
 
   @Get(':id')
@@ -24,11 +25,11 @@ export class ExceptionTimedateController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateExceptionTimedateDto: UpdateExceptionTimedateDto) {
-    return this.exceptionTimedateService.update(+id, updateExceptionTimedateDto);
+    return this.exceptionTimedateService.updateException( {...updateExceptionTimedateDto,id:Number(id)});
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.exceptionTimedateService.remove(+id);
+  eliminarException(@Param('id') id: string):ExceptionTimedate[]|any {
+    return this.exceptionTimedateService.eliminarException(Number(id));
   }
 }

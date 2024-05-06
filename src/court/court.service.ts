@@ -21,7 +21,7 @@ export class CourtService {
       if (court)
         return court;
       else
-        throw new DOMException('No se pudo crear el court :(');
+        throw new Error('No se pudo crear el court :(');
 
     } catch (error) {
       throw new HttpException({
@@ -74,7 +74,7 @@ export class CourtService {
              Court.setNumb(CourtDTO.numb);
              Court.setObservations(CourtDTO.observations);
              Court.setRating(CourtDTO.rating);
-             Court.reservation[](CourtDTO.reservations);//Aca me trabe,no se como continuar.Sigo con el metodo Delete.
+             //Court.reservations[](CourtDTO.reservations);//Aca me trabe,no se como continuar.Sigo con el metodo Delete.
           Court = await this.courtRepository.save(Court);
           return Court;
        } catch (error) {

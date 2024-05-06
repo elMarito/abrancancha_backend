@@ -5,6 +5,7 @@ import { UpdateClubDto } from './dto/update-club.dto';
 import { Club } from './entities/club.entity';
 
 @Controller('club')
+
 export class ClubController {
   constructor(private readonly clubService: ClubService) {}
 
