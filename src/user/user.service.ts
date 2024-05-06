@@ -1,4 +1,13 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  GoneException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,6 +22,33 @@ import { StatusOfUser } from 'src/status-of-user/entities/status-of-user.entity'
 import { Reservation } from 'src/reservation/entities/reservation.entity';
 import { Administrator } from 'src/administrator/entities/administrator.entity';
 import * as bcryptjs from 'bcryptjs';
+import {
+  ResponseObject,
+  ServiceResponse as ServiceResponseOk,
+} from 'src/utilities';
+
+const ERROR_ENTITY = 'usuario';
+const ERROR_ENTITY_LOWER = `el ${ERROR_ENTITY}`;
+const ERROR_ENTITY_UCASE = `El ${ERROR_ENTITY}`;
+const ERROR_ENTITIES = 'usuarios';
+const ERROR_MSG = {
+  NOT_FOUND: `${ERROR_ENTITY_UCASE} no se encuentra.`,
+  NOT_FOUND_ANY: `No se encuentran ${ERROR_ENTITIES}.`,
+  REPEATED: `${ERROR_ENTITY_UCASE} ya se encuentra.`,
+  CANT_CREATE: `No se pudo crear ${ERROR_ENTITY_LOWER}`,
+  // CANT_UPDATE: `No hay datos para modificar ${ERROR_ENTITIES}.`,
+  // CANT_DELETE: `No hay datos para eliminar ${ERROR_ENTITIES}.`,
+  NO_DATA_4: {
+    CREATE: `No hay datos para crear ${ERROR_ENTITIES}.`,
+    UPDATE: `No hay datos para modificar ${ERROR_ENTITIES}.`,
+    DELETE: `No hay datos para eliminar ${ERROR_ENTITIES}.`,
+  },
+  INVALID_ID: `El ID de ${ERROR_ENTITY} provisto no es válido.`,
+  INVALID_DATA_4: {
+    CREATE: `Los datos para crear ${ERROR_ENTITY_LOWER} no son validos`,
+    UPDATE: `Los datos para modificar ${ERROR_ENTITY_LOWER} no son validos`,
+  },
+};
 
 @Injectable()
 export class UserService {
@@ -26,57 +62,72 @@ export class UserService {
   ) {}
   //---------------------------------------------------------------------------
   async getUserByEmail(email: string): Promise<User> {
-    try {
+    // try {
       const criteria: FindOneOptions = { where: { email: email } };
       const user: User = await this.userRepository.findOne(criteria);
-      if (user) return user;
-    } catch (error) {
-      if (error instanceof QueryFailedError) {
-        throw new HttpException(
-          {
-            stattus: HttpStatus.INTERNAL_SERVER_ERROR,
-            error: 'Error en la consulta a la base de datos',
-          },
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: 'No existe un usuario registrado con el email:' + email,
-        },
-        HttpStatus.NOT_FOUND,
-      );
-    }
+      // if (user) 
+        return user;
+      // throw new NotFoundException(
+      //   'Error buscando usuario por email: \n' +
+      //   ERROR_MSG.NOT_FOUND,
+      //   `No existe un ${ERROR_ENTITY} registrado con el email: ` + email,
+      // );
+      // throw new Error( 'Error buscando usuario por email: \n' +"Error inesperado");
+    // } catch (error) {
+    //   if (error instanceof QueryFailedError) {
+    //     throw new InternalServerErrorException(
+    //       'Error buscando usuario por email: \n' +
+    //       'Error en la consulta a la base de datos',
+    //     );
+    //   }
+    //   throw new NotFoundException(
+    //     ERROR_MSG.NOT_FOUND,
+    //     `No existe un ${ERROR_ENTITY} registrado con el email: ` + email,
+    //   );
+    // }
   }
   //---------------------------------------------------------------------------
   public async create(datos: CreateUserDto): Promise<User> {
     try {
       // if (datos) //<---esto si devuelve Promise<string>
-      if (datos.fullname)
-        if (await this.existUserName(datos.fullname)) {
-          // if (datos.id && datos.fullname)
-          throw new Error('El usuario ya se encuentra.');
-        } else {
-          const hashedPassword = await bcryptjs.hash(datos.password, 10);
-          let user: User = await this.userRepository.save(
-            new User(
-              datos.fullname,
-              hashedPassword,
-              datos.email,
-              // datos.phone,
-              // datos.avatar,
-            ),
-          );
+      // if (!datos.email) throw new Error(ERROR_MSG.INVALID_DATA_4.CREATE+"\nFaltó proporcionar el email");
 
-          if (user.getId()) return user;
-          else throw new Error('No se pudo crear usuario');
-        }
-      else throw new Error('Los datos para crear usuario no son validos');
-      // else throw new Error('No hay datos para crear usuario');
+      // if (datos.email)
+      if (await this.existUserEmail(datos.email))
+        throw new ConflictException(
+          'Error: Datos repetidos\n' ,
+            ERROR_MSG.REPEATED +
+            '\nYa existe otro usuario registrado con el email: ' +
+            datos.email,
+        );
+
+      const hashedPassword = await bcryptjs.hash(datos.password, 10);
+      let user: User = await this.userRepository.save(
+        new User(
+          datos.fullname,
+          hashedPassword,
+          datos.email,  datos.phone, datos.avatar
+        ),
+      );
+
+      if (user) return user;
+      throw new Error( 'Error creando el usuario: \n' +"Error inesperado");
+      // if (user.getId()) return user;
+      // else throw new Error(ERROR_MSG.CANT_CREATE);
+      //
+      // else throw new Error(ERROR_MSG.INVALID_DATA_4.CREATE);
+
+      // else throw new Error(ERROR_MSG.NO_DATA_4.CREATE);
       // return 'ok';
     } catch (error) {
-      return error.message;
+      if (error instanceof QueryFailedError) {
+        throw new InternalServerErrorException(
+          'Error: creando el usuario \n' ,
+            'Error en la consulta a la base de datos',
+        );
+      }
+      else
+      return error;
     }
   }
   //---------------------------------------------------------------------------
@@ -86,15 +137,17 @@ export class UserService {
       // this.users = await this.userRepository.find(criterio);
       this.users = await this.userRepository.find();
       if (this.users) return this.users;
-      throw new Error('No se encuentran usuarios.');
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: 'Error en la busqueda: ' + error,
-        },
-        HttpStatus.NOT_FOUND,
+      throw new NotFoundException(
+        'Error en la busqueda: ' , ERROR_MSG.NOT_FOUND_ANY,
       );
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        throw new InternalServerErrorException(
+          'Error en la busqueda: ' ,
+            'Error en la consulta a la base de datos'
+        );
+      }
+      throw error;
     }
   }
   //---------------------------------------------------------------------------
@@ -110,59 +163,133 @@ export class UserService {
 
       this.users = [];
       if (user) this.users.push(user);
-      else throw new Error('El usuario no se encuentra.');
+      else throw new Error(ERROR_MSG.NOT_FOUND);
       return this.users;
     } catch (error) {
-      throw new HttpException(
+      // throw new NotFoundException(ERROR_MSG.NOT_FOUND);
+      // throw new NotFoundException(ERROR_MSG.NOT_FOUND);
+      throw new NotFoundException(
+        'Error en la busqueda: \n' + ERROR_MSG.NOT_FOUND,
         {
-          status: HttpStatus.NOT_FOUND,
-          error: 'Error en la busqueda de usuario ' + idUser + ' : ' + error,
+          cause: new Error('Error en la busqueda de usuario ' + idUser + ' : '),
+          description: 'Some error description',
         },
-        HttpStatus.NOT_FOUND,
       );
     }
   }
   //---------------------------------------------------------------------------
-  public async update(idUser: number, datos: UpdateUserDto): Promise<string> {
+  public async update(
+    idUser: number,
+    datos: UpdateUserDto,
+  ): Promise<ResponseObject> {
     try {
-      if (datos)
-        if (datos.fullname)
-          if (await this.existUserId(idUser)) {
-            let criterio: FindOneOptions = { where: { id: idUser } };
-            let user: User = await this.userRepository.findOne(criterio);
-            user.setFullname(datos.fullname);
-            await this.userRepository.save(user);
-          } else throw new Error('El usuario no se encuentra.');
-        else throw new Error('Los datos para modificar usuario no son validos');
-      else throw new Error('No hay datos para modificar usuarios');
-      return 'ok';
+      if (!idUser) throw new BadRequestException(ERROR_MSG.INVALID_ID);
+      if (!datos) throw new BadRequestException(ERROR_MSG.NO_DATA_4.UPDATE);
+      // if (!datos.fullname) throw new Error(ERROR_MSG.INVALID_DATA_4.UPDATE);
+      // const userExists = await this.existUserId(idUser);
+      // if (!userExists) throw new GoneException(ERROR_MSG.NOT_FOUND);
+
+      // const criterio: FindOneOptions = { where: { id: idUser } };
+      // let user: User = await this.userRepository.findOne(criterio);
+      let user: User = await this.getUserById(idUser);
+
+      if (user == null) throw new GoneException(ERROR_MSG.NOT_FOUND);
+      
+      //si modifico el email, chequear que no ponga un email de otro
+      if (datos.email && user.getEmail() !== datos.email) {
+        // console.log(user.getEmail(),datos.email);
+        const otherUser: User = await this.getUserByEmail(datos.email);
+        if (otherUser.getId() != idUser)
+          throw new ConflictException(
+            'el email elegido pertenece a otro usuario.',
+          );
+      }
+      // const { password, ...userNoPassword } = datos;
+      // let user2: User = new User(datos)
+
+      user.setFullname(datos.fullname);
+      user.setEmail(datos.email);
+      user.setPhone(datos.phone);
+      user.setAvatar(datos.avatar);
+      const userUpdated: User = await this.userRepository.save(user);
+      //else
+      //  throw new Error(ERROR_MSG.INVALID_DATA_4.UPDATE);
+      return ServiceResponseOk(
+        'Usuario actualizado exitosamente.',
+        userUpdated,
+      );
     } catch (error) {
-      return error.message;
+      // return error;
+      if (
+        error instanceof BadRequestException ||
+        error instanceof GoneException
+      ) {
+        throw error;
+      } else if (error instanceof QueryFailedError) {
+        throw new InternalServerErrorException(
+          'Error en la consulta a la base de datos',
+        );
+      } else {
+        // console.error('Error borrando el usuario:', error);
+        throw new Error('Ocurrio un error inesperado');
+      }
     }
   }
   //---------------------------------------------------------------------------
-  public async remove(id: number): Promise<string> {
+  // public async remove(id: number): Promise<string> {
+  public async remove(id: number): Promise<ResponseObject> {
     try {
-      if (id)
-        if (await this.existUserId(id)) {
-          await this.userRepository.delete(id);
-        } else throw new Error('El usuario no se encuentra.');
-      else throw new Error('No hay datos para eliminar usuarios');
-      return 'ok';
+      if (!id) throw new BadRequestException(ERROR_MSG.NO_DATA_4.DELETE);
+
+      const userExists = await this.existUserId(id);
+      if (!userExists) throw new GoneException(ERROR_MSG.NOT_FOUND);
+
+      await this.userRepository.delete(id);
+
+      return ServiceResponseOk('Usuario borrado exitosamente.');
+      // return {status: true, messagge: 'Usuario borrado exitosamente.'};
     } catch (error) {
-      return error.message;
+      // return error.message;
+      if (
+        error instanceof BadRequestException ||
+        error instanceof GoneException
+      ) {
+        throw error;
+      } else if (error instanceof QueryFailedError) {
+        throw new InternalServerErrorException(
+          'Error en la consulta a la base de datos',
+        );
+      } else {
+        // console.error('Error borrando el usuario:', error);
+        throw new Error('Ocurrio un error inesperado');
+      }
     }
+  }
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  private async getUserById(idUser: number): Promise<User> {
+    const criterio: FindOneOptions = { where: { id: idUser } };
+    return await this.userRepository.findOne(criterio);
   }
   //---------------------------------------------------------------------------
   private async existUserId(idUser: number): Promise<boolean> {
-    let criterio: FindOneOptions = { where: { id: idUser } };
-    let user: User = await this.userRepository.findOne(criterio);
+    const criterio: FindOneOptions = { where: { id: idUser } };
+    const user: User = await this.userRepository.findOne(criterio);
     return user != null;
   }
   //---------------------------------------------------------------------------
-  private async existUserName(name: string): Promise<boolean> {
-    let criterio: FindOneOptions = { where: { fullname: name } };
-    let user: User = await this.userRepository.findOne(criterio);
+  private async existUserEmail(email: string): Promise<boolean> {
+    const criterio: FindOneOptions = { where: { email: email } };
+    const user: User = await this.userRepository.findOne(criterio);
     return user != null;
   }
+  //---------------------------------------------------------------------------
+  // metodo para modificar contraseña?
+
+  //---------------------------------------------------------------------------
+  // private async isAdministrator(idUser: number): Promise<boolean> {
+  //   let criterio: FindOneOptions = { where: { id: idUser } };
+  //   let user: User = await this.userRepository.findOne(criterio);
+  //   return user.administrator != null;
+  // }
 }

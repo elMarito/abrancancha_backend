@@ -3,38 +3,20 @@ import { CreateAdministratorDto } from './dto/create-administrator.dto';
 import { UpdateAdministratorDto } from './dto/update-administrator.dto';
 import { Administrator } from './entities/administrator.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-
 import { Repository, FindOneOptions, Admin } from 'typeorm';
 
-// @Injectable()
-// export class AdministratorService {
-//   create(createAdministratorDto: CreateAdministratorDto) {
-//     return 'This action adds a new administrator';
-//   }
-
-//   findAll() {
-//     return `This action returns all administrator`;
-//   }
-
-//   findOne(id: number) {
-//     return `This action returns a #${id} administrator`;
-//   }
-
-//   update(id: number, updateAdministratorDto: UpdateAdministratorDto) {
-//     return `This action updates a #${id} administrator`;
-//   }
-
-//   remove(id: number) {
-//     return `This action removes a #${id} administrator`;
-//   }
 @Injectable()
 export class AdministratorService {
-
   private administrators: Administrator[] = [];
-
-
-  constructor(@InjectRepository(Administrator) private readonly administratorRepository: Repository<Administrator>) { }
-
+ 
+  constructor(
+    @InjectRepository(Administrator)
+    private readonly administratorRepository:Repository<Administrator>
+    // ,
+    // @InjectRepository(User)
+    // private readonly userRepository: Repository<User>,
+  ) {}
+  //---------------------------------------------------------------------------
   public async create(CreateAdministratorDto: CreateAdministratorDto): Promise<Administrator> {
     try {
       let administrator: Administrator = await this.administratorRepository.save(new Administrator(
@@ -52,7 +34,7 @@ export class AdministratorService {
     }
 
   }
-
+  //---------------------------------------------------------------------------
   public async getAll(): Promise<Administrator[]> {
     try {
       this.administrators = await this.administratorRepository.find();
@@ -66,7 +48,7 @@ export class AdministratorService {
     }
 
   }
-
+  //---------------------------------------------------------------------------
   public async findOne(idAdministrator: number): Promise<Administrator[]> {
     try {
       const criterio: FindOneOptions = { where:{ id: idAdministrator }};
@@ -85,7 +67,7 @@ export class AdministratorService {
 
     }
   }
-
+  //---------------------------------------------------------------------------
   public async updateAdministrator(administratorDTO : UpdateAdministratorDto) : Promise<Administrator> {
     try {
         let criterio : FindOneOptions = { where:{id:administratorDTO.idUser}};
@@ -101,7 +83,7 @@ export class AdministratorService {
                  error : 'Error en la actualizacion de administrator '+error}, HttpStatus.NOT_FOUND);
      }
      }
-
+     //---------------------------------------------------------------------------
      public async deleteAdministrator(idadministrator:number) : Promise<string> {
       try {
          let criterio : FindOneOptions = {where:{id:idadministrator}};

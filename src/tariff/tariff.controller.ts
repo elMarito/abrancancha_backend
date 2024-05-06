@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TariffService } from './tariff.service';
 import { CreateTariffDto } from './dto/create-tariff.dto';
 import { UpdateTariffDto } from './dto/update-tariff.dto';
+import { Tariff } from './entities/tariff.entity';
 
 @Controller('tariffs')
 export class TariffController {
@@ -14,7 +15,7 @@ export class TariffController {
 
   @Get()
   findAll() {
-    return this.tariffService.findAll();
+    return this.tariffService.getAll();
   }
 
   @Get(':id')
@@ -24,11 +25,11 @@ export class TariffController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTariffDto: UpdateTariffDto) {
-    return this.tariffService.update(+id, updateTariffDto);
+    return this.tariffService.updateTariff({...updateTariffDto , id:Number(id)});
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tariffService.remove(+id);
-  }
+    private deleteTariff(@Param('id') id : number) : Tariff[] | any {
+        return this.tariffService.deleteTariff(id);        
+    }
 }
