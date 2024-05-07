@@ -21,7 +21,7 @@ export class CourtService {
       if (court)
         return court;
       else
-        throw new DOMException('No se pudo crear el court :(');
+        throw new Error('No se pudo crear el court :(');
 
     } catch (error) {
       throw new HttpException({
@@ -68,13 +68,13 @@ export class CourtService {
           let criterio : FindOneOptions = { where:{id:CourtDTO.id}};
           let Court : Court = await this.courtRepository.findOne(criterio);
           if (!Court)
-             throw new DOMException('No se encuentra la Court');
+             throw new Error('No se encuentra la Court');
           else
              Court.setName(CourtDTO.name);
              Court.setNumb(CourtDTO.numb);
              Court.setObservations(CourtDTO.observations);
              Court.setRating(CourtDTO.rating);
-             Court.reservation[](CourtDTO.reservations);//Aca me trabe,no se como continuar.Sigo con el metodo Delete.
+             //Court.reservation[](CourtDTO.reservations);//Aca me trabe,no se como continuar.Sigo con el metodo Delete.
           Court = await this.courtRepository.save(Court);
           return Court;
        } catch (error) {
@@ -89,7 +89,7 @@ public async eliminarCourt(idCourt:number) : Promise<string> {
      let criterio : FindOneOptions = {where:{id:idCourt}};
      let court : Court = await this.courtRepository.findOne(criterio);
      if (!court)
-        throw new DOMException('No se encuentra la Cancha');
+        throw new Error('No se encuentra la Cancha');
      else
         await this.courtRepository.delete(court.getId());
      return ("El tipo de cancha fue cambiado correctamente .")
