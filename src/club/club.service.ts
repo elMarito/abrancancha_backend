@@ -22,7 +22,7 @@ export class ClubService {
         if (club)
           return club;
         else
-          throw new DOMException('No se pudo crear el Club :(');
+          throw new Error('No se pudo crear el Club :(');
   
       } catch (error) {
         throw new HttpException({
@@ -70,7 +70,7 @@ export class ClubService {
         let criterio : FindOneOptions = { where:{id:clubDto.id}};
         let club : Club = await this.clubRepository.findOne(criterio);
         if (!club)
-           throw new DOMException('No se encuentra el Club');
+           throw new Error('No se encuentra el Club');
         else
            club.setName(clubDto.name);
           club.setEmail(clubDto.email);
@@ -89,7 +89,7 @@ export class ClubService {
          let criterio : FindOneOptions = {where:{id:idClub}};
          let club : Club = await this.clubRepository.findOne(criterio);
          if (!club)
-            throw new DOMException('No se encuentra la club');
+            throw new Error('No se encuentra la club');
          else
             await this.clubRepository.delete(club.getId());
          return ("El club fue cambiado corectamente.")
