@@ -55,16 +55,23 @@ export class Reservation {
   public status: StatusOfReservation;
   //---------------------------------------------------------------------------
   constructor(
-    idUser: number,
-    idCourt: number,
+    user: User,
+    court: Court,
     timedate: Date,
-    price: number,
+    price?: number,
+    status?: number,
+    // idUser: number,
+    // idCourt: number,
+    // timedate: Date,
     // status: string,
   ) {
     // this.idUser = idUser;
     // this.idCourt = idCourt;
-    // this.timedate = timedate;
-    this.price = price;
+    this.timedate = timedate;
+    // this.price = price; //deberia venir averiguarlo de court.tariff.price
+    // this.price = court.tariff.getPrice();
+    this.user=user;
+    this.court =court;
     // this.status = status;
   }
   //---------------------------------------------------------------------------
@@ -76,6 +83,12 @@ export class Reservation {
     this.id = id;
   }
 
+  public getUser(): User { return this.user; }
+  public setUser( user:User): void { this.user = user; }
+  public getCourt(): Court { return this.court; }
+  public setCourt( court:Court): void { this.court = court; }
+  public getStatus(): StatusOfReservation { return this.status; }
+  public setStatus( status:StatusOfReservation): void { this.status = status; }
   // getIdUser(): number {
   //   return this.idUser;
   // }
