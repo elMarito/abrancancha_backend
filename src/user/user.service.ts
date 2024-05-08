@@ -22,10 +22,7 @@ import { StatusOfUser } from 'src/status-of-user/entities/status-of-user.entity'
 import { Reservation } from 'src/reservation/entities/reservation.entity';
 import { Administrator } from 'src/administrator/entities/administrator.entity';
 import * as bcryptjs from 'bcryptjs';
-import {
-  ResponseObject,
-  ServiceResponse as ServiceResponseOk,
-} from 'src/utilities';
+import { ResponseObject, ServiceResponseOk } from 'src/utilities';
 
 const ERROR_ENTITY = 'usuario';
 const ERROR_ENTITY_LOWER = `el ${ERROR_ENTITY}`;
@@ -57,22 +54,22 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    @InjectRepository(Reservation) //**quizas esto no va */
-    private readonly reservationRepository: Repository<Reservation>,
+    // @InjectRepository(Reservation) //**quizas esto no va */
+    // private readonly reservationRepository: Repository<Reservation>,
   ) {}
   //---------------------------------------------------------------------------
   async getUserByEmail(email: string): Promise<User> {
     // try {
-      const criteria: FindOneOptions = { where: { email: email } };
-      const user: User = await this.userRepository.findOne(criteria);
-      // if (user) 
-        return user;
-      // throw new NotFoundException(
-      //   'Error buscando usuario por email: \n' +
-      //   ERROR_MSG.NOT_FOUND,
-      //   `No existe un ${ERROR_ENTITY} registrado con el email: ` + email,
-      // );
-      // throw new Error( 'Error buscando usuario por email: \n' +"Error inesperado");
+    const criteria: FindOneOptions = { where: { email: email } };
+    const user: User = await this.userRepository.findOne(criteria);
+    // if (user)
+    return user;
+    // throw new NotFoundException(
+    //   'Error buscando usuario por email: \n' +
+    //   ERROR_MSG.NOT_FOUND,
+    //   `No existe un ${ERROR_ENTITY} registrado con el email: ` + email,
+    // );
+    // throw new Error( 'Error buscando usuario por email: \n' +"Error inesperado");
     // } catch (error) {
     //   if (error instanceof QueryFailedError) {
     //     throw new InternalServerErrorException(
@@ -95,8 +92,8 @@ export class UserService {
       // if (datos.email)
       if (await this.existUserEmail(datos.email))
         throw new ConflictException(
-          'Error: Datos repetidos\n' ,
-            ERROR_MSG.REPEATED +
+          'Error: Datos repetidos\n',
+          ERROR_MSG.REPEATED +
             '\nYa existe otro usuario registrado con el email: ' +
             datos.email,
         );
@@ -106,12 +103,14 @@ export class UserService {
         new User(
           datos.fullname,
           hashedPassword,
-          datos.email,  datos.phone, datos.avatar
+          datos.email,
+          datos.phone,
+          datos.avatar,
         ),
       );
 
       if (user) return user;
-      throw new Error( 'Error creando el usuario: \n' +"Error inesperado");
+      throw new Error('Error creando el usuario: \n' + 'Error inesperado');
       // if (user.getId()) return user;
       // else throw new Error(ERROR_MSG.CANT_CREATE);
       //
@@ -122,12 +121,10 @@ export class UserService {
     } catch (error) {
       if (error instanceof QueryFailedError) {
         throw new InternalServerErrorException(
-          'Error: creando el usuario \n' ,
-            'Error en la consulta a la base de datos',
+          'Error: creando el usuario \n',
+          'Error en la consulta a la base de datos',
         );
-      }
-      else
-      return error;
+      } else return error;
     }
   }
   //---------------------------------------------------------------------------
@@ -138,13 +135,14 @@ export class UserService {
       this.users = await this.userRepository.find();
       if (this.users) return this.users;
       throw new NotFoundException(
-        'Error en la busqueda: ' , ERROR_MSG.NOT_FOUND_ANY,
+        'Error en la busqueda: ',
+        ERROR_MSG.NOT_FOUND_ANY,
       );
     } catch (error) {
       if (error instanceof QueryFailedError) {
         throw new InternalServerErrorException(
-          'Error en la busqueda: ' ,
-            'Error en la consulta a la base de datos'
+          'Error en la busqueda: ',
+          'Error en la consulta a la base de datos',
         );
       }
       throw error;
@@ -178,6 +176,12 @@ export class UserService {
     }
   }
   //---------------------------------------------------------------------------
+  public async changePassword(user: User): Promise<ResponseObject> {
+    // user.setPasswordHash(resetToken);
+    const userUpdated: User = await this.userRepository.save(user);
+    return ServiceResponseOk('La contraseña a sido actualizada.');
+  }
+  //---------------------------------------------------------------------------
   public async update(
     idUser: number,
     datos: UpdateUserDto,
@@ -194,7 +198,7 @@ export class UserService {
       let user: User = await this.getUserById(idUser);
 
       if (user == null) throw new GoneException(ERROR_MSG.NOT_FOUND);
-      
+
       //si modifico el email, chequear que no ponga un email de otro
       if (datos.email && user.getEmail() !== datos.email) {
         // console.log(user.getEmail(),datos.email);
@@ -269,6 +273,11 @@ export class UserService {
   //---------------------------------------------------------------------------
   private async getUserById(idUser: number): Promise<User> {
     const criterio: FindOneOptions = { where: { id: idUser } };
+    return await this.userRepository.findOne(criterio);
+  }
+  //---------------------------------------------------------------------------
+  public async getUserByResetToken(passwordHash:string): Promise<User> {
+    const criterio: FindOneOptions = { where: { passwordHash: passwordHash } };
     return await this.userRepository.findOne(criterio);
   }
   //---------------------------------------------------------------------------

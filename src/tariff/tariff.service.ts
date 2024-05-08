@@ -5,7 +5,6 @@ import { Tariff } from './entities/tariff.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository } from 'typeorm';
 
-
 @Injectable()
 export class TariffService {
   private tariffs: Tariff[] = [];
