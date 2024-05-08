@@ -29,7 +29,7 @@ import { User } from './user/entities/user.entity';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'root',
+      password: '1234',
       database: 'abrancancha',
       entities: [        
         "dist/**/**.entity{.ts,.js}"

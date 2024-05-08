@@ -84,7 +84,7 @@ export class CourtService {
        }
 //Falta teminar el update/
 
-public async eliminarCourt(idCourt:number) : Promise<string> {
+public async remove(idCourt:number) : Promise<string> {
   try {
      let criterio : FindOneOptions = {where:{id:idCourt}};
      let court : Court = await this.courtRepository.findOne(criterio);

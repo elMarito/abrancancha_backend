@@ -3,6 +3,6 @@ import { PartialType } from '@nestjs/mapped-types';
 import { CreateExceptionTimedateDto } from './create-exception-timedate.dto';
 
 export class UpdateExceptionTimedateDto extends PartialType(CreateExceptionTimedateDto) {
-    // @IsNumber()
-    // id: number;
+    
+     id: number;
 }
