@@ -4,7 +4,7 @@ import { CreateTariffDto } from './dto/create-tariff.dto';
 import { UpdateTariffDto } from './dto/update-tariff.dto';
 import { Tariff } from './entities/tariff.entity';
 
-@Controller('tariff')
+@Controller('tariffs')
 export class TariffController {
   constructor(private readonly tariffService: TariffService) {}
 

@@ -5,7 +5,6 @@ import { Tariff } from './entities/tariff.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository } from 'typeorm';
 
-
 @Injectable()
 export class TariffService {
   private tariffs: Tariff[] = [];
@@ -32,8 +31,8 @@ export class TariffService {
         try {
           const criterio: FindOneOptions = { where:{ id: id }};
           let tariff: Tariff = await this.tariffRepository.findOne(criterio);
+          this.tariffs = [];
           if (tariff){
-            this.tariffs = [];
             this.tariffs.push(tariff)
           }
           else throw new Error('No tariff found');
@@ -90,6 +89,7 @@ export class TariffService {
            throw new DOMException('The tariff was not found');
         else
            tariff.setName(TariffDTO.name);
+           tariff.setPrice(TariffDTO.price);
         tariff = await this.tariffRepository.save(tariff);
         return tariff;
      } catch (error) {
