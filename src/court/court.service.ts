@@ -74,7 +74,7 @@ export class CourtService {
              Court.setNumb(CourtDTO.numb);
              Court.setObservations(CourtDTO.observations);
              Court.setRating(CourtDTO.rating);
-             //Court.reservation[](CourtDTO.reservations);//Aca me trabe,no se como continuar.Sigo con el metodo Delete.
+             //Court.reservations[](CourtDTO.reservations);//Aca me trabe,no se como continuar.Sigo con el metodo Delete.
           Court = await this.courtRepository.save(Court);
           return Court;
        } catch (error) {
@@ -84,7 +84,7 @@ export class CourtService {
        }
 //Falta teminar el update/
 
-public async eliminarCourt(idCourt:number) : Promise<string> {
+public async remove(idCourt:number) : Promise<string> {
   try {
      let criterio : FindOneOptions = {where:{id:idCourt}};
      let court : Court = await this.courtRepository.findOne(criterio);
