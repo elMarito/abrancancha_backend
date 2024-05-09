@@ -29,6 +29,6 @@ export class CourtController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.courtService.eliminarCourt(+id);
+    return this.courtService.remove(+id);
   }
 }
