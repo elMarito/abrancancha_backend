@@ -24,7 +24,7 @@ export class AdministratorService {
       if (administrator)
         return administrator;
       else
-        throw new DOMException('No se pudo crear el administrator :(');
+        throw new Error('No se pudo crear el administrator :(');
 
     } catch (error) {
       throw new HttpException({
@@ -73,7 +73,7 @@ export class AdministratorService {
         let criterio : FindOneOptions = { where:{id:administratorDTO.idUser}};
         let administrator : Administrator = await this.administratorRepository.findOne(criterio);
         if (!administrator)
-           throw new DOMException('No se encuentra la administrator');
+           throw new Error('No se encuentra la administrator');
         else
            administratorDTO.idUser;//Aqui corregi y probablemente halla un error typeOfCourt.setName(TypeOfCourtDTO.name);//
         administrator = await this.administratorRepository.save(administrator);
@@ -89,7 +89,7 @@ export class AdministratorService {
          let criterio : FindOneOptions = {where:{id:idadministrator}};
          let administrator : Administrator = await this.administratorRepository.findOne(criterio);
          if (!administrator)
-            throw new DOMException('No se encuentra la administrator');
+            throw new Error('No se encuentra la administrator');
          else
             await this.administratorRepository.delete(administrator.getId());
          return ("El administrador fue cambiado correctamente. ")

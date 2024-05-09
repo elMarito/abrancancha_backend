@@ -1,10 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ClubService } from './club.service';
 import { CreateClubDto } from './dto/create-club.dto';
 import { UpdateClubDto } from './dto/update-club.dto';
 import { Club } from './entities/club.entity';
+import { Auth } from 'src/auth/entities/auth.entity';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('club')
+@UseGuards(AuthGuard)
 export class ClubController {
   constructor(private readonly clubService: ClubService) {}
 

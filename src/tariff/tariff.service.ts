@@ -70,7 +70,7 @@ export class TariffService {
       if (tariff)
         return tariff;
       else
-        throw new DOMException('Error, the tariff could not be created ');
+        throw new Error('Error, the tariff could not be created ');
 
     } catch (error) {
       throw new HttpException({
@@ -86,7 +86,7 @@ export class TariffService {
         let criterio : FindOneOptions = { where:{id:TariffDTO.id}};
         let tariff : Tariff = await this.tariffRepository.findOne(criterio);
         if (!tariff)
-           throw new DOMException('The tariff was not found');
+           throw new Error('The tariff was not found');
         else
            tariff.setName(TariffDTO.name);
            tariff.setPrice(TariffDTO.price);
@@ -103,7 +103,7 @@ export class TariffService {
          let criterio : FindOneOptions = {where:{id:id}};
          let tariff : Tariff = await this.tariffRepository.findOne(criterio);
          if (!tariff)
-            throw new DOMException('The tariff was not found');
+            throw new Error('The tariff was not found');
          else
             await this.tariffRepository.delete(tariff.getId());
          return (true)

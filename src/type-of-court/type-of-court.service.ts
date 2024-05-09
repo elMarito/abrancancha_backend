@@ -21,7 +21,7 @@ export class TypeOfCourtService {
       if (typeOfCourt)
         return typeOfCourt;
       else
-        throw new DOMException('No se pudo crear el TypeOFCourt :(');
+        throw new Error('No se pudo crear el TypeOFCourt :(');
 
     } catch (error) {
       throw new HttpException({
@@ -69,7 +69,7 @@ export class TypeOfCourtService {
         let criterio : FindOneOptions = { where:{id:TypeOfCourtDTO.id}};
         let typeOfCourt : TypeOfCourt = await this.typeOfCourtRepository.findOne(criterio);
         if (!typeOfCourt)
-           throw new DOMException('No se encuentra la typeOfCourt');
+           throw new Error('No se encuentra la typeOfCourt');
         else
            typeOfCourt.setName(TypeOfCourtDTO.name);
         typeOfCourt = await this.typeOfCourtRepository.save(typeOfCourt);
@@ -85,7 +85,7 @@ export class TypeOfCourtService {
          let criterio : FindOneOptions = {where:{id:idTypeOfCourt}};
          let typeOfCourt : TypeOfCourt = await this.typeOfCourtRepository.findOne(criterio);
          if (!typeOfCourt)
-            throw new DOMException('No se encuentra la typeOfCourt');
+            throw new Error('No se encuentra la typeOfCourt');
          else
             await this.typeOfCourtRepository.delete(typeOfCourt.getIdTypeOfCourt());
          return ("El tipo de cancha fue cambiado correctamente .")
