@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateExceptionTimedateDto } from './dto/create-exception-timedate.dto';
 import { UpdateExceptionTimedateDto } from './dto/update-exception-timedate.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -120,13 +120,11 @@ export class ExceptionTimedateService {
         );
       return 'El exceptionTimedate fue eliminado corectamente.';
     } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: 'Error en la eliminacion de exceptionTimedate ' + error,
-        },
-        HttpStatus.NOT_FOUND,
+      throw new NotFoundException(
+         'Error en la eliminacion de exceptionTimedate ' + error
       );
+
+     
     }
   }
 }
