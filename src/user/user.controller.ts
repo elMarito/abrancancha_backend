@@ -29,6 +29,7 @@ export class UserController {
   @Get(':id/reservas')
   // o userWithReservations
   reservationsByUser(@Param('id') id : string) /* : User | any */ {
+    // TODO
       // return this.userService.getByIdCompleto(id);
   }
 

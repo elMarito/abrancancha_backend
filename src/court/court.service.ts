@@ -68,7 +68,7 @@ export class CourtService {
           let criterio : FindOneOptions = { where:{id:CourtDTO.id}};
           let Court : Court = await this.courtRepository.findOne(criterio);
           if (!Court)
-             throw new DOMException('No se encuentra la Court');
+             throw new Error('No se encuentra la Court');
           else
              Court.setName(CourtDTO.name);
              Court.setNumb(CourtDTO.numb);
@@ -89,7 +89,7 @@ public async remove(idCourt:number) : Promise<string> {
      let criterio : FindOneOptions = {where:{id:idCourt}};
      let court : Court = await this.courtRepository.findOne(criterio);
      if (!court)
-        throw new DOMException('No se encuentra la Cancha');
+        throw new Error('No se encuentra la Cancha');
      else
         await this.courtRepository.delete(court.getId());
      return ("El tipo de cancha fue cambiado correctamente .")

@@ -22,7 +22,7 @@ export class AuthController {
 
   @Post('register')
   async registerUser(@Body() register: RegisterDto): Promise<User> {
-    console.log("controller",{register});
+    // console.log("controller",{register});
     
     return this.authService.registerUser(register);
   }
@@ -33,5 +33,20 @@ export class AuthController {
     return this.authService.login(loginDto);
     // signIn(@Body() signInDto: Record<string, any>) {
     // 	return this.authService.signIn(signInDto.username, signInDto.password);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Patch('reset')
+  resetPassword(@Body() data: any) {
+    return this.authService.resetPassword(data.email);
+  }
+
+  @Patch('reset/:token')
+  // changePassword(@Body() newPassword: String) {
+    async changePassword(@Param('token') token: string, @Body() data: UpdateAuthDto) {
+    // async changePassword(@Param('token') token: string, @Body() data: any) {
+    return this.authService.changePassword(token, data.newPassword);
+    // const originalHash = '$2a$10$uUbvjZvgpYWqN5Pf5sDULeOZBnPReOTBz7tO7QeEU0wEPqzsYJA42';
+    // return this.authService.changePassword(originalHash, data.newPassword);
   }
 }
