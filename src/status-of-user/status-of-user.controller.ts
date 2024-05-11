@@ -24,11 +24,11 @@ export class StatusOfUserController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStatusOfUserDto: UpdateStatusOfUserDto) {
-    return this.statusOfUserService.update(+id, updateStatusOfUserDto);
+    return this.statusOfUserService.update({... updateStatusOfUserDto, id:Number(id)});
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number)  {
     return this.statusOfUserService.remove(+id);
   }
 }

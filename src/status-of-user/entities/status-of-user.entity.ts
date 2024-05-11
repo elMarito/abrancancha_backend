@@ -1,11 +1,6 @@
 //export class StatusOfUser 
 import { User } from 'src/user/entities/user.entity';
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,  
-} from 'typeorm';
+import {Entity,PrimaryGeneratedColumn,Column,OneToMany,} from 'typeorm';
 
 @Entity('statusOfUser')
 export class StatusOfUser {
