@@ -24,7 +24,7 @@ export class StatusOfCourtController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStatusOfCourtDto: UpdateStatusOfCourtDto) {
-    return this.statusOfCourtService.update(+id, updateStatusOfCourtDto);
+    return this.statusOfCourtService.update({...updateStatusOfCourtDto , id:Number(id)});
   }
 
   @Delete(':id')
