@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { StatusOfUserService } from './status-of-user.service';
 import { CreateStatusOfUserDto } from './dto/create-status-of-user.dto';
 import { UpdateStatusOfUserDto } from './dto/update-status-of-user.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('status-of-user')
+@UseGuards(AuthGuard)
 export class StatusOfUserController {
   constructor(private readonly statusOfUserService: StatusOfUserService) {}
 

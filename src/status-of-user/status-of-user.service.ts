@@ -4,9 +4,6 @@ import { UpdateStatusOfUserDto } from './dto/update-status-of-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StatusOfUser } from './entities/status-of-user.entity';
 import { Repository } from 'typeorm/repository/Repository';
-import { CreateTariffDto } from 'src/tariff/dto/create-tariff.dto';
-import { UpdateTariffDto } from 'src/tariff/dto/update-tariff.dto';
-import { Tariff } from 'src/tariff/entities/tariff.entity';
 import { FindOneOptions } from 'typeorm';
 import { CreateStatusOfCourtDto } from 'src/status-of-court/dto/create-status-of-court.dto';
 
@@ -40,7 +37,7 @@ export class StatusOfUserService {
           if (statusOfUser){
             this.statusOfUser.push(statusOfUser)
           }
-          else throw new Error('No tariff found');
+          else throw new Error('No statusOfUser found');
           return this.statusOfUser;
         } catch (error) {
           throw new HttpException({
@@ -59,7 +56,7 @@ export class StatusOfUserService {
           if (statusOfUser) 
               this.statusOfUser.push(statusOfUser);
           else
-              throw new Error('No tariff found')
+              throw new Error('No statusOfUser found')
           return this.statusOfUser;
       } catch (error) {
           throw new HttpException( {
