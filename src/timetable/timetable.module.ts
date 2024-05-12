@@ -7,7 +7,7 @@ import { Schedule } from 'src/schedule/entities/schedule.entity';
 import { Court } from 'src/court/entities/court.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Timetable,Schedule,Court])],
+  imports: [TypeOrmModule.forFeature([Timetable, Schedule/* , Court */])],
   controllers: [TimetableController],
   providers: [TimetableService],
 })
