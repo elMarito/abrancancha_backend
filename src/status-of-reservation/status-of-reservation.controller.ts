@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { StatusOfReservationService } from './status-of-reservation.service';
 import { CreateStatusOfReservationDto } from './dto/create-status-of-reservation.dto';
 import { UpdateStatusOfReservationDto } from './dto/update-status-of-reservation.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('status-of-reservation')
+@UseGuards(AuthGuard)
 export class StatusOfReservationController {
   constructor(private readonly statusOfReservationService: StatusOfReservationService) {}
 
