@@ -19,8 +19,8 @@ import { StatusOfCourtModule } from './status-of-court/status-of-court.module';
 import { ExceptionTimedateModule } from './exception-timedate/exception-timedate.module';
 import { ScheduleModule } from './schedule/schedule.module';
 import { AuthModule } from './auth/auth.module';
-// import { StatusOfUser } from './status-of-user/entities/status-of-user.entity';
-// import { User } from './user/entities/user.entity';
+import { StatusOfUser } from './status-of-user/entities/status-of-user.entity';
+import { User } from './user/entities/user.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/roles.guard';
 //https://docs.nestjs.com/guards
