@@ -219,7 +219,7 @@ export class UserService {
       //else
       //  throw new Error(ERROR_MSG.INVALID_DATA_4.UPDATE);
       return ServiceResponseOk(
-        'Usuario actualizado exitosamente.',
+        `${ERROR_ENTITY_UCASE} se ha actualizado exitosamente.`,
         userUpdated,
       );
     } catch (error) {
