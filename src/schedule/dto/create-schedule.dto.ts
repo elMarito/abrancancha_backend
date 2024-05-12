@@ -1,9 +1,7 @@
 import { IsNumber, IsDate } from 'class-validator';
+import { Timetable } from 'src/timetable/entities/timetable.entity';
 
 export class CreateScheduleDto {
-  @IsNumber()
-  idTimetable: number;
-
   @IsNumber()
   dayOfWeek: number;
 
@@ -12,4 +10,9 @@ export class CreateScheduleDto {
 
   @IsDate()
   timeTo: Date;
+  
+  // @IsNumber()
+  // idTimetable: number;
+  @IsNumber()
+  timetable: Timetable;
 }
