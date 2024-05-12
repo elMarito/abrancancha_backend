@@ -19,7 +19,7 @@ export class Timetable {
   //---------------------------------------------------------------------------
   constructor(name: string, schedules?: Schedule[]) {
     this.name = name;
-    this.schedules = schedules || [];
+    this.schedules = schedules;// || [];
   }
   //---------------------------------------------------------------------------
   // Getters and Setters

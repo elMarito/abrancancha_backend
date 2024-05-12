@@ -8,6 +8,8 @@ import { FindManyOptions, FindOneOptions } from 'typeorm';
 import { Repository, QueryFailedError } from 'typeorm';
 import { Timetable } from './entities/timetable.entity';
 import { ResponseObject, ServiceResponseOk } from 'src/utilities';
+import { Schedule } from 'src/schedule/entities/schedule.entity';
+import { ScheduleService } from 'src/schedule/schedule.service';
 
 const ERROR_ENTITY = 'calendario';
 const ERROR_ENTITY_LOWER = `la ${ERROR_ENTITY}`;
@@ -41,6 +43,7 @@ export class TimetableService {
     private readonly timetableRepository: Repository<Timetable>,
     // @InjectRepository(Schedules) //**quizas esto no va */
     // private readonly scheduleRepository: Repository<Schedules>,
+    // private scheduleService: ScheduleService    
   ) {}
   //---------------------------------------------------------------------------
   public async create(datos: CreateTimetableDto): Promise<Timetable> {
@@ -54,7 +57,28 @@ export class TimetableService {
 
     let timetable: Timetable = await this.timetableRepository.save(
       new Timetable(datos.name, datos.schedules),
+      // new Timetable(datos.name),
     );
+    //*************
+    // let timetable : Timetable;
+    // if (datos)
+    // if (datos.name) {
+    // let timetable: Timetable = new Timetable(datos.name);
+    // let timetable: Timetable = new Timetable(datos.name, datos.schedules);
+
+    // if (datos.schedules.length) {
+    //   // timetable.schedules = [];
+    //   let schedule: Schedule;
+    //   for (let i = 0; i < datos.schedules.length; i++) {
+    //      schedule = this.scheduleService.create({...(datos.schedules[i]),timetable});
+    //     // let schedule: Schedule =  datos.schedules[i];
+    //     // console.log(schedule);
+    //     // timetable.schedules.push(schedule);
+    //   }
+    // }
+    // await this.timetableRepository.save(timetable);
+
+    //**************
 
     if (timetable) return timetable;
     throw new Error(

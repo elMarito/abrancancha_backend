@@ -1,23 +1,13 @@
-import {
-  BadRequestException,
-  ConflictException,
-  GoneException,
-  HttpException,
-  HttpStatus,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import {  BadRequestException,  ConflictException} from '@nestjs/common';
+import {  GoneException,  HttpException,  HttpStatus} from '@nestjs/common';
+import {  Injectable,  InternalServerErrorException} from '@nestjs/common';
+import {  NotFoundException,} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import {
-  FindManyOptions,
-  FindOneOptions,
-  QueryFailedError,
-  Repository,
-} from 'typeorm';
+import {  FindManyOptions,  FindOneOptions} from 'typeorm';
+import {  QueryFailedError,  Repository} from 'typeorm';
 import { StatusOfUser } from 'src/status-of-user/entities/status-of-user.entity';
 import { Reservation } from 'src/reservation/entities/reservation.entity';
 import { Administrator } from 'src/administrator/entities/administrator.entity';
@@ -203,7 +193,7 @@ export class UserService {
       if (datos.email && user.getEmail() !== datos.email) {
         // console.log(user.getEmail(),datos.email);
         const otherUser: User = await this.getUserByEmail(datos.email);
-        if (otherUser.getId() != idUser)
+        if (otherUser && otherUser.getId() != idUser)
           throw new ConflictException(
             'el email elegido pertenece a otro usuario.',
           );
@@ -235,7 +225,8 @@ export class UserService {
         );
       } else {
         // console.error('Error borrando el usuario:', error);
-        throw new Error('Ocurrio un error inesperado');
+        // throw new Error('Ocurrio un error inesperado');
+        throw error;
       }
     }
   }
