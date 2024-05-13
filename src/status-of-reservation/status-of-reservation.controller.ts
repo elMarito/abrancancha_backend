@@ -7,7 +7,9 @@ import { AuthGuard } from 'src/auth/auth.guard';
 @Controller('status-of-reservation')
 @UseGuards(AuthGuard)
 export class StatusOfReservationController {
-  constructor(private readonly statusOfReservationService: StatusOfReservationService) {}
+  constructor(
+    private readonly statusOfReservationService: StatusOfReservationService,
+  ) {}
 
   @Post()
   create(@Body() createStatusOfReservationDto: CreateStatusOfReservationDto) {
@@ -16,7 +18,7 @@ export class StatusOfReservationController {
 
   @Get()
   findAll() {
-    return this.statusOfReservationService.findAll();
+    return this.statusOfReservationService.getAll();
   }
 
   @Get(':id')
@@ -25,12 +27,21 @@ export class StatusOfReservationController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStatusOfReservationDto: UpdateStatusOfReservationDto) {
-    return this.statusOfReservationService.update(+id, updateStatusOfReservationDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateStatusOfReservationDto: UpdateStatusOfReservationDto,
+  ) {
+    return this.statusOfReservationService.updateStatusOfReservation({
+      ...updateStatusOfReservationDto,idStatus:Number(id)
+    });
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.statusOfReservationService.remove(+id);
+  private eliminarStatusOfReservation(
+    @Param('id') id: string,
+  ): StatusOfReservation[] | any {
+    return this.statusOfReservationService.deleteStatusOfReservation(
+      Number(id),
+    );
   }
 }
