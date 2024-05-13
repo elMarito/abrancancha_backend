@@ -1,6 +1,7 @@
-import { IsString } from 'class-validator';
+import {IsString } from 'class-validator';
 
 export class CreateStatusOfReservationDto {
   @IsString()
-  name: string;
+  name:string;
+  
 }
