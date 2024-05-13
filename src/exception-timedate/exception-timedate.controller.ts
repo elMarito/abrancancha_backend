@@ -5,7 +5,6 @@ import { UpdateExceptionTimedateDto } from './dto/update-exception-timedate.dto'
 import { ExceptionTimedate } from './entities/exception-timedate.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
 
-
 @Controller('exception-timedate')
 @UseGuards(AuthGuard)
 export class ExceptionTimedateController {

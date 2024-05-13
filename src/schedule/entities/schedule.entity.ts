@@ -1,13 +1,16 @@
 import { Timetable } from 'src/timetable/entities/timetable.entity';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity('schedules')
 export class Schedule {
   @PrimaryGeneratedColumn()
   private id: number;
-
-  // @Column()
-  // private idTimetable: number;
 
   @Column()
   private dayOfWeek: number;
@@ -18,20 +21,25 @@ export class Schedule {
   @Column({ type: 'time' })
   private timeTo: Date;
 
-  @ManyToOne(() => Timetable, timetable => timetable.schedules)
-  @JoinColumn( { name: 'idTimetable', referencedColumnName: 'id' })
+  @ManyToOne(() => Timetable, (timetable) => timetable.schedules)
+  @JoinColumn({ name: 'idTimetable', referencedColumnName: 'id' })
   public timetable: Timetable;
+
+  // @Column()
+  // private idTimetable: number;
   //---------------------------------------------------------------------------
   constructor(
-    idTimetable: number,
     dayOfWeek: number,
     timeFrom: Date,
     timeTo: Date,
+    timetable: Timetable,
+    // idTimetable: number,
   ) {
     // this.idTimetable = idTimetable;
     this.dayOfWeek = dayOfWeek;
     this.timeFrom = timeFrom;
     this.timeTo = timeTo;
+    this.timetable = timetable;
   }
   //---------------------------------------------------------------------------
   // Getters and Setters
@@ -39,13 +47,13 @@ export class Schedule {
     return this.id;
   }
 
-  // getIdTimetable(): number {
-  //   return this.idTimetable;
-  // }
+  getTimetable(): Timetable {
+    return this.timetable;
+  }
 
-  // setIdTimetable(idTimetable: number): void {
-  //   this.idTimetable = idTimetable;
-  // }
+  setTimetable(timetable: Timetable): void {
+    this.timetable = timetable;
+  }
 
   getDayOfWeek(): number {
     return this.dayOfWeek;
