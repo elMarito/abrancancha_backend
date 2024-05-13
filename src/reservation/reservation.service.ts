@@ -1,20 +1,11 @@
-import {
-  BadRequestException,
-  ConflictException,
-  GoneException,
-  InternalServerErrorException,
-  NotFoundException,
-  Injectable,
-} from '@nestjs/common';
+import {  BadRequestException,  ConflictException} from '@nestjs/common';
+import {  GoneException,  InternalServerErrorException} from '@nestjs/common';
+import {  NotFoundException,  Injectable} from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  FindManyOptions,
-  FindOneOptions,
-  QueryFailedError,
-  Repository,
-} from 'typeorm';
+import {  FindManyOptions,  FindOneOptions} from 'typeorm';
+import {  QueryFailedError,  Repository} from 'typeorm';
 import { Reservation } from './entities/reservation.entity';
 import { ResponseObject, ServiceResponseOk } from 'src/utilities';
 import { Court } from 'src/court/entities/court.entity';
@@ -127,7 +118,7 @@ export class ReservationService {
     //  throw new Error(ERROR_MSG.INVALID_DATA_4.UPDATE);
 
     return ServiceResponseOk(
-      'Reserva actualizada exitosamente.',
+      `${ERROR_ENTITY_UCASE} se ha actualizado exitosamente.`,
       reservationUpdated,
     );
   }
@@ -157,7 +148,7 @@ export class ReservationService {
     return await this.reservationRepository.findOne(criterio);
   }
   //---------------------------------------------------------------------------
-  private async getReservationByCourt(court: Court): Promise<Reservation[]> {
+  private async getReservationsByCourt(court: Court): Promise<Reservation[]> {
     // const criterio: FindManyOptions = { relations: ['StatusOfUser','Reservation','Administrator'] };
     // const criterio: FindManyOptions = { relations: ['Court'], where: { court: court } };
     const criterio: FindManyOptions = { where: { court: court } };

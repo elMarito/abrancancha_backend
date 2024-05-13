@@ -5,10 +5,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Timetable } from './entities/timetable.entity';
 import { Schedule } from 'src/schedule/entities/schedule.entity';
 import { Court } from 'src/court/entities/court.entity';
+import { ScheduleService } from 'src/schedule/schedule.service';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Timetable,Schedule,Court])],
+  imports: [TypeOrmModule.forFeature([Timetable, Schedule /* , Court */])],
   controllers: [TimetableController],
-  providers: [TimetableService],
+  providers: [TimetableService, ScheduleService],
 })
 export class TimetableModule {}

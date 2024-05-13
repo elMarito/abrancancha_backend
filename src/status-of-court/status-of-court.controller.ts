@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { StatusOfCourtService } from './status-of-court.service';
 import { CreateStatusOfCourtDto } from './dto/create-status-of-court.dto';
 import { UpdateStatusOfCourtDto } from './dto/update-status-of-court.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('status-of-court')
+@UseGuards(AuthGuard)
 export class StatusOfCourtController {
   constructor(private readonly statusOfCourtService: StatusOfCourtService) {}
 

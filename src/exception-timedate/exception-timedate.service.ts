@@ -4,7 +4,6 @@ import { UpdateExceptionTimedateDto } from './dto/update-exception-timedate.dto'
 import { InjectRepository } from '@nestjs/typeorm';
 import { ExceptionTimedate } from './entities/exception-timedate.entity';
 import { FindOneOptions, Repository } from 'typeorm';
-import { error } from 'console';
 
 @Injectable()
 export class ExceptionTimedateService {
@@ -86,7 +85,7 @@ export class ExceptionTimedateService {
       let criterio: FindOneOptions = { where: { id: exceptionTimedateDto.id } };
       let exceptionTimedate: ExceptionTimedate =
         await this.exceptionTimedateRepository.findOne(criterio);
-      if (!exceptionTimedate) throw new error('No se encuentra la excepcion');
+      if (!exceptionTimedate) throw new Error('No se encuentra la excepcion');
       else exceptionTimedate.setDateFrom(exceptionTimedateDto.dateFrom);
       exceptionTimedate.setDateTo(exceptionTimedateDto.dateTo);
       exceptionTimedate.setDayOfWeek(exceptionTimedateDto.dayOfWeek);
@@ -113,7 +112,7 @@ export class ExceptionTimedateService {
       let exceptionTimedate: ExceptionTimedate =
         await this.exceptionTimedateRepository.findOne(criterio);
       if (!exceptionTimedate)
-        throw new error('No se encuentra la exceptionTimedate');
+        throw new Error('No se encuentra la exceptionTimedate');
       else
         await this.exceptionTimedateRepository.delete(
           exceptionTimedate.getId(),
