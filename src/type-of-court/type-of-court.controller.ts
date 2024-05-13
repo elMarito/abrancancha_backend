@@ -9,7 +9,7 @@ export class TypeOfCourtController {
   constructor(private readonly typeOfCourtService: TypeOfCourtService) {}
 
   @Post()
-  create(@Body() createTypeOfCourtDto: CreateTypeOfCourtDto) {
+  create(@Body() createTypeOfCourtDto: CreateTypeOfCourtDto)  {
     return this.typeOfCourtService.create(createTypeOfCourtDto);
   }
 

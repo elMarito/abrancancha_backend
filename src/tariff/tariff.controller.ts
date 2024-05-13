@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { TariffService } from './tariff.service';
 import { CreateTariffDto } from './dto/create-tariff.dto';
 import { UpdateTariffDto } from './dto/update-tariff.dto';
 import { Tariff } from './entities/tariff.entity';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('tariffs')
+@UseGuards(AuthGuard)
 export class TariffController {
   constructor(private readonly tariffService: TariffService) {}
 
