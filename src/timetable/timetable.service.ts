@@ -10,6 +10,7 @@ import { Timetable } from './entities/timetable.entity';
 import { ResponseObject, ServiceResponseOk } from 'src/utilities';
 import { Schedule } from 'src/schedule/entities/schedule.entity';
 import { ScheduleService } from 'src/schedule/schedule.service';
+import { CreateScheduleDto } from 'src/schedule/dto/create-schedule.dto';
 
 const ERROR_ENTITY = 'calendario';
 const ERROR_ENTITY_LOWER = `la ${ERROR_ENTITY}`;
@@ -43,7 +44,7 @@ export class TimetableService {
     private readonly timetableRepository: Repository<Timetable>,
     // @InjectRepository(Schedules) //**quizas esto no va */
     // private readonly scheduleRepository: Repository<Schedules>,
-    // private scheduleService: ScheduleService    
+    private scheduleService: ScheduleService,
   ) {}
   //---------------------------------------------------------------------------
   public async create(datos: CreateTimetableDto): Promise<Timetable> {
@@ -56,8 +57,8 @@ export class TimetableService {
       );
 
     let timetable: Timetable = await this.timetableRepository.save(
-      new Timetable(datos.name, datos.schedules),
-      // new Timetable(datos.name),
+      // new Timetable(datos.name, datos.schedules),
+      new Timetable(datos.name),
     );
     //*************
     // let timetable : Timetable;
@@ -66,16 +67,29 @@ export class TimetableService {
     // let timetable: Timetable = new Timetable(datos.name);
     // let timetable: Timetable = new Timetable(datos.name, datos.schedules);
 
-    // if (datos.schedules.length) {
-    //   // timetable.schedules = [];
-    //   let schedule: Schedule;
-    //   for (let i = 0; i < datos.schedules.length; i++) {
-    //      schedule = this.scheduleService.create({...(datos.schedules[i]),timetable});
-    //     // let schedule: Schedule =  datos.schedules[i];
-    //     // console.log(schedule);
-    //     // timetable.schedules.push(schedule);
-    //   }
+    if (datos.schedules.length) {
+      let newSchedule; //: CreateScheduleDto;
+      datos.schedules.forEach(async (schedule) => {
+        newSchedule = { ...schedule, timetable: timetable };
+        // newSchedule = {
+        //   dayOfWeek: schedule.getDayOfWeek(),
+        //   timeFrom: schedule.getTimeFrom(),
+        //   timeTo: schedule.getTimeTo(),
+        //   timetable: timetable,
+        // };
+        // let user: Schedule =
+        await this.scheduleService.create(newSchedule);
+      });
+    }
+
+    // timetable.schedules = [];
+    // for (let i = 0; i < datos.schedules.length; i++) {
+    //   const schedule: CreateScheduleDto = datos.schedules[i];
     // }
+    // let schedule: Schedule =  datos.schedules[i];
+    // console.log(schedule);
+    // timetable.schedules.push(schedule);
+
     // await this.timetableRepository.save(timetable);
 
     //**************
@@ -88,6 +102,16 @@ export class TimetableService {
   //---------------------------------------------------------------------------
   public async findAll(): Promise<Timetable[]> {
     this.timetables = await this.timetableRepository.find();
+    if (this.timetables) return this.timetables;
+    throw new NotFoundException(
+      'Error en la busqueda: ',
+      ERROR_MSG.NOT_FOUND_ANY,
+    );
+  }
+  //---------------------------------------------------------------------------
+  public async findAllwithSchedules(): Promise<Timetable[]> {
+    const criterio: FindManyOptions = { relations: ['schedules'] };
+    this.timetables = await this.timetableRepository.find(criterio);
     if (this.timetables) return this.timetables;
     throw new NotFoundException(
       'Error en la busqueda: ',
