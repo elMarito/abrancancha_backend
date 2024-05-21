@@ -6,11 +6,14 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 import { RegisterDto } from './dto/register-auth.dto';
 import { User } from 'src/user/entities/user.entity';
 import { LoginDto } from './dto/login-auth.dto';
+import { Public } from './roles.decorator';
 
+@Public()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
+  
+  // @Public()
   @Post('register')
   async registerUser(@Body() register: RegisterDto): Promise<User> {
     // console.log("controller",{register});
@@ -18,6 +21,7 @@ export class AuthController {
     return this.authService.registerUser(register);
   }
 
+  // @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
   login(@Body() loginDto: LoginDto) {
@@ -27,11 +31,13 @@ export class AuthController {
   }
 
   // @HttpCode(HttpStatus.OK)
+  // @Public()
   @Patch('reset')
   resetPassword(@Body() data: any) {
     return this.authService.resetPassword(data.email);
   }
 
+  // @Public()
   @Patch('reset/:token')
   // changePassword(@Body() newPassword: String) {
   async changePassword(
