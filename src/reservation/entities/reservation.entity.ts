@@ -30,7 +30,8 @@ export class Reservation {
   // @Column()
   // private idCourt: number;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  // @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'date' })
   private timedate: Date;
 
   @Column()

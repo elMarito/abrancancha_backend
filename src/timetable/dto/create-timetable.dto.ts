@@ -5,5 +5,6 @@ export class CreateTimetableDto {
     @IsString()
     readonly name: string;
     
-    readonly schedules: Schedule[];
+    readonly schedules: {"dayOfWeek":number,"timeFrom":Date,"timeTo":Date}[];
+    // readonly schedules: Schedule[];
 }

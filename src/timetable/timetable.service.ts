@@ -70,7 +70,13 @@ export class TimetableService {
     if (datos.schedules.length) {
       let newSchedule; //: CreateScheduleDto;
       datos.schedules.forEach(async (schedule) => {
-        newSchedule = { ...schedule, timetable: timetable };
+        // newSchedule = { ...schedule, timetable: timetable };
+        newSchedule = {
+          dayOfWeek: schedule.dayOfWeek,
+          timeFrom: new Date(schedule.timeFrom),
+          timeTo: new Date(schedule.timeTo),
+          timetable: timetable
+        };
         // newSchedule = {
         //   dayOfWeek: schedule.getDayOfWeek(),
         //   timeFrom: schedule.getTimeFrom(),
@@ -141,7 +147,7 @@ export class TimetableService {
     if (timetable == null) throw new GoneException(ERROR_MSG.NOT_FOUND);
 
     timetable.setName(datos.name);
-    timetable.setSchedules(datos.schedules);
+    // timetable.setSchedules(datos.schedules);
     const timetableUpdated: Timetable =
       await this.timetableRepository.save(timetable);
     //else
@@ -191,4 +197,15 @@ export class TimetableService {
     const timetable: Timetable[] = await this.getTimetablesByName(name);
     return timetable[0] != null;
   }
+      //---------------------------------------------------------------------------
+      // private async getScheduleByName(name: string): Promise<Timetable> {
+      //   // const criterio: FindManyOptions = { relations: ['StatusOfUser','Timetable','Administrator'] };
+      //   // const criterio: FindManyOptions = { relations: ['Court'], where: { court: court } };
+      //   const criterio: FindOneOptions = { where: { name: name } };
+      //   return await this.timetabscheleRepository.findOne(criterio);
+      //   // return await this.timetableService.getTimetablesByName(name)
+      //   // const timetable:Timetable[]= await this.timetableService.getTimetablesByName(datos.timetable.name)
+  
+      //   // return await this.timetableRepository.findOne(criterio);
+      // }
 }
