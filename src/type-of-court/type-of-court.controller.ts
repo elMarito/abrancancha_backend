@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { TypeOfCourtService } from './type-of-court.service';
 import { CreateTypeOfCourtDto } from './dto/create-type-of-court.dto';
 import { UpdateTypeOfCourtDto } from './dto/update-type-of-court.dto';
 import { TypeOfCourt } from './entities/type-of-court.entity';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('type-of-court')
+@UseGuards(AuthGuard)
 export class TypeOfCourtController {
   constructor(private readonly typeOfCourtService: TypeOfCourtService) {}
 

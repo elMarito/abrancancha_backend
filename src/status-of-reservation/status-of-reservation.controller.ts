@@ -1,11 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { StatusOfReservationService } from './status-of-reservation.service';
 import { CreateStatusOfReservationDto } from './dto/create-status-of-reservation.dto';
 import { UpdateStatusOfReservationDto } from './dto/update-status-of-reservation.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { StatusOfReservation } from './entities/status-of-reservation.entity';
 
 @Controller('status-of-reservation')
+@UseGuards(AuthGuard)
 export class StatusOfReservationController {
-  constructor(private readonly statusOfReservationService: StatusOfReservationService) {}
+  constructor(
+    private readonly statusOfReservationService: StatusOfReservationService,
+  ) {}
 
   @Post()
   create(@Body() createStatusOfReservationDto: CreateStatusOfReservationDto) {
@@ -14,7 +19,7 @@ export class StatusOfReservationController {
 
   @Get()
   findAll() {
-    return this.statusOfReservationService.findAll();
+    return this.statusOfReservationService.getAll();
   }
 
   @Get(':id')
@@ -23,12 +28,21 @@ export class StatusOfReservationController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStatusOfReservationDto: UpdateStatusOfReservationDto) {
-    return this.statusOfReservationService.update(+id, updateStatusOfReservationDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateStatusOfReservationDto: UpdateStatusOfReservationDto,
+  ) {
+    return this.statusOfReservationService.updateStatusOfReservation({
+      ...updateStatusOfReservationDto,idStatus:Number(id)
+    });
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.statusOfReservationService.remove(+id);
+  private eliminarStatusOfReservation(
+    @Param('id') id: string,
+  ): StatusOfReservation[] | any {
+    return this.statusOfReservationService.deleteStatusOfReservation(
+      Number(id),
+    );
   }
 }

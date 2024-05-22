@@ -2,7 +2,7 @@
 import { User } from 'src/user/entities/user.entity';
 import {Entity,PrimaryGeneratedColumn,Column,OneToMany,} from 'typeorm';
 
-@Entity('status-of-user')
+@Entity('statusOfUser')
 export class StatusOfUser {
   @PrimaryGeneratedColumn()
   private id: number;
