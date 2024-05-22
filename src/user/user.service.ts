@@ -203,7 +203,7 @@ export class UserService {
       if (datos.email && user.getEmail() !== datos.email) {
         // console.log(user.getEmail(),datos.email);
         const otherUser: User = await this.getUserByEmail(datos.email);
-        if (otherUser.getId() != idUser)
+        if (otherUser && otherUser.getId() != idUser)
           throw new ConflictException(
             'el email elegido pertenece a otro usuario.',
           );
@@ -235,7 +235,7 @@ export class UserService {
         );
       } else {
         // console.error('Error borrando el usuario:', error);
-        throw new Error('Ocurrio un error inesperado');
+        throw error;
       }
     }
   }
