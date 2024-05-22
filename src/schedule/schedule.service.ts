@@ -11,7 +11,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Schedule } from './entities/schedule.entity';
 import { FindOneOptions, Repository } from 'typeorm';
 // import { Timetable } from 'src/timetable/entities/timetable.entity';
-import { ResponseObject, ServiceResponseOk } from 'src/utilities';
+import { dateEstractGMT, ResponseObject, ServiceResponseOk } from 'src/utilities';
+import { Timetable } from 'src/timetable/entities/timetable.entity';
+import { TimetableService } from 'src/timetable/timetable.service';
 
 const ERROR_ENTITY = 'agenda';
 const ERROR_ENTITY_LOWER = `la ${ERROR_ENTITY}`;
@@ -43,21 +45,38 @@ export class ScheduleService {
   constructor(
     @InjectRepository(Schedule)
     private readonly scheduleRepository: Repository<Schedule>,
+    @InjectRepository(Timetable)
+    private readonly timetableRepository: Repository<Timetable>,
+    // private timetableService: TimetableService,
   ) {}
   //---------------------------------------------------------------------------
   public async create(datos: CreateScheduleDto): Promise<Schedule> {
+    const { timeTo, timeFrom } = datos;
+    const stringTimeFrom:Date = dateEstractGMT( timeFrom.toString());
+    const stringTimeTo:Date =   dateEstractGMT(timeTo.toString());
+//"2025-04-22T08:36:45.000Z"+++"2025-02-03T15:46:57.000Z"
+
+
+// throw new Error("+++"+ JSON.stringify(        new Date(stringTimeFrom))+"++"      );
+// const criterio: FindOneOptions = { where: { name: datos.timetable.name }, };
+// const timetable: Promise<Timetable> = this.timetableRepository.findOne(criterio);
+
+    const timetable:Timetable= await this.getTimetableByName(datos.timetable.name)
+    if (!timetable)
+      throw new NotFoundException('El calendario elegido no existe.');
+    
+    // return await this.timetableRepository.find(criterio);
     let schedule: Schedule = await this.scheduleRepository.save(
       new Schedule(
         datos.dayOfWeek,
-        datos.timeFrom,
-        datos.timeTo,
-        datos.timetable
-        // datos.idTimetable,
+        stringTimeFrom,
+        stringTimeTo,
+        await timetable,
       ),
     );
 
     if (schedule) return schedule;
-    throw new Error('Error inesperado:\n'+ERROR_MSG.CANT_CREATE );
+    throw new Error('Error inesperado:\n' + ERROR_MSG.CANT_CREATE);
   }
   //---------------------------------------------------------------------------
   public async findAll(): Promise<Schedule[]> {
@@ -75,7 +94,7 @@ export class ScheduleService {
 
     this.schedules = [];
     if (schedule) this.schedules.push(schedule);
-    else throw new Error('Error en la busqueda: '+ ERROR_MSG.NOT_FOUND);
+    else throw new Error('Error en la busqueda: ' + ERROR_MSG.NOT_FOUND);
     return this.schedules;
   }
   //---------------------------------------------------------------------------
@@ -84,30 +103,33 @@ export class ScheduleService {
     datos: UpdateScheduleDto,
   ): Promise<ResponseObject> {
     if (!idSchedule) throw new BadRequestException(ERROR_MSG.INVALID_ID);
-    if (!datos) throw new BadRequestException(ERROR_MSG.NO_DATA_4.UPDATE);
+    // if (!datos) throw new BadRequestException(ERROR_MSG.NO_DATA_4.UPDATE);
 
     let schedule: Schedule = await this.getScheduleById(idSchedule);
 
     if (schedule == null) throw new GoneException(ERROR_MSG.NOT_FOUND);
+
+    const timetable:Timetable= await this.getTimetableByName(datos.timetable.name)
 
     //si modifico algo, chequear que no repita la otra agenda
     if (
       (datos.dayOfWeek && schedule.getDayOfWeek() !== datos.dayOfWeek) ||
       (datos.timeFrom && schedule.getTimeFrom() !== datos.timeFrom) ||
       (datos.timeTo && schedule.getTimeTo() !== datos.timeTo) ||
-      (datos.timetable && schedule.getTimetable() !== datos.timetable)
+      (datos.timetable && schedule.getTimetable() !== timetable)
     ) {
       const otherSchedule: Schedule =
         await this.getScheduleByDow_Tf_Tt_Table(datos);
       if (otherSchedule.getId() != idSchedule)
-        throw new ConflictException("Datos repetidos",
-          'Los datos cargados pertenece a otra agenda.'
+        throw new ConflictException(
+          'Datos repetidos',
+          'Los datos cargados pertenece a otra agenda.',
         );
     }
     schedule.setDayOfWeek(datos.dayOfWeek);
     schedule.setTimeFrom(datos.timeFrom);
     schedule.setTimeTo(datos.timeTo);
-    schedule.setTimetable(datos.timetable);
+    schedule.setTimetable(timetable);
     const scheduleUpdated: Schedule =
       await this.scheduleRepository.save(schedule);
     //else
@@ -156,4 +178,15 @@ export class ScheduleService {
     const schedule: Schedule = await this.getScheduleById(id);
     return schedule != null;
   }
+    //---------------------------------------------------------------------------
+    private async getTimetableByName(name: string): Promise<Timetable> {
+      // const criterio: FindManyOptions = { relations: ['StatusOfUser','Timetable','Administrator'] };
+      // const criterio: FindManyOptions = { relations: ['Court'], where: { court: court } };
+      const criterio: FindOneOptions = { where: { name: name } };
+      return await this.timetableRepository.findOne(criterio);
+      // return await this.timetableService.getTimetablesByName(name)
+      // const timetable:Timetable[]= await this.timetableService.getTimetablesByName(datos.timetable.name)
+
+      // return await this.timetableRepository.findOne(criterio);
+    }
 }

@@ -1,11 +1,6 @@
 import { Timetable } from 'src/timetable/entities/timetable.entity';
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity('schedules')
 export class Schedule {

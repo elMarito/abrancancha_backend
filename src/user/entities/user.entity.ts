@@ -24,11 +24,13 @@ export class User {
   // @ApiProperty({ description: 'Una o mas palabras separadas por espacios' })
   private fullname: string;
 
-  @Column()
+  @Column({ nullable: false})
+  // @Column({select: false}) //<-si uso esto no funciona el getPasswordHash
+  // @Column({ nullable: false, select: false })
   @IsNotEmpty()
   @MaxLength(256)
   // @IsHash('sha256') Checks if the string is a hash The following types are supported:md4, md5, sha1, sha256, sha384, sha512, ripemd128, ripemd160, tiger128, tiger160, tiger192, crc32, crc32b.
-  // @Column({ nullable: false, select: false })
+  // @IsHash no funcion con bcryptjs
   private passwordHash: string;
 
   // Si quieres incluir el campo "salt", descomenta la siguiente línea y asegúrate de agregarlo en la base de datos.
@@ -48,6 +50,8 @@ export class User {
 
   // @Column()
   // private idStatus: number;
+  // @Column()
+  // private role: string | enum;
 
   @ManyToOne(() => StatusOfUser, (statusOfUser) => statusOfUser.users)
   @JoinColumn({ name: 'idStatus', referencedColumnName: 'id' })
@@ -141,9 +145,18 @@ export class User {
   }
   //public hasReservations(): boolean
   public isAdministrator(): boolean {
-    return this.administrator != null;
+    return this.administrator !== null;
   }
 
   // public getIdStatus(): number {    return this.idStatus;  }
   // public  setIdStatus(value: number): void {    this.idStatus = value;  }
 }
+
+
+//Role
+//https://orkhan.gitbook.io/typeorm/docs/entities#column-types
+// export enum UserRole {
+//   ADMIN = "admin",
+//   EDITOR = "editor",
+//   GHOST = "ghost",
+// }
