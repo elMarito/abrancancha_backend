@@ -1,15 +1,17 @@
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { IsNumber, IsDate } from 'class-validator';
 
 export class CreateExceptionTimedateDto {
-    @IsNumber()
-    dayOfWeek: number;
-  
-    @IsDate()
-    @Type(()=>Date)
-    dateFrom: Date;
-  
-    @IsDate()
-    @Type(()=>Date)
-    dateTo: Date;
+  @IsNumber()
+  readonly dayOfWeek: number;
+
+  @IsDate()
+  @Transform(({ value }) => new Date(value), { toClassOnly: true })
+  @Type(() => Date)
+  readonly dateFrom: Date;
+
+  @IsDate()
+  @Transform(({ value }) => new Date(value), { toClassOnly: true })
+  @Type(() => Date)
+  readonly dateTo: Date;
 }

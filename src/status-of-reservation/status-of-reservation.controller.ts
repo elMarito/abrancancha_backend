@@ -3,6 +3,7 @@ import { StatusOfReservationService } from './status-of-reservation.service';
 import { CreateStatusOfReservationDto } from './dto/create-status-of-reservation.dto';
 import { UpdateStatusOfReservationDto } from './dto/update-status-of-reservation.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { StatusOfReservation } from './entities/status-of-reservation.entity';
 
 @Controller('status-of-reservation')
 @UseGuards(AuthGuard)

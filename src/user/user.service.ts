@@ -1,18 +1,19 @@
-import {  BadRequestException,  ConflictException} from '@nestjs/common';
-import {  GoneException,  HttpException,  HttpStatus} from '@nestjs/common';
-import {  Injectable,  InternalServerErrorException} from '@nestjs/common';
-import {  NotFoundException,} from '@nestjs/common';
+import { BadRequestException, ConflictException } from '@nestjs/common';
+import { GoneException, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import {  FindManyOptions,  FindOneOptions} from 'typeorm';
-import {  QueryFailedError,  Repository} from 'typeorm';
+import { FindManyOptions, FindOneOptions, IsNull, Not } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { StatusOfUser } from 'src/status-of-user/entities/status-of-user.entity';
 import { Reservation } from 'src/reservation/entities/reservation.entity';
 import { Administrator } from 'src/administrator/entities/administrator.entity';
 import * as bcryptjs from 'bcryptjs';
 import { ResponseObject, ServiceResponseOk } from 'src/utilities';
+import { Role } from 'src/auth/role.enum';
 
 const ERROR_ENTITY = 'usuario';
 const ERROR_ENTITY_LOWER = `el ${ERROR_ENTITY}`;
@@ -49,8 +50,8 @@ export class UserService {
   ) {}
   //---------------------------------------------------------------------------
   async getUserByEmail(email: string): Promise<User> {
-    // try {
-    const criteria: FindOneOptions = { where: { email: email } };
+    // try { //aca va relarions para que funcione use.isAdministrator()
+    const criteria: FindOneOptions = { relations: ['administrator'], where: { email: email } };
     const user: User = await this.userRepository.findOne(criteria);
     // if (user)
     return user;
@@ -114,15 +115,26 @@ export class UserService {
           'Error: creando el usuario \n',
           'Error en la consulta a la base de datos',
         );
-      } else return error;
+      } else throw error;
     }
   }
   //---------------------------------------------------------------------------
-  public async findAll(): Promise<User[]> {
+  public async findAll(role: Role): Promise<User[]> {
     try {
+      let filterRole;
+      if ((role === Role.Admin)) filterRole = { administrator: { id: Not(IsNull())  } };
+      else filterRole = { administrator: { id: IsNull() } };
+
+      const criterio: FindManyOptions = {
+        relations: ['administrator'],
+        where: filterRole,
+        select: {passwordHash:false, administrator: { id: false, idUser: false } },
+      };
+      this.users = await this.userRepository.find(criterio);
+
       // const criterio: FindManyOptions = { relations: ['StatusOfUser','Reservation','Administrator'] };
       // this.users = await this.userRepository.find(criterio);
-      this.users = await this.userRepository.find();
+      // this.users = await this.userRepository.find();
       if (this.users) return this.users;
       throw new NotFoundException(
         'Error en la busqueda: ',
@@ -178,7 +190,7 @@ export class UserService {
   ): Promise<ResponseObject> {
     try {
       if (!idUser) throw new BadRequestException(ERROR_MSG.INVALID_ID);
-      if (!datos) throw new BadRequestException(ERROR_MSG.NO_DATA_4.UPDATE);
+      // if (!datos) throw new BadRequestException(ERROR_MSG.NO_DATA_4.UPDATE);
       // if (!datos.fullname) throw new Error(ERROR_MSG.INVALID_DATA_4.UPDATE);
       // const userExists = await this.existUserId(idUser);
       // if (!userExists) throw new GoneException(ERROR_MSG.NOT_FOUND);
@@ -213,7 +225,6 @@ export class UserService {
         userUpdated,
       );
     } catch (error) {
-      // return error;
       if (
         error instanceof BadRequestException ||
         error instanceof GoneException
@@ -244,7 +255,6 @@ export class UserService {
       return ServiceResponseOk('Usuario borrado exitosamente.');
       // return {status: true, messagge: 'Usuario borrado exitosamente.'};
     } catch (error) {
-      // return error.message;
       if (
         error instanceof BadRequestException ||
         error instanceof GoneException
@@ -267,7 +277,7 @@ export class UserService {
     return await this.userRepository.findOne(criterio);
   }
   //---------------------------------------------------------------------------
-  public async getUserByResetToken(passwordHash:string): Promise<User> {
+  public async getUserByResetToken(passwordHash: string): Promise<User> {
     const criterio: FindOneOptions = { where: { passwordHash: passwordHash } };
     return await this.userRepository.findOne(criterio);
   }

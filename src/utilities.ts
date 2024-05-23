@@ -23,6 +23,10 @@ export function today(completa: boolean = false): Date {
   return fechaSinHora;
 }
 
+export function dateEstractGMT( timeFrom: string): Date {   
+  return new Date( timeFrom.toString().replace(/GMT.*$/, ''));  
+}
+
 //como convertir un hash para que sea valido en una URL
 //hash: $2a$10$OAAgeChoe7oWWeqwuihHH.G//nxvmhl.zFhf41w09dspxu0JYPE.S'
 
@@ -62,3 +66,14 @@ export function urlUnsafeHash(encodedHash: string): string {
   return decodedHash;
 }
 // console.log(decodedHash); // Output: $2a$10$OAAgeChoe7oWWeqwuihHH.G//nxvmhl.zFhf41w09dspxu0JYPE.S
+
+
+// const fecha: Date = new Date();
+// const fechaString1: string = fecha.toString();
+// console.log(fechaString1); // Ejemplo de salida: "Thu May 13 2024 15:30:00 GMT+0530 (hora de India estándar)"
+
+// const fechaString2: string = fecha.toISOString();
+// console.log(fechaString2); // Ejemplo de salida: "2024-05-13T10:00:00.000Z"
+
+// const fechaString: string = fecha.toUTCString();
+// console.log(fechaString); // Ejemplo de salida: "Thu, 13 May 2024 10:00:00 GMT"

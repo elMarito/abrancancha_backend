@@ -3,9 +3,12 @@ import { StatusOfUserService } from './status-of-user.service';
 import { CreateStatusOfUserDto } from './dto/create-status-of-user.dto';
 import { UpdateStatusOfUserDto } from './dto/update-status-of-user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 
 @Controller('status-of-user')
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
+@Roles(Role.Admin)
 export class StatusOfUserController {
   constructor(private readonly statusOfUserService: StatusOfUserService) {}
 
