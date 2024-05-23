@@ -75,7 +75,7 @@ export class AdministratorService {
         if (!administrator)
            throw new Error('No se encuentra la administrator');
         else
-           administratorDTO.idUser;//Aqui corregi y probablemente halla un error typeOfCourt.setName(TypeOfCourtDTO.name);//
+           administratorDTO.idUser;
         administrator = await this.administratorRepository.save(administrator);
         return administrator;
      } catch (error) {
@@ -84,15 +84,15 @@ export class AdministratorService {
      }
      }
      //---------------------------------------------------------------------------
-     public async deleteAdministrator(idadministrator:number) : Promise<string> {
+     public async deleteAdministrator(idAdministrator:number) : Promise<string> {
       try {
-         let criterio : FindOneOptions = {where:{id:idadministrator}};
+         let criterio : FindOneOptions = {where:{id:idAdministrator}};
          let administrator : Administrator = await this.administratorRepository.findOne(criterio);
          if (!administrator)
             throw new Error('No se encuentra la administrator');
          else
             await this.administratorRepository.delete(administrator.getId());
-         return ("El administrador fue cambiado correctamente. ")
+         return ("El administrador fue eliminado correctamente. ")
       } catch (error) {
             throw new HttpException( { status : HttpStatus.NOT_FOUND, 
                   error : 'Error en la eliminacion de administrator '+error}, HttpStatus.NOT_FOUND);

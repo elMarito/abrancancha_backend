@@ -4,6 +4,10 @@ import { CreateCourtDto } from './dto/create-court.dto';
 import { UpdateCourtDto } from './dto/update-court.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 
+
+
+
+
 @Controller('court')
 @UseGuards(AuthGuard)
 export class CourtController {
@@ -16,7 +20,7 @@ export class CourtController {
 
   @Get()
   findAll() {
-    return this.courtService.getAll();
+    return this.courtService.findAll();
   }
 
   @Get(':id')
@@ -26,7 +30,7 @@ export class CourtController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCourtDto: UpdateCourtDto) {
-    return this.courtService.updateCourt({...updateCourtDto , id:Number(id)});
+    return this.courtService.update(+id, updateCourtDto);
   }
 
   @Delete(':id')

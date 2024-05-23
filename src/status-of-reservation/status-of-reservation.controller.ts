@@ -32,14 +32,15 @@ export class StatusOfReservationController {
     @Body() updateStatusOfReservationDto: UpdateStatusOfReservationDto,
   ) {
     return this.statusOfReservationService.updateStatusOfReservation({
-      ...updateStatusOfReservationDto,idStatus:Number(id)
+      ...updateStatusOfReservationDto,
+      idStatus: Number(id),
     });
   }
 
   @Delete(':id')
-  private eliminarStatusOfReservation(
+  deleteStatusOfReservation(
     @Param('id') id: string,
-  ): StatusOfReservation[] | any {
+  ): StatusOfReservationService[] | any {
     return this.statusOfReservationService.deleteStatusOfReservation(
       Number(id),
     );

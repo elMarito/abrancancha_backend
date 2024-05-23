@@ -19,10 +19,10 @@ export class TimetableController {
     return this.timetableService.findAll();
   }
 
-  @Get('withSchedules')
-  findAllwithSchedules() {
-    return this.timetableService.findAllwithSchedules();
-  }
+  // @Get('withSchedules')
+  // findAllwithSchedules() {
+  //   return this.timetableService.findAllwithSchedules();
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
