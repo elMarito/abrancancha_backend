@@ -4,10 +4,6 @@ import { UpdateTimetableDto } from './dto/update-timetable.dto';
 
 @Injectable()
 export class TimetableService {
-<<<<<<< HEAD
-  create(createTimetableDto: CreateTimetableDto) {
-    return 'This action adds a new timetable';
-=======
   private timetables: Timetable[] = [];
 
   constructor(
@@ -75,17 +71,12 @@ export class TimetableService {
     throw new Error(
       'Error inesperado' + `\nError creando ${ERROR_ENTITY_LOWER}:`,
     );
->>>>>>> 7619a126572955f0ba6ce5a2d990a88a9d0fa07a
   }
 
   findAll() {
     return `This action returns all timetable`;
   }
 
-<<<<<<< HEAD
-  findOne(id: number) {
-    return `This action returns a #${id} timetable`;
-=======
     let timetable: Timetable = await this.getTimetableById(idTimetable);
 
     if (timetable == null) throw new GoneException(ERROR_MSG.NOT_FOUND);
@@ -101,7 +92,6 @@ export class TimetableService {
       `${ERROR_ENTITY_UCASE} se ha actualizado exitosamente.`,
       timetableUpdated,
     );
->>>>>>> 7619a126572955f0ba6ce5a2d990a88a9d0fa07a
   }
 
   update(id: number, updateTimetableDto: UpdateTimetableDto) {
