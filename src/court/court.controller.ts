@@ -20,7 +20,7 @@ export class CourtController {
 
   @Get()
   findAll() {
-    return this.courtService.findAll();
+    return this.courtService.getAll();
   }
 
   @Get(':id')
@@ -30,7 +30,7 @@ export class CourtController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCourtDto: UpdateCourtDto) {
-    return this.courtService.update(+id, updateCourtDto);
+    return this.courtService.updateCourt(updateCourtDto);
   }
 
   @Delete(':id')

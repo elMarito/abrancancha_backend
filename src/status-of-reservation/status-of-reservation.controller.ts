@@ -41,7 +41,7 @@ export class StatusOfReservationController {
   @Delete(':id')
   deleteStatusOfReservation(
     @Param('id') id: string,
-  ): StatusOfReservationService[] | any {
+  ): StatusOfReservation[] | any {
     return this.statusOfReservationService.deleteStatusOfReservation(
       Number(id),
     );

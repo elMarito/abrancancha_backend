@@ -1,10 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateCourtDto } from './dto/create-court.dto';
 import { UpdateCourtDto } from './dto/update-court.dto';
 import { Court } from './entities/court.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-
+import { FindOneOptions, Repository } from 'typeorm';
 
 const ERROR_ENTITY = 'cancha';
 const ERROR_ENTITY_LOWER = `la ${ERROR_ENTITY}`;
@@ -32,32 +31,125 @@ const ERROR_MSG = {
 @Injectable()
 export class CourtService {
 
-  private courts :Court[]=[];
+  private courts :Court []=[];
 
-  constructor(
-    @InjectRepository(Court)
-    private readonly courtRespository:Repository<Court>
-  ){}
+  constructor(@InjectRepository(Court)private readonly courtRepository:Repository<Court>){}
 
-  //---------------------------------------------------------------------------
+  public async create(createCourtDto: CreateCourtDto): Promise<Court> {
+    try {
+      let court: Court = await this.courtRepository.save(new Court(
+        createCourtDto.numb,createCourtDto.name,createCourtDto.idType,createCourtDto.idTimetable
+      ,createCourtDto.idTariff,createCourtDto.rating,createCourtDto.observations,createCourtDto.idStatus));
+      if (court)
+        return court;
+      else
+        throw new Error('No se pudo crear el court :(');
 
-  create(createCourtDto: CreateCourtDto) {
-    return 'This action adds a new court';
+    } catch (error) {
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: 'Error en la creacion del court '+ error
+      }, HttpStatus.NOT_FOUND);
+    }
   }
 
-  findAll() {
-    return `This action returns all court`;
-  }
+    public async getAll(): Promise<Court[]> {
+      try {
+        this.courts= await this.courtRepository.find();
+        if (this.courts)
+          return this.courts
+        else throw new Error('no se encuentran Canchas');
+      } catch (error) {
+        throw new HttpException({
+          status: HttpStatus.NOT_FOUND, error: "Error en la busqueda :)" + error
+        }, HttpStatus.NOT_FOUND)
+      }
+  
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} court`;
-  }
+    public async findOne(idCourt: number): Promise<Court[]> {
+      try {
+        let criterio: FindOneOptions = { where:{ id: idCourt }};
+        let court: Court = await this.courtRepository.findOne(criterio);
+        this.courts = [];
+        if (Court){
+          this.courts.push(court)
+        }
+        else throw new Error('no se encuentran Courts');
+        return this.courts;
+      } catch (error) {
+        throw new HttpException({
+          status: HttpStatus.NOT_FOUND, error: "Error en la busqueda :" + error
+        }, HttpStatus.NOT_FOUND)
+  
+      }
+    }
 
-  update(id: number, updateCourtDto: UpdateCourtDto) {
-    return `This action updates a #${id} court`;
-  }
+    // public async updateCourt(CourtDTO : UpdateCourtDto) : Promise<Court> {
+      // public async updateCourt(
+      //   idCourt: number,
+      //   datos: UpdateCourtDto,
+      // ): Promise<Court>{
+      // try {
+      //     let criterio : FindOneOptions = { where:{ id: idCourt }};
+      //      let Court : Court = await this.courtRepository.findOne(criterio);
+          
+      //     if (!Court)
+      //        throw new Error('No se encuentra la Court');
+      //     else
+      //        Court.setName(CourtDTO.name);
+      //        Court.setNumb(CourtDTO.numb);
+      //        Court.setObservations(CourtDTO.observations);
+      //        Court.setRating(CourtDTO.rating);
+      //        //Court.reservations[](CourtDTO.reservations);//Aca me trabe,no se como continuar.Sigo con el metodo Delete.
+      //     Court = await this.courtRepository.save(Court);
+      //     return Court;
+      //  } catch (error) {
+      //        throw new HttpException( { status : HttpStatus.NOT_FOUND, 
+      //              error : 'Error en la actualizacion de Court '+error}, HttpStatus.NOT_FOUND);
+      //  }
+      //  }
 
-  remove(id: number) {
-    return `This action removes a #${id} court`;
+      public async updateCourt(
+        CourtDto: UpdateCourtDto,
+      ): Promise<Court> {
+        try {
+          const criterio: FindOneOptions = { where:{ id: CourtDto }};
+          let court: Court =
+            await this.courtRepository.findOne(criterio);
+          if (!court) throw new Error('No se encuentra la excepcion');
+          else court.setName(CourtDto.name);
+                 court.setNumb(CourtDto.numb);
+                court.setObservations(CourtDto.observations);
+                  court.setRating(CourtDto.rating);;
+    
+          court =
+            await this.courtRepository.save(court);
+          return court;
+        } catch (error) {
+          throw new HttpException(
+            {
+              status: HttpStatus.NOT_FOUND,
+              error: 'Error en la actualizacion de Court ' + error,
+            },
+            HttpStatus.NOT_FOUND,
+          );
+        }
+      }
+//Falta teminar el update/
+
+public async remove(idCourt:number) : Promise<string> {
+  try {
+     let criterio : FindOneOptions = {where:{id:idCourt}};
+     let court : Court = await this.courtRepository.findOne(criterio);
+     if (!court)
+        throw new Error('No se encuentra la Cancha');
+     else
+        await this.courtRepository.delete(court.getId());
+     return ("El tipo de cancha fue cambiado correctamente .")
+  } catch (error) {
+        throw new HttpException( { status : HttpStatus.NOT_FOUND, 
+              error : 'Error en la eliminacion de la cancha '+error}, HttpStatus.NOT_FOUND);
   }
+}
 }

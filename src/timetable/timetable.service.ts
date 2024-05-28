@@ -70,7 +70,13 @@ export class TimetableService {
     if (datos.schedules.length) {
       let newSchedule; //: CreateScheduleDto;
       datos.schedules.forEach(async (schedule) => {
-        newSchedule = { ...schedule, timetable: timetable };
+        // newSchedule = { ...schedule, timetable: timetable };
+        newSchedule = {
+          dayOfWeek: schedule.dayOfWeek,
+          timeFrom: new Date(schedule.timeFrom),
+          timeTo: new Date(schedule.timeTo),
+          timetable: timetable
+        };
         // newSchedule = {
         //   dayOfWeek: schedule.getDayOfWeek(),
         //   timeFrom: schedule.getTimeFrom(),
