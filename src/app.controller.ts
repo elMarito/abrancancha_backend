@@ -1,6 +1,9 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Res } from '@nestjs/common';
 import { AppService } from './app.service';
+import { Public } from './auth/roles.decorator';
+import { Request, Response } from 'express';
 
+@Public()
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -9,7 +12,11 @@ export class AppController {
   // getHello(): string {
   //   return this.appService.getHello();
   // }
-  getEndPoints(): Record<string,string> {
-    return this.appService.getEndPoints();
+  // getEndPoints(): any {
+  //   return this.appService.getEndPoints();
+  // }
+  async getEndPoints(@Res() res: Response): Promise<void> {
+    const data = await this.appService.getEndPoints();
+    res.status(HttpStatus.ACCEPTED).json(data);
   }
 }

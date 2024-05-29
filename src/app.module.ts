@@ -23,7 +23,7 @@ import { StatusOfUser } from './status-of-user/entities/status-of-user.entity';
 import { User } from './user/entities/user.entity';
 
 import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './auth/roles.guard';
+// import { RolesGuard } from './auth/roles.guard';
 import { URL } from 'url';
 import { AuthGuard } from './auth/auth.guard';
 import { RoleGuard } from './auth/role.guard';
