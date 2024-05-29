@@ -4,9 +4,11 @@ import { CreateStatusOfReservationDto } from './dto/create-status-of-reservation
 import { UpdateStatusOfReservationDto } from './dto/update-status-of-reservation.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { StatusOfReservation } from './entities/status-of-reservation.entity';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 
 @Controller('status-of-reservation')
-@UseGuards(AuthGuard)
+@Roles(Role.Admin)
 export class StatusOfReservationController {
   constructor(
     private readonly statusOfReservationService: StatusOfReservationService,

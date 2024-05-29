@@ -85,30 +85,6 @@ export class CourtService {
       }
     }
 
-    // public async updateCourt(CourtDTO : UpdateCourtDto) : Promise<Court> {
-      // public async updateCourt(
-      //   idCourt: number,
-      //   datos: UpdateCourtDto,
-      // ): Promise<Court>{
-      // try {
-      //     let criterio : FindOneOptions = { where:{ id: idCourt }};
-      //      let Court : Court = await this.courtRepository.findOne(criterio);
-          
-      //     if (!Court)
-      //        throw new Error('No se encuentra la Court');
-      //     else
-      //        Court.setName(CourtDTO.name);
-      //        Court.setNumb(CourtDTO.numb);
-      //        Court.setObservations(CourtDTO.observations);
-      //        Court.setRating(CourtDTO.rating);
-      //        //Court.reservations[](CourtDTO.reservations);//Aca me trabe,no se como continuar.Sigo con el metodo Delete.
-      //     Court = await this.courtRepository.save(Court);
-      //     return Court;
-      //  } catch (error) {
-      //        throw new HttpException( { status : HttpStatus.NOT_FOUND, 
-      //              error : 'Error en la actualizacion de Court '+error}, HttpStatus.NOT_FOUND);
-      //  }
-      //  }
 
       public async updateCourt(
         CourtDto: UpdateCourtDto,

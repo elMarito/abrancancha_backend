@@ -3,13 +3,15 @@ import { CourtService } from './court.service';
 import { CreateCourtDto } from './dto/create-court.dto';
 import { UpdateCourtDto } from './dto/update-court.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 
 
 
 
 
 @Controller('court')
-@UseGuards(AuthGuard)
+@Roles(Role.Admin)
 export class CourtController {
   constructor(private readonly courtService: CourtService) {}
 

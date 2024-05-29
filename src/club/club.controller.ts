@@ -9,7 +9,7 @@ import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/role.enum';
 
 @Controller('club')
-// @UseGuards(AuthGuard)
+
 @Roles(Role.Admin)
 export class ClubController {
   constructor(private readonly clubService: ClubService) {}
