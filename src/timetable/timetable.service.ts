@@ -197,4 +197,15 @@ export class TimetableService {
     const timetable: Timetable[] = await this.getTimetablesByName(name);
     return timetable[0] != null;
   }
+      //---------------------------------------------------------------------------
+      // private async getScheduleByName(name: string): Promise<Timetable> {
+      //   // const criterio: FindManyOptions = { relations: ['StatusOfUser','Timetable','Administrator'] };
+      //   // const criterio: FindManyOptions = { relations: ['Court'], where: { court: court } };
+      //   const criterio: FindOneOptions = { where: { name: name } };
+      //   return await this.timetabscheleRepository.findOne(criterio);
+      //   // return await this.timetableService.getTimetablesByName(name)
+      //   // const timetable:Timetable[]= await this.timetableService.getTimetablesByName(datos.timetable.name)
+
+      //   // return await this.timetableRepository.findOne(criterio);
+      // }
 }
