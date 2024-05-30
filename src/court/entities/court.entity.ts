@@ -33,7 +33,7 @@ export class Court {
   // private idTariff: number;
 
   @Column()
-  private rating: string;
+  private rating: number;
 
   @Column()
   private observations: string;
@@ -78,7 +78,7 @@ export class Court {
     idType: number,
     idTimetable: number,
     idTariff: number,
-    rating: string,
+    rating: number,
     observations: string,
     idStatus: number,
     // active: boolean
@@ -116,7 +116,7 @@ export class Court {
   //   return this.idTariff;
   // }
 
-  getRating(): string {
+  getRating(): number {
     return this.rating;
   }
   getObservations(): string {
@@ -142,7 +142,7 @@ export class Court {
   // setIdTariff(idTariff: number): void {
   //   this.idTariff = idTariff;
   // }
-  setRating(rating: string): void {
+  setRating(rating: number): void {
     this.rating = rating;
   }
   setObservations(observations: string): void {

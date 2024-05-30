@@ -4,9 +4,11 @@ import { CreateStatusOfReservationDto } from './dto/create-status-of-reservation
 import { UpdateStatusOfReservationDto } from './dto/update-status-of-reservation.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { StatusOfReservation } from './entities/status-of-reservation.entity';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 
 @Controller('status-of-reservation')
-@UseGuards(AuthGuard)
+@Roles(Role.Admin)
 export class StatusOfReservationController {
   constructor(
     private readonly statusOfReservationService: StatusOfReservationService,
@@ -33,12 +35,13 @@ export class StatusOfReservationController {
     @Body() updateStatusOfReservationDto: UpdateStatusOfReservationDto,
   ) {
     return this.statusOfReservationService.updateStatusOfReservation({
-      ...updateStatusOfReservationDto,idStatus:Number(id)
+      ...updateStatusOfReservationDto,
+      idStatus: Number(id),
     });
   }
 
   @Delete(':id')
-  private eliminarStatusOfReservation(
+  deleteStatusOfReservation(
     @Param('id') id: string,
   ): StatusOfReservation[] | any {
     return this.statusOfReservationService.deleteStatusOfReservation(

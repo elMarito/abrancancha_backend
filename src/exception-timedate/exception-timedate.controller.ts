@@ -4,9 +4,11 @@ import { CreateExceptionTimedateDto } from './dto/create-exception-timedate.dto'
 import { UpdateExceptionTimedateDto } from './dto/update-exception-timedate.dto';
 import { ExceptionTimedate } from './entities/exception-timedate.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 
 @Controller('exception-timedate')
-@UseGuards(AuthGuard)
+@Roles(Role.Admin)
 export class ExceptionTimedateController {
   constructor(private readonly exceptionTimedateService: ExceptionTimedateService) {}
 
