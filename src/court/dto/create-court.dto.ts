@@ -1,15 +1,31 @@
-import { Type } from "@nestjs/common";
-import { Tariff } from "src/tariff/entities/tariff.entity";
-import { TypeOfCourt } from "src/type-of-court/entities/type-of-court.entity";
+// src/court/dto/create-court.dto.ts
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateCourtDto {
-    readonly numb: string;
-    readonly name:string;
-    readonly idTariff:number;
-    readonly idType:number;
-    readonly idTimetable:number;
-    readonly rating:string;
-    readonly observations:string;
-    readonly idStatus:number;
-    
+  @IsString()
+  readonly numb: string;
+
+  @IsString()
+  readonly name: string;
+
+  @IsNumber()
+  readonly idTariff: number;
+
+  @IsNumber()
+  readonly idType: number;
+
+  @IsNumber()
+  readonly idTimetable: number;
+
+  @IsNumber()
+  @IsOptional()
+  readonly rating?: number;
+
+  @IsString()
+  @IsOptional()
+  readonly observations?: string;
+
+  @IsNumber()
+  readonly idStatus: number;
 }
+

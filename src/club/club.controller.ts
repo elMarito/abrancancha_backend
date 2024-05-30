@@ -5,9 +5,12 @@ import { UpdateClubDto } from './dto/update-club.dto';
 import { Club } from './entities/club.entity';
 import { Auth } from 'src/auth/entities/auth.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 
 @Controller('club')
-@UseGuards(AuthGuard)
+
+@Roles(Role.Admin)
 export class ClubController {
   constructor(private readonly clubService: ClubService) {}
 

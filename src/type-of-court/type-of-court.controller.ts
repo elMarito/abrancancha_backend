@@ -4,9 +4,11 @@ import { CreateTypeOfCourtDto } from './dto/create-type-of-court.dto';
 import { UpdateTypeOfCourtDto } from './dto/update-type-of-court.dto';
 import { TypeOfCourt } from './entities/type-of-court.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 
 @Controller('type-of-court')
-@UseGuards(AuthGuard)
+@Roles(Role.Admin)
 export class TypeOfCourtController {
   constructor(private readonly typeOfCourtService: TypeOfCourtService) {}
 
