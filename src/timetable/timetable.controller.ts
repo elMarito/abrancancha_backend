@@ -20,7 +20,7 @@ export class TimetableController {
   }
 
   @Get('withSchedules')
-   findAllwithSchedules() {
+  findAllwithSchedules() {
     return this.timetableService.findAllwithSchedules();
   }
 
