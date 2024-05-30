@@ -3,28 +3,20 @@ import { Administrator } from 'src/administrator/entities/administrator.entity';
 import { Reservation } from 'src/reservation/entities/reservation.entity';
 import { StatusOfUser } from 'src/status-of-user/entities/status-of-user.entity';
 // import { ApiProperty } from '@nestjs/swagger';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { JoinColumn, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
   private id: number;
-  
+
   @Column()
   @IsNotEmpty()
   // @ApiProperty({ description: 'Una o mas palabras separadas por espacios' })
   private fullname: string;
 
-  @Column({ nullable: false})
+  @Column({ nullable: false })
   // @Column({select: false}) //<-si uso esto no funciona el getPasswordHash
   // @Column({ nullable: false, select: false })
   @IsNotEmpty()
@@ -49,7 +41,7 @@ export class User {
   private avatar: string;
 
   // @Column()
-  // private idStatus: number;
+  private idStatus: number;
   // @Column()
   // private role: string | enum;
 
@@ -76,9 +68,10 @@ export class User {
     this.passwordHash = passwordHash;
     // this.salt = crypto.getRandomValues();
     this.email = email;
-    this.phone = phone ||"";
-    this.avatar = avatar||"";
-
+    this.phone = phone || '';
+    this.avatar = avatar || '';
+    this.idStatus = 1;
+    // this.status={id:1,name:"Activo"};
     // "nombre": "Usuario Uno",
     // "estado": "activo"
     // "categoria": 3,
@@ -151,7 +144,6 @@ export class User {
   // public getIdStatus(): number {    return this.idStatus;  }
   // public  setIdStatus(value: number): void {    this.idStatus = value;  }
 }
-
 
 //Role
 //https://orkhan.gitbook.io/typeorm/docs/entities#column-types

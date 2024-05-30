@@ -5,22 +5,25 @@ export class AppService {
   getHello(): string {
     return 'Hello World!';
   }
-  getEndPoints(): Record<string,string> {
+  getEndPoints(): any {
+    const API_URL_BASE= ""
+    // const API_URL_BASE= app.geturl()
+    // const API_URL_BASE= "http://localhost:3000"
     return {
-      auth: 'http://localhost:3000/auth',
-      administrators: 'http://localhost:3000/administrators',
-      users: 'http://localhost:3000/users',
-      statusOfUser: 'http://localhost:3000/statusOfUser',
-      courts: 'http://localhost:3000/courts',
-      typeOfCourt: 'http://localhost:3000/typeOfCourt',
-      statusOfCourt: 'http://localhost:3000/statusOfCourt',
-      tariff: 'http://localhost:3000/tariff',
-      timetables: 'http://localhost:3000/timetables',
-      schedules: 'http://localhost:3000/schedules',
-      reservations: 'http://localhost:3000/reservations',
-      statusOfReservation: 'http://localhost:3000/statusOfReservation',
-      club: 'http://localhost:3000/club',
-      exceptionsTimeDate: 'http://localhost:3000/exceptionsTimeDate',
+      auth: API_URL_BASE+'/auth',
+      administrators: API_URL_BASE+'/administrators',
+      users: API_URL_BASE+'/users',
+      statusOfUser: API_URL_BASE+'/statusOfUser',
+      courts: API_URL_BASE+'/courts',
+      typeOfCourt: API_URL_BASE+'/typeOfCourt',
+      statusOfCourt: API_URL_BASE+'/statusOfCourt',
+      tariff: API_URL_BASE+'/tariff',
+      timetables: API_URL_BASE+'/timetables',
+      schedules: API_URL_BASE+'/schedules',
+      reservations: API_URL_BASE+'/reservations',
+      statusOfReservation: API_URL_BASE+'/statusOfReservation',
+      club: API_URL_BASE+'/club',
+      exceptionsTimeDate: API_URL_BASE+'/exceptionsTimeDate',
     };
   }
 
