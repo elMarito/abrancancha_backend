@@ -205,7 +205,7 @@ export class TimetableService {
       //   return await this.timetabscheleRepository.findOne(criterio);
       //   // return await this.timetableService.getTimetablesByName(name)
       //   // const timetable:Timetable[]= await this.timetableService.getTimetablesByName(datos.timetable.name)
-
+  
       //   // return await this.timetableRepository.findOne(criterio);
       // }
 }
