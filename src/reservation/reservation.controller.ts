@@ -3,9 +3,12 @@ import { ReservationService } from './reservation.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { RoleGuard } from 'src/auth/role.guard';
+import { Role } from 'src/auth/role.enum';
 
 @Controller('reservations')
-@UseGuards(AuthGuard)
+@Roles(Role.Admin)
 export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
 

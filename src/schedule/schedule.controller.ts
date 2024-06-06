@@ -3,9 +3,11 @@ import { ScheduleService } from './schedule.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 
 @Controller('schedules')
-@UseGuards(AuthGuard)
+@Roles(Role.Admin)
 export class ScheduleController {
   constructor(private readonly scheduleService: ScheduleService) {}
 

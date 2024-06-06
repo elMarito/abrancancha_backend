@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { CourtService } from './court.service';
 import { CreateCourtDto } from './dto/create-court.dto';
 import { UpdateCourtDto } from './dto/update-court.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+
 import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/role.enum';
 
@@ -10,7 +10,7 @@ import { Role } from 'src/auth/role.enum';
 
 
 
-@Controller('court')
+@Controller('courts')
 @Roles(Role.Admin)
 export class CourtController {
   constructor(private readonly courtService: CourtService) {}
@@ -32,7 +32,7 @@ export class CourtController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCourtDto: UpdateCourtDto) {
-    return this.courtService.updateCourt(updateCourtDto);
+    return this.courtService.updateCourt(+id ,updateCourtDto) ;
   }
 
   @Delete(':id')

@@ -1,5 +1,5 @@
 // src/court/dto/create-court.dto.ts
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateCourtDto {
   @IsString()
@@ -27,5 +27,11 @@ export class CreateCourtDto {
 
   @IsNumber()
   readonly idStatus: number;
+
+  @IsOptional()
+  @IsBoolean()
+  readonly active?:boolean;
+
+
 }
 
