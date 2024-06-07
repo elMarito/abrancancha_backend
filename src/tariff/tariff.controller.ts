@@ -3,11 +3,13 @@ import { TariffService } from './tariff.service';
 import { CreateTariffDto } from './dto/create-tariff.dto';
 import { UpdateTariffDto } from './dto/update-tariff.dto';
 import { Tariff } from './entities/tariff.entity';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/role.enum';
+import { Roles } from 'src/auth/roles.decorator';
+import { AuthGuard } from 'src/auth/auth.guard';
+
 
 @Controller('tariffs')
+
 @Roles(Role.Admin)
 export class TariffController {
   constructor(private readonly tariffService: TariffService) {}

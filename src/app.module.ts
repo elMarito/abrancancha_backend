@@ -23,7 +23,7 @@ import { StatusOfUser } from './status-of-user/entities/status-of-user.entity';
 import { User } from './user/entities/user.entity';
 
 import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './auth/roles.guard';
+// import { RolesGuard } from './auth/roles.guard';
 import { URL } from 'url';
 import { AuthGuard } from './auth/auth.guard';
 import { RoleGuard } from './auth/role.guard';
@@ -40,48 +40,48 @@ import { DB } from './auth/constants';
 @Module({
   imports: [
     ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'app') }),
-    // TypeOrmModule.forRoot({
-    //   type: 'mysql',
-    //   host: 'localhost',
-    //   port: 3306,
-    //   username: 'root',
-    //   password: 'root',
-    //   database: 'abranCancha',
-    //   entities: ['dist/**/**.entity{.ts,.js}'],
-    //   synchronize: false,
-    // }),
     TypeOrmModule.forRoot({
-      type: "cockroachdb",
-    //   url: dbUrl.toString(),
-      host: DB.HOST,
-      port: DB.PORT,
-      username: DB.USERNAME,
-      password: DB.PASSWORD,
-      database: DB.NAME,
-      ssl: true,
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: '1234',
+      database: 'abranCancha',
       entities: ['dist/**/**.entity{.ts,.js}'],
       synchronize: false,
     }),
-    AuthModule,
-    UserModule,
-    AdministratorModule,
-    ClubModule,
-    ReservationModule,
-    TypeOfCourtModule,
-    CourtModule,
-    StatusOfUserModule,
-    TariffModule,
-    TimetableModule,
-    StatusOfReservationModule,
-    StatusOfCourtModule,
-    ExceptionTimedateModule,
-    ScheduleModule,
-  ],
-  controllers: [AppController],
-  // providers: [AppService],
-  // providers: [ AppService, AuthGuard],
-  providers: [
-    { provide: APP_GUARD, useClass: AuthGuard },
-    { provide: APP_GUARD, useClass: RoleGuard }, AppService,AccessControlService],
-})
+  //   TypeOrmModule.forRoot({
+  //     type: "cockroachdb",
+  //   //   url: dbUrl.toString(),
+  //     host: DB.HOST,
+  //     port: DB.PORT,
+  //     username: DB.USERNAME,
+  //     password: DB.PASSWORD,
+  //     database: DB.NAME,
+  //     ssl: true,
+  //     entities: ['dist/**/**.entity{.ts,.js}'],
+  //     synchronize: false,
+  //   }),
+  //   AuthModule,
+  //   UserModule,
+  //   AdministratorModule,
+  //   ClubModule,
+  //   ReservationModule,
+  //   TypeOfCourtModule,
+  //   CourtModule,
+  //   StatusOfUserModule,
+  //   TariffModule,
+  //   TimetableModule,
+  //   StatusOfReservationModule,
+  //   StatusOfCourtModule,
+  //   ExceptionTimedateModule,
+  //   ScheduleModule,
+  // ],
+  // controllers: [AppController],
+  // // providers: [AppService],
+  // // providers: [ AppService, AuthGuard],
+  // providers: [
+  //   { provide: APP_GUARD, useClass: AuthGuard },
+  //   { provide: APP_GUARD, useClass: RoleGuard }, AppService,AccessControlService],
+]})
 export class AppModule {}

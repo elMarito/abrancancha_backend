@@ -7,6 +7,7 @@ import { Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/role.enum';
 
 @Controller('status-of-court')
+// @Roles(Role.Admin)
 @Roles(Role.Admin)
 export class StatusOfCourtController {
   constructor(private readonly statusOfCourtService: StatusOfCourtService) {}

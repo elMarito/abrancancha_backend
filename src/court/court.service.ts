@@ -43,31 +43,31 @@ export class CourtService {
 ){}
 
   public async create(createCourtDto: CreateCourtDto): Promise<Court> {
-    {
+    
 //try {ACA ES NUEVO
       // Verificar si el ID de TypeOfCourt existe
-      const typeExists = await this.typeOfCourtRepository.findOne(createCourtDto.idType);
-      if (!typeExists) {
-        throw new BadRequestException(`El idType ${createCourtDto.idType} no existe`);
-      }
+      // const typeExists = await this.typeOfCourtRepository.findOne(createCourtDto.idType);
+      // if (!typeExists) {
+      //   throw new BadRequestException(`El idType ${createCourtDto.idType} no existe`);
+      // }
 
-      // Verificar si el ID de Timetable existe
-      const timetableExists = await this.timetableRepository.findOne(createCourtDto.idTimetable);
-      if (!timetableExists) {
-        throw new BadRequestException(`El idTimetable ${createCourtDto.idTimetable} no existe`);
-      }
+      // // Verificar si el ID de Timetable existe
+      // const timetableExists = await this.timetableRepository.findOne(createCourtDto.idTimetable);
+      // if (!timetableExists) {
+      //   throw new BadRequestException(`El idTimetable ${createCourtDto.idTimetable} no existe`);
+      // }
 
-      // Verificar si el ID de Tariff existe
-      const tariffExists = await this.tariffRepository.findOne(createCourtDto.idTariff);
-      if (!tariffExists) {
-        throw new BadRequestException(`El idTariff ${createCourtDto.idTariff} no existe`);
-      }
+      // // Verificar si el ID de Tariff existe
+      // const tariffExists = await this.tariffRepository.findOne(createCourtDto.idTariff);
+      // if (!tariffExists) {
+      //   throw new BadRequestException(`El idTariff ${createCourtDto.idTariff} no existe`);
+      // }
 
-      // Verificar si el ID de StatusOfCourt existe
-      const statusExists = await this.statusOfCourtRepository.findOne(createCourtDto.idStatus);
-      if (!statusExists) {
-        throw new BadRequestException(`El idStatus ${createCourtDto.idStatus} no existe`);
-      }
+      // // Verificar si el ID de StatusOfCourt existe
+      // const statusExists = await this.statusOfCourtRepository.findOne(createCourtDto.idStatus);
+      // if (!statusExists) {
+      //   throw new BadRequestException(`El idStatus ${createCourtDto.idStatus} no existe`);
+      // }
 
       let court: Court = await this.courtRepository.save(new Court(
         createCourtDto.numb,createCourtDto.name,createCourtDto.idType,createCourtDto.idTimetable
@@ -78,7 +78,7 @@ export class CourtService {
         throw new Error('No se pudo crear la cancha :(');
 
     }  
-  }
+  
 
     public async getAll(): Promise<Court[]> {
       try {
@@ -96,7 +96,7 @@ export class CourtService {
 
     public async findOne(idCourt: number): Promise<Court[]> {
       try {
-        let criterio: FindOneOptions = { where:{ id: idCourt }};
+        const criterio: FindOneOptions = { where:{ id: idCourt }};
         let court: Court = await this.courtRepository.findOne(criterio);
         this.courts = [];
         if (Court){
@@ -165,4 +165,6 @@ private async getCourtById(
   return await this.courtRepository.findOne(criterio);
 }
 }
+
+
 

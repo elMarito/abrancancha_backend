@@ -1,12 +1,6 @@
-import {
-  IsString,
-  IsHash,
-  IsOptional,
-  IsNotEmpty,
-  IsEmail,
-  MaxLength,
-  IsNumber,
-} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString, MaxLength, IsOptional, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNumber } from 'class-validator';
 
 export class CreateUserDto {
   @IsString({ message: 'El campo "fullname" debe ser una cadena de texto.' })
@@ -16,7 +10,7 @@ export class CreateUserDto {
   @MaxLength(256, {
     message: 'Nombre demasiado largo. Max 256 caracteres.',
   })
-  // @ApiProperty({ description: 'Nombre completo del usuario' })
+  @ApiProperty({ description: 'Nombre completo del usuario' })
   readonly fullname: string;
   //---------------------------------------------------------------------------
   // @IsString()
