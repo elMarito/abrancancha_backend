@@ -1,4 +1,5 @@
-import { BadRequestException, GoneException, HttpException, HttpStatus, Inject, Injectable, Type } from '@nestjs/common';
+import { BadRequestException, GoneException, HttpException} from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Type } from '@nestjs/common';
 import { CreateCourtDto } from './dto/create-court.dto';
 import { UpdateCourtDto } from './dto/update-court.dto';
 import { Court } from './entities/court.entity';
@@ -36,8 +37,7 @@ const ERROR_MSG = {
 
 @Injectable()
 export class CourtService {
-
-  private courts :Court []=[];
+  private courts: Court[] = [];
 
   constructor(@InjectRepository(Court)
   private readonly courtRepository:Repository<Court>,
@@ -49,10 +49,7 @@ export class CourtService {
     private readonly tariffRepository: Repository<Tariff>,
     @InjectRepository(StatusOfCourt)
     private readonly statusOfCourtRepository: Repository<StatusOfCourt>,
-
-){}
-
-
+  ){}
 
     // ESTO Funciona pero no corrobora las otras entidades--
     //  public async create(createCourtDto: CreateCourtDto): Promise<Court> {
@@ -63,15 +60,12 @@ export class CourtService {
     //     return court;
     //   else
     //     throw new Error('No se pudo crear la cancha :(');
-
     // }  
     public async create(createCourtDto: CreateCourtDto): Promise<Court> {
       try {
         // Verificar si el ID de TypeOfCourt existe
         let criterio: FindOneOptions = { where: { id: createCourtDto.idType } };
         const typeExists = await this.typeOfCourtRepository.findOne(criterio);
-
-
     
         // Verificar si el ID de Timetable existe
         let criterio2: FindOneOptions = { where: { id: createCourtDto.idTimetable} };
@@ -110,48 +104,31 @@ export class CourtService {
         throw new BadRequestException('Error al crear la cancha');
       }
     }
-  
 
-
-
-    public async getAll(): Promise<Court[]> {
-      try {
-        this.courts= await this.courtRepository.find();
-        if (this.courts)
-          return this.courts
-        else throw new Error('no se encuentran Canchas');
-      } catch (error) {
-        throw new HttpException({
-          status: HttpStatus.NOT_FOUND, error: "Error en la busqueda :)" + error
-        }, HttpStatus.NOT_FOUND)
-      }
-  
+  public async getAll(): Promise<Court[]> {
+    try {
+      this.courts = await this.courtRepository.find();
+      if (this.courts) return this.courts;
+      else throw new Error('no se encuentran Canchas');
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Error en la busqueda :)' + error,
+        },
+        HttpStatus.NOT_FOUND,
+      );
     }
+  }
 
-    // public async findOne(idCourt: number): Promise<Court[]> {
-    //   try {
-    //     const criterio: FindOneOptions = { where:{ id: idCourt }};
-    //     let court: Court = await this.courtRepository.findOne(criterio);
-    //     this.courts = [];
-    //     if (Court){
-    //       this.courts.push(court)
-    //     }
-    //     else throw new Error('no se encuentran Courts');
-    //     return this.courts;
-    //   } catch (error) {
-    //     throw new HttpException({
-    //       status: HttpStatus.NOT_FOUND, error: "Error en la busqueda :" + error
-    //     }, HttpStatus.NOT_FOUND)
-  
-    //   }
-    // }
     public async findOne(idCourt: number): Promise<Court[]> {
       try {
         const court = await this.getCourtById(idCourt);
         
-        if (!court) {
-          throw new Error('No se encuentran Canchas');
-        }
+        if (!court) throw new Error('No se encuentran Canchas');
+    //     this.courts = [];
+    //       this.courts.push(court)
+    //     return this.courts;
     
         return [court];
       } catch (error) {
@@ -161,9 +138,8 @@ export class CourtService {
         }, HttpStatus.NOT_FOUND);
       }
     }
+  }
 
-
-   
       public async updateCourt(idCourt: number, datos: UpdateCourtDto): Promise<ResponseObject> {
         try {
           if (!idCourt) {
@@ -253,14 +229,9 @@ public async remove(idCourt:number) : Promise<string> {
   }
 }
 
-//---------------------------------------------------------------------------
-private async getCourtById(
-  idCourt: number,
-): Promise<Court> {
-  const criterio: FindOneOptions = { where: { id: idCourt } };
-  return await this.courtRepository.findOne(criterio);
+  //---------------------------------------------------------------------------
+  private async getCourtById( idCourt: number): Promise<Court> {
+    const criterio: FindOneOptions = { where: { id: idCourt } };
+    return await this.courtRepository.findOne(criterio);
+  }
 }
-}
-
-
-

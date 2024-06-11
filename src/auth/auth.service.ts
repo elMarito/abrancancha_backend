@@ -1,12 +1,8 @@
-import {
-  BadRequestException,
-  ConflictException,
-  ForbiddenException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { UnauthorizedException, ForbiddenException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { ConflictException } from '@nestjs/common';
+import { InternalServerErrorException } from '@nestjs/common';
 // import { CreateAuthDto } from './dto/create-auth.dto';
 // import { UpdateAuthDto } from './dto/update-auth.dto';
 import { UserService } from 'src/user/user.service';
@@ -15,12 +11,8 @@ import { RegisterDto } from './dto/register-auth.dto';
 import { LoginDto } from './dto/login-auth.dto';
 import * as bcryptjs from 'bcryptjs';
 import { QueryFailedError } from 'typeorm';
-import {
-  ServiceResponseOk,
-  today,
-  urlSafeHash,
-  urlUnsafeHash,
-} from 'src/utilities';
+import { ServiceResponseOk, today } from 'src/utilities';
+import { urlSafeHash, urlUnsafeHash } from 'src/utilities';
 import { Role } from './role.enum';
 import { User } from 'src/user/entities/user.entity';
 
@@ -77,8 +69,18 @@ export class AuthService {
     };
     // const payload = { sub: user.getId(), email: user.getEmail() };
     // const { getPasswordHash, ...result } = user;
+    // const { passwordHash, ...userWithoutPassword } = user;
+
     // return result;
-    return { token: await this.jwtService.signAsync(payload) };
+    return {
+      token: await this.jwtService.signAsync(payload),
+      user: user.getPublicData(),
+    };
+    // return {
+    //   token: await this.jwtService.signAsync(payload),
+    //   user: {...(user.getPublicData()),token: "algo"},
+    // };
+    
     // const accesToken = await this.jwtService.signAsync(payload);
     // return {
     //   token: accesToken,

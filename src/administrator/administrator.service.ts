@@ -119,7 +119,7 @@ export class AdministratorService {
       let administrator: Administrator =
         await this.administratorRepository.findOne(criterio);
       if (!administrator) throw new Error('No se encuentra la administrator');
-     // else idUser; Aqui corregi y probablemente halla un error typeOfCourt.setName(TypeOfCourtDTO.name);//
+      // else idUser; //Aqui corregi y probablemente halla un error typeOfCourt.setName(TypeOfCourtDTO.name);//
       administrator = await this.administratorRepository.save(administrator);
       return administrator;
     } catch (error) {
