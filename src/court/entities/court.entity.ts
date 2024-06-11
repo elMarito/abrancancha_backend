@@ -23,14 +23,14 @@ export class Court {
   @Column()
   private name: string;
 
-  // @Column()
-  // private idType: number;
+  @Column()
+  private idType: number;
 
-  // @Column()
-  // private idTimetable: number;
+  @Column()
+  private idTimetable: number;
 
-  // @Column()
-  // private idTariff: number;
+  @Column()
+  private idTariff: number;
 
   @Column()
   private rating: number;
@@ -38,8 +38,8 @@ export class Court {
   @Column()
   private observations: string;
 
-  // @Column()
-  // private idStatus: number;
+  @Column()
+  private idStatus: number;
 
   @Column()
   private active: boolean;
@@ -70,7 +70,7 @@ export class Court {
   // "tarifa": 50,
   // "rating": 4,
   // "observaciones": "Cancha de césped sintético",
-  // "activa": true
+  // "active": true
 
   constructor(
     numb: string,
@@ -81,17 +81,17 @@ export class Court {
     rating: number,
     observations: string,
     idStatus: number,
-    // active: boolean
+    active: boolean
   ) {
     this.numb = numb;
     this.name = name;
-    // this.idType = idType;
-    // this.idTimetable = idTimetable;
-    // this.idTariff = idTariff;
+    this.idType = idType;
+    this.idTimetable = idTimetable;
+    this.idTariff = idTariff;
     this.rating = rating;
     this.observations = observations;
-    // this.idStatus = idStatus;
-    // this.active = active;
+    this.idStatus = idStatus;
+    this.active = active;
   }
   //---------------------------------------------------------------------------
   // Getters and Setters
@@ -106,15 +106,15 @@ export class Court {
   getName(): string {
     return this.name;
   }
-  // getIdType(): number {
-  //   return this.idType;
-  // }
-  // getIdTimetable(): number {
-  //   return this.idTimetable;
-  // }
-  // getIdTariff(): number {
-  //   return this.idTariff;
-  // }
+  getIdType(): number {
+    return this.idType;
+  }
+  getIdTimetable(): number {
+    return this.idTimetable;
+  }
+  getIdTariff(): number {
+    return this.idTariff;
+  }
 
   getRating(): number {
     return this.rating;
@@ -122,10 +122,14 @@ export class Court {
   getObservations(): string {
     return this.observations;
   }
-  // getIdStatus(): number {
-  //   return this.idStatus;
-  // }
-  //   getActive(): boolean {    return this.active;  }
+   getIdStatus(): number {
+     return this.idStatus;
+   }
+     getActive(): boolean { 
+   return this.active; 
+    }
+
+     
   // Setters
   setNumb(numb: string): void {
     this.numb = numb;
@@ -133,23 +137,25 @@ export class Court {
   setName(name: string): void {
     this.name = name;
   }
-  // setIdType(idType: number): void {
-  //   this.idType = idType;
-  // }
-  // setIdTimetable(idTimetable: number): void {
-  //   this.idTimetable = idTimetable;
-  // }
-  // setIdTariff(idTariff: number): void {
-  //   this.idTariff = idTariff;
-  // }
+  setIdType(idType: number): void {
+    this.idType = idType;
+  }
+  setIdTimetable(idTimetable: number): void {
+    this.idTimetable = idTimetable;
+  }
+  setIdTariff(idTariff: number): void {
+    this.idTariff = idTariff;
+  }
   setRating(rating: number): void {
     this.rating = rating;
   }
   setObservations(observations: string): void {
     this.observations = observations;
   }
-  // setIdStatus(idStatus: number): void {
-  //   this.idStatus = idStatus;
-  // }
-  //   setActive(active: boolean): void {    this.active = active;  }
+  setIdStatus(idStatus: number): void {
+    this.idStatus = idStatus;
+  }
+  setActive(active: boolean): void {
+   this.active = active;  
+  }
 }

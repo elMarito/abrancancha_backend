@@ -6,5 +6,3 @@ export class UpdateCourtDto extends PartialType(CreateCourtDto) {
    
     
 }
-//Todos estos parametros los cree para que funcione el create pero no estan enlazados
-//a ninguna de las otras entidades, no esta correcto.

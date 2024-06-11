@@ -3,9 +3,11 @@ import { TimetableService } from './timetable.service';
 import { CreateTimetableDto } from './dto/create-timetable.dto';
 import { UpdateTimetableDto } from './dto/update-timetable.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 
 @Controller('timetables')
-@UseGuards(AuthGuard)
+@Roles(Role.Admin)
 export class TimetableController {
   constructor(private readonly timetableService: TimetableService) {}
 
