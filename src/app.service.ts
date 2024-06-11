@@ -1,9 +1,23 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AppService {
+  // constructor(private configService: ConfigService) {
+  //   interface DatabaseConfig {
+  //     host: string;
+  //     port: number;
+  //   }
+  //   debugger
+  //   const dbConfig = this.configService.get<DatabaseConfig>('database');
+    
+  //   // you can now use `dbConfig.port` and `dbConfig.host`
+  //   const port = dbConfig.port;
+  // }
+
   getHello(): string {
     return 'Hello World!';
+    // getDatabaseUrl(): string { }
   }
   getEndPoints(): any {
     const API_URL_BASE= ""

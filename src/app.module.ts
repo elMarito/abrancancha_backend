@@ -28,37 +28,47 @@ import { URL } from 'url';
 import { AuthGuard } from './auth/auth.guard';
 import { RoleGuard } from './auth/role.guard';
 import { AccessControlService } from './auth/access-contorl.service';
-import { DB } from './auth/constants';
+// import { CLOUD_DB } from './auth/constants';
+import { ConfigModule } from '@nestjs/config';
+import { loadEnvFile } from 'process';
+import configurationApp from 'config/configuration-app';
 //https://docs.nestjs.com/guards
 
-//$env:DATABASE_URL = "postgresql://mario:92xqM3KxqKKrTMDDTgMDQA@gloomy-dryad-14679.7tt.aws-us-east-1.cockroachlabs.cloud:26257/abranCancha?sslmode=verify-full"
-//const DATABASE_URL = "postgresql://mario:92xqM3KxqKKrTMDDTgMDQA@gloomy-dryad-14679.7tt.aws-us-east-1.cockroachlabs.cloud:26257/abranCancha?sslmode=verify-full"
-// const dbUrl = new URL(process.env.DATABASE_URL);
-// const routingId = dbUrl.searchParams.get("options");
-// dbUrl.searchParams.delete("options");
+const DB_ORIGIN = process.env.DB_CONFIG;
 
 @Module({
   imports: [
+    //https://stackoverflow.com/questions/54308318/how-to-get-the-configurations-from-within-a-module-import-in-nestjs
+    //
+    ConfigModule.forRoot({
+      envFilePath: [
+        `.env`,
+        `env/.env.jwtConfig`,
+        // `env/.env.dbConfig.remote`,
+        // `env/.env.dbConfig.${DB_ORIGIN}`,
+        !DB_ORIGIN
+          ? 'env/.env.dbConfig.local'
+          : `env/.env.dbConfig.${DB_ORIGIN}`,
+      ],
+      // envFilePath: [`env/.env.development.local`],
+      // load: [configurationApp],
+      isGlobal: true,
+    }),
     ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'app') }),
     // TypeOrmModule.forRoot({
-    //   type: 'mysql',
-    //   host: 'localhost',
-    //   port: 3306,
-    //   username: 'root',
-    //   password: 'root',
-    //   database: 'abranCancha',
+    //   ...CONFIG,
     //   entities: ['dist/**/**.entity{.ts,.js}'],
     //   synchronize: false,
     // }),
     TypeOrmModule.forRoot({
-      type: "cockroachdb",
-    //   url: dbUrl.toString(),
-      host: DB.HOST,
-      port: DB.PORT,
-      username: DB.USERNAME,
-      password: DB.PASSWORD,
-      database: DB.NAME,
-      ssl: true,
+      type: process.env.DB_TYPE as any,
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT),
+      database: process.env.DB_NAME,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      // (!DB_ORIGIN? null: (ssl: true)),
+      // ssl: true as any,
       entities: ['dist/**/**.entity{.ts,.js}'],
       synchronize: false,
     }),
@@ -82,6 +92,16 @@ import { DB } from './auth/constants';
   // providers: [ AppService, AuthGuard],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
-    { provide: APP_GUARD, useClass: RoleGuard }, AppService,AccessControlService],
+    { provide: APP_GUARD, useClass: RoleGuard },
+    AppService,
+    AccessControlService,
+  ],
 })
 export class AppModule {}
+// export class AppModule {
+//   constructor(private readonly configService: ConfigService) {
+//     // Aquí puedes acceder a la configuración y hacer cualquier inicialización necesaria
+//     const databaseUrl = this.configService.get<string>('DATABASE_CONFIG');
+//     console.log('Database URL:', databaseUrl);
+//   }
+// }
