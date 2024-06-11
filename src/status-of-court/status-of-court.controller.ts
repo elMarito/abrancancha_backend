@@ -3,8 +3,8 @@ import { StatusOfCourtService } from './status-of-court.service';
 import { CreateStatusOfCourtDto } from './dto/create-status-of-court.dto';
 import { UpdateStatusOfCourtDto } from './dto/update-status-of-court.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { Role } from 'src/auth/role.enum';
 import { Roles } from 'src/auth/roles.decorator';
+import { Role } from 'src/auth/role.enum';
 
 @Controller('status-of-court')
 // @UseGuards(AuthGuard)

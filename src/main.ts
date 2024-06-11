@@ -16,6 +16,7 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   //  app.useGlobalGuards(new AuthGuard());
   // app.useGlobalGuards(new RolesGuard())
+
   const options = new DocumentBuilder()
     .setTitle('Abran Cancha')
     .setDescription('Api para la conexion a la DB de Abran Cancha')

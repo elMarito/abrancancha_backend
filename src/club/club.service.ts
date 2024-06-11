@@ -92,7 +92,7 @@ export class ClubService {
             throw new Error('No se encuentra la club');
          else
             await this.clubRepository.delete(club.getId());
-         return ("El club fue cambiado corectamente.")
+         return ("El club fue eliminado corectamente.")
       } catch (error) {
             throw new HttpException( { status : HttpStatus.NOT_FOUND, 
                   error : 'Error en la eliminacion de club '+error}, HttpStatus.NOT_FOUND);

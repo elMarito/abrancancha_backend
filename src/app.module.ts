@@ -31,7 +31,7 @@ import { AccessControlService } from './auth/access-contorl.service';
 // import { CLOUD_DB } from './auth/constants';
 import { ConfigModule } from '@nestjs/config';
 import { loadEnvFile } from 'process';
-import configurationApp from 'config/configuration-app';
+// import configurationApp from 'config/configuration-app';
 //https://docs.nestjs.com/guards
 
 const DB_ORIGIN = process.env.DB_CONFIG;
@@ -98,6 +98,7 @@ const DB_ORIGIN = process.env.DB_CONFIG;
   ],
 })
 export class AppModule {}
+
 // export class AppModule {
 //   constructor(private readonly configService: ConfigService) {
 //     // Aquí puedes acceder a la configuración y hacer cualquier inicialización necesaria
