@@ -9,7 +9,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 
 
 @Controller('tariffs')
-
+// @UseGuards(AuthGuard)
 @Roles(Role.Admin)
 export class TariffController {
   constructor(private readonly tariffService: TariffService) {}
