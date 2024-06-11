@@ -38,7 +38,7 @@ import { DB } from './auth/constants';
 // dbUrl.searchParams.delete("options");
 
 @Module({
-  imports: [
+   imports: [
     ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'app') }),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -46,7 +46,7 @@ import { DB } from './auth/constants';
       port: 3306,
       username: 'root',
       password: '1234',
-      database: 'abranCancha',
+      database: 'abrancancha',
       entities: ['dist/**/**.entity{.ts,.js}'],
       synchronize: false,
     }),
@@ -62,26 +62,26 @@ import { DB } from './auth/constants';
   //     entities: ['dist/**/**.entity{.ts,.js}'],
   //     synchronize: false,
   //   }),
-  //   AuthModule,
-  //   UserModule,
-  //   AdministratorModule,
-  //   ClubModule,
-  //   ReservationModule,
-  //   TypeOfCourtModule,
-  //   CourtModule,
-  //   StatusOfUserModule,
-  //   TariffModule,
-  //   TimetableModule,
-  //   StatusOfReservationModule,
-  //   StatusOfCourtModule,
-  //   ExceptionTimedateModule,
-  //   ScheduleModule,
-  // ],
-  // controllers: [AppController],
-  // // providers: [AppService],
-  // // providers: [ AppService, AuthGuard],
-  // providers: [
-  //   { provide: APP_GUARD, useClass: AuthGuard },
-  //   { provide: APP_GUARD, useClass: RoleGuard }, AppService,AccessControlService],
-]})
+    AuthModule,
+    UserModule,
+    AdministratorModule,
+    ClubModule,
+    ReservationModule,
+    TypeOfCourtModule,
+    CourtModule,
+    StatusOfUserModule,
+    TariffModule,
+    TimetableModule,
+    StatusOfReservationModule,
+    StatusOfCourtModule,
+    ExceptionTimedateModule,
+    ScheduleModule,
+  ],
+  controllers: [AppController],
+  // providers: [AppService],
+  // providers: [ AppService, AuthGuard],
+  providers: [
+    { provide: APP_GUARD, useClass: AuthGuard },
+    { provide: APP_GUARD, useClass: RoleGuard }, AppService,AccessControlService],
+})
 export class AppModule {}
