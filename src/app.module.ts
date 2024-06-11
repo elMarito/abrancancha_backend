@@ -38,15 +38,15 @@ import { DB } from './auth/constants';
 // dbUrl.searchParams.delete("options");
 
 @Module({
-   imports: [
+  imports: [
     ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'app') }),
     // TypeOrmModule.forRoot({
     //   type: 'mysql',
     //   host: 'localhost',
     //   port: 3306,
     //   username: 'root',
-    //   password: '1234',
-    //   database: 'abrancancha',
+    //   password: 'root',
+    //   database: 'abranCancha',
     //   entities: ['dist/**/**.entity{.ts,.js}'],
     //   synchronize: false,
     // }),
