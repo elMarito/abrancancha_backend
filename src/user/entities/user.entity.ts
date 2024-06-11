@@ -141,6 +141,10 @@ export class User {
     return this.administrator !== null;
   }
 
+  public getPublicData():Partial<User> { 
+    const { passwordHash, administrator, ...publicData } = this;
+    return publicData;
+  }
   // public getIdStatus(): number {    return this.idStatus;  }
   // public  setIdStatus(value: number): void {    this.idStatus = value;  }
 }

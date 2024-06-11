@@ -152,11 +152,6 @@ export class ScheduleService {
   }
   //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
-  private async getScheduleById(idSchedule: number): Promise<Schedule> {
-    const criterio: FindOneOptions = { where: { id: idSchedule } };
-    return await this.scheduleRepository.findOne(criterio);
-  }
-  //---------------------------------------------------------------------------
   private async getScheduleByDow_Tf_Tt_Table({
     dayOfWeek,
     timeFrom,
@@ -171,6 +166,11 @@ export class ScheduleService {
         timetable: timetable,
       },
     };
+    return await this.scheduleRepository.findOne(criterio);
+  }
+  //---------------------------------------------------------------------------
+  private async getScheduleById(idSchedule: number): Promise<Schedule> {
+    const criterio: FindOneOptions = { where: { id: idSchedule } };
     return await this.scheduleRepository.findOne(criterio);
   }
   //---------------------------------------------------------------------------
