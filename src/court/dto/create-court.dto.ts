@@ -2,9 +2,6 @@
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateCourtDto {
-  getIdTypeOfCourt() {
-    throw new Error('Method not implemented.');
-  }
   @IsString()
   readonly numb: string;
 
