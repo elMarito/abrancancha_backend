@@ -138,7 +138,7 @@ export class CourtService {
         }, HttpStatus.NOT_FOUND);
       }
     }
-  }
+  
 
       public async updateCourt(idCourt: number, datos: UpdateCourtDto): Promise<ResponseObject> {
         try {
