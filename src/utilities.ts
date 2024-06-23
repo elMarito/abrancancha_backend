@@ -1,7 +1,10 @@
+import { HttpStatus } from '@nestjs/common';
+
 export type ResponseObject = {
   statusOk: boolean;
   message: string;
   data?: any;
+  // type: keyof typeof HttpStatus;
 };
 
 export function ServiceResponseOk(
@@ -23,8 +26,8 @@ export function today(completa: boolean = false): Date {
   return fechaSinHora;
 }
 
-export function dateEstractGMT( timeFrom: string): Date {   
-  return new Date( timeFrom.toString().replace(/GMT.*$/, ''));  
+export function dateEstractGMT(timeFrom: string): Date {
+  return new Date(timeFrom.toString().replace(/GMT.*$/, ''));
 }
 
 //como convertir un hash para que sea valido en una URL
@@ -66,7 +69,6 @@ export function urlUnsafeHash(encodedHash: string): string {
   return decodedHash;
 }
 // console.log(decodedHash); // Output: $2a$10$OAAgeChoe7oWWeqwuihHH.G//nxvmhl.zFhf41w09dspxu0JYPE.S
-
 
 // const fecha: Date = new Date();
 // const fechaString1: string = fecha.toString();
