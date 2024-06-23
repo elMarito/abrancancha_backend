@@ -8,8 +8,8 @@ import { ConfigService } from '@nestjs/config';
 // import { AuthGuard } from './auth/auth.guard';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  // app.setGlobalPrefix('api'); // Agregar el prefijo '/api' a todas las rutas
+  const app = await NestFactory.create(AppModule, { cors: true });
+  app.setGlobalPrefix('api'); // Agregar el prefijo '/api' a todas las rutas
   // const loggerInstance = app.get(Logger);
   app.useGlobalPipes(new ValidationPipe());
   // app.useGlobalFilters(new HttpExceptionFilter(loggerInstance));
