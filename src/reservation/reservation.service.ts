@@ -1,11 +1,11 @@
-import {  BadRequestException,  ConflictException} from '@nestjs/common';
-import {  GoneException,  InternalServerErrorException} from '@nestjs/common';
-import {  NotFoundException,  Injectable} from '@nestjs/common';
+import { BadRequestException, ConflictException, HttpStatus } from '@nestjs/common';
+import { GoneException, InternalServerErrorException } from '@nestjs/common';
+import { NotFoundException, Injectable } from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import {  FindManyOptions,  FindOneOptions} from 'typeorm';
-import {  QueryFailedError,  Repository} from 'typeorm';
+import { FindManyOptions, FindOneOptions } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { Reservation } from './entities/reservation.entity';
 import { ResponseObject, ServiceResponseOk } from 'src/utilities';
 import { Court } from 'src/court/entities/court.entity';
@@ -67,8 +67,12 @@ export class ReservationService {
     throw new Error('Error creando la reserva: \n' + 'Error inesperado');
   }
   //---------------------------------------------------------------------------
-  public async findAll(): Promise<Reservation[]> {
-    this.reservations = await this.reservationRepository.find();
+  public async findAll(userId?: number): Promise<Reservation[]> {
+    const criterio: FindManyOptions = userId
+      ? { where: { idUser: userId } }
+      : {};
+    this.reservations = await this.reservationRepository.find(criterio);
+    // this.reservations = await this.reservationRepository.find();
     if (this.reservations) return this.reservations;
     throw new NotFoundException(
       'Error en la busqueda: ',
@@ -129,12 +133,12 @@ export class ReservationService {
     const userExists = await this.existReservationId(id);
     if (!userExists) throw new GoneException(ERROR_MSG.NOT_FOUND);
 
-// TODO
-//chequear: si la fecha ya paso no se puede borrar
-// la reserva ya expiro, no se puede borrar.
+    // TODO
+    //chequear: si la fecha ya paso no se puede borrar
+    // la reserva ya expiro, no se puede borrar.
 
     await this.reservationRepository.delete(id);
-
+// guardar la respuesta y ponerle HttpStatus.NO_CONTENT
     return ServiceResponseOk('Reserva borrada exitosamente.');
 
     // return `This action removes a #${id} reservation`;
