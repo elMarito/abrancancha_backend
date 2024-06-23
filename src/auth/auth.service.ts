@@ -74,7 +74,7 @@ export class AuthService {
     // return result;
     return {
       token: await this.jwtService.signAsync(payload),
-      user: user.getPublicData(),
+      user: {role: payload.role, ...(user.getPublicData())},
     };
     // return {
     //   token: await this.jwtService.signAsync(payload),
