@@ -29,7 +29,7 @@ export class CreateUserDto {
   //   message: 'La clave debe ser un hash SHA-256 válido',
   // })
   @IsString({
-    message: 'La clave debe ser una cadena alfanumerica valida',
+    message: 'La clave debe ser una cadena alfanumerica válida',
   })
   @IsNotEmpty({
     message: 'El contraseña no debe ser una cadena vacia.',

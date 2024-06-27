@@ -28,8 +28,8 @@ const ERROR_MSG = {
   },
   INVALID_ID: `El ID de ${ERROR_ENTITY} provisto no es válido.`,
   INVALID_DATA_4: {
-    CREATE: `Los datos para crear ${ERROR_ENTITY_LOWER} no son validos`,
-    UPDATE: `Los datos para modificar ${ERROR_ENTITY_LOWER} no son validos`,
+    CREATE: `Los datos para crear ${ERROR_ENTITY_LOWER} no son válidos`,
+    UPDATE: `Los datos para modificar ${ERROR_ENTITY_LOWER} no son válidos`,
   },
 };
 
@@ -47,9 +47,9 @@ export class ReservationService {
   public async create(datos: CreateReservationDto): Promise<Reservation> {
     // if (await this.existUserEmail(datos.email))
     //   throw new ConflictException(
-    //     'Error: Datos repetidos\n',
+    //     'Error: Datos repetidos. ',
     //     ERROR_MSG.REPEATED +
-    //       '\nYa existe otro usuario registrado con el email: ' +
+    //       ' Ya existe otro usuario registrado con el email: ' +
     //       datos.email,
     //   );
 
@@ -64,7 +64,7 @@ export class ReservationService {
     );
 
     if (reservation) return reservation;
-    throw new Error('Error creando la reserva: \n' + 'Error inesperado');
+    throw new Error('Error creando la reserva: ' + 'Error inesperado');
   }
   //---------------------------------------------------------------------------
   public async findAll(userId?: number): Promise<Reservation[]> {

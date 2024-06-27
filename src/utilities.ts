@@ -30,7 +30,7 @@ export function dateEstractGMT(timeFrom: string): Date {
   return new Date(timeFrom.toString().replace(/GMT.*$/, ''));
 }
 
-//como convertir un hash para que sea valido en una URL
+//como convertir un hash para que sea válido en una URL
 //hash: $2a$10$OAAgeChoe7oWWeqwuihHH.G//nxvmhl.zFhf41w09dspxu0JYPE.S'
 
 // const bcrypt = require('bcrypt');
