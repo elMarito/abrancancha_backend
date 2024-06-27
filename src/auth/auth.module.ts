@@ -16,7 +16,7 @@ import { AuthGuard } from './auth.guard';
       global: true,
       // secret: jwtConstants.secret,
       // secret: 'Super_$_S3cr3et_#_Key_@_123',
-      secret: process.env.JWT_SECRET,
+      secret: `${process.env.JWT_SECRET}`,
       // secret: this.configService.get<string>('jwtSecret'),
       signOptions: { expiresIn: '12h' },
     }),

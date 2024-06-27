@@ -31,10 +31,12 @@ import { AccessControlService } from './auth/access-contorl.service';
 import { DB } from './auth/constants';
 import { ConfigModule } from '@nestjs/config';
 import { loadEnvFile } from 'process';
+import { CockroachConnectionOptions } from 'typeorm/driver/cockroachdb/CockroachConnectionOptions';
 // import configurationApp from 'config/configuration-app';
 //https://docs.nestjs.com/guards
 
-const DB_ORIGIN = process.env.DB_CONFIG;
+const DB_ORIGIN = process.env.DB_CONFIG || "remote";
+const getDB_TYPE = ()=> (process.env.DB_TYPE || "cockroachdb") as CockroachConnectionOptions["type"];
 
 @Module({
   imports: [
@@ -63,21 +65,20 @@ const DB_ORIGIN = process.env.DB_CONFIG;
     //   synchronize: false,
     // }),
     TypeOrmModule.forRoot({
-      type: process.env.DB_TYPE as any,
+      type: getDB_TYPE() ,
       host: process.env.DB_HOST,
       port: parseInt(process.env.DB_PORT),
       database: process.env.DB_NAME,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
-      // (!DB_ORIGIN? null: (ssl: true)),
+      ...(DB_ORIGIN &&  {ssl: true}),
       // ssl: true as any,
-      ssl: true,
+      // ssl: true,
       entities: ['dist/**/**.entity{.ts,.js}'],
       synchronize: false,
     }),
     //     TypeOrmModule.forRoot({
     //   type: "cockroachdb",
-    // //   url: dbUrl.toString(),
     //   host: DB.HOST,
     //   port: DB.PORT,
     //   username: DB.USERNAME,
