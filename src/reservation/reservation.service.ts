@@ -36,6 +36,7 @@ const ERROR_MSG = {
 @Injectable()
 export class ReservationService {
   private reservations: Reservation[] = [];
+  reservationsForUsers: any[];
 
   constructor(
     @InjectRepository(Reservation)
@@ -44,20 +45,16 @@ export class ReservationService {
     // private readonly userRepository: Repository<User>,
   ) {}
   //---------------------------------------------------------------------------
-  public async create(datos: CreateReservationDto): Promise<Reservation> {
-    // if (await this.existUserEmail(datos.email))
-    //   throw new ConflictException(
-    //     'Error: Datos repetidos\n',
-    //     ERROR_MSG.REPEATED +
-    //       '\nYa existe otro usuario registrado con el email: ' +
-    //       datos.email,
-    //   );
-
-    let reservation: Reservation = await this.reservationRepository.save(
+ //---------------------------------------------------------------------------
+ public async create(datos: CreateReservationDto): Promise<Reservation> {
+  console.log('Datos recibidos para crear reserva:', datos);
+  try {
+    const formattedDate = new Date(datos.timedate).toISOString().slice(0, 19).replace('T', ' ');
+    const reservation: Reservation = await this.reservationRepository.save(
       new Reservation(
         datos.user,
         datos.court,
-        datos.timedate,
+        formattedDate,
         Number(datos.price),
         // datos.status
       ),
@@ -65,14 +62,28 @@ export class ReservationService {
 
     if (reservation) return reservation;
     throw new Error('Error creando la reserva: \n' + 'Error inesperado');
+  } catch (error) {
+    console.error('Error al crear la reserva:', error);
+    throw new InternalServerErrorException('Error inesperado al crear la reserva');
   }
+}
+
   //---------------------------------------------------------------------------
-  public async findAll(): Promise<Reservation[]> {
+  public async findAll(id?:string): Promise<Reservation[]> {
+    if(id){
+      const criterio:FindOneOptions ={where:{id:id}};
+      let reservationForUser:Reservation=
+      await this.reservationRepository.findOne(criterio)
+      this.reservationsForUsers=[];
+      this.reservationsForUsers.push(reservationForUser)
+    return this.reservationsForUsers
+    }
     this.reservations = await this.reservationRepository.find();
     if (this.reservations) return this.reservations;
     throw new NotFoundException(
       'Error en la busqueda: ',
       ERROR_MSG.NOT_FOUND_ANY,
+      
     );
   }
   //---------------------------------------------------------------------------
@@ -86,6 +97,10 @@ export class ReservationService {
     else throw new Error(ERROR_MSG.NOT_FOUND);
     return this.reservations;
   }
+
+  //--------------------------------------------------------------------------- 
+  
+
   //---------------------------------------------------------------------------
   public async update(
     idReservation: number,

@@ -1,4 +1,4 @@
-// #Region IMPORT
+
 
 import { Court } from 'src/court/entities/court.entity';
 import { StatusOfReservation } from 'src/status-of-reservation/entities/status-of-reservation.entity';
@@ -32,7 +32,7 @@ export class Reservation {
 
   // @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   @Column({ type: 'date' })
-  private timedate: Date;
+  private timedate: string;
 
   @Column()
   private price: number;
@@ -58,7 +58,7 @@ export class Reservation {
   constructor(
     user: User,
     court: Court,
-    timedate: Date,
+    timedate: string,
     price?: number,
     status?: number,
     // idUser: number,
@@ -69,7 +69,7 @@ export class Reservation {
     // this.idUser = idUser;
     // this.idCourt = idCourt;
     this.timedate = timedate;
-    // this.price = price; //deberia venir averiguarlo de court.tariff.price
+    this.price = price; //deberia venir averiguarlo de court.tariff.price
     // this.price = court.tariff.getPrice();
     this.user=user;
     this.court =court;
@@ -106,12 +106,13 @@ export class Reservation {
   //   this.idCourt = idCourt;
   // }
 
-  getTimedate(): Date {
+  
+  getTimedate(): string {
     return this.timedate;
   }
 
-  setTimedate(fecha: Date): void {
-    this.timedate = fecha;
+  setTimedate(timedate: string): void {
+    this.timedate = timedate;
   }
 
   // getStatus(): string {
@@ -121,4 +122,5 @@ export class Reservation {
   // setStatus(status: string): void {
   //   this.status = status;
   // }
+  
 }

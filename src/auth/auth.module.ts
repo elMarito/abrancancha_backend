@@ -13,7 +13,7 @@ import { AuthGuard } from './auth.guard';
     JwtModule.register({
       global: true,
       // secret: jwtConstants.secret,
-      secret: process.env.JWT_SECRET,
+      secret: `${process.env.JWT_SECRET}`,
       // secret: this.configService.get<string>('JWT_SECRET'),
       signOptions: { expiresIn: '12h' },
     }),

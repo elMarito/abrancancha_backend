@@ -8,6 +8,11 @@ import { ConfigService } from '@nestjs/config';
 // import { AuthGuard } from './auth/auth.guard';
 
 async function bootstrap() {
+  require('dotenv').config({ path: [ '.env',"env/.env.jwtConfig"] })
+  require('dotenv').config({ path: [ `env/.env.dbConfig.${process.env.DB_CONFIG}`] })
+    
+  // const configService = app.get(ConfigService);
+  // const port = configService.get<number>('PORT');
   const app = await NestFactory.create(AppModule);
   // app.setGlobalPrefix('api'); // Agregar el prefijo '/api' a todas las rutas
   // const loggerInstance = app.get(Logger);
@@ -26,9 +31,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
 
-  // require('dotenv').config();
-  // const configService = app.get(ConfigService);
-  // const port = configService.get<number>('PORT');
+ 
 
   await app.listen(3000);
 }
