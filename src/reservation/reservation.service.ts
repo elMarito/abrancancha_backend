@@ -1,4 +1,8 @@
-import { BadRequestException, ConflictException, HttpStatus } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpStatus,
+} from '@nestjs/common';
 import { GoneException, InternalServerErrorException } from '@nestjs/common';
 import { NotFoundException, Injectable } from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
@@ -55,9 +59,11 @@ export class ReservationService {
 
     let reservation: Reservation = await this.reservationRepository.save(
       new Reservation(
-        datos.user,
-        datos.court,
+        // datos.user,
+        // datos.court,
         datos.timedate,
+        datos.idUser,
+        datos.idCourt,
         Number(datos.price),
         // datos.status
       ),
@@ -68,9 +74,13 @@ export class ReservationService {
   }
   //---------------------------------------------------------------------------
   public async findAll(userId?: number): Promise<Reservation[]> {
-    const criterio: FindManyOptions = userId
-      ? { where: { idUser: userId } }
-      : {};
+    // debugger;
+    const criterio: FindManyOptions = {
+      relations: ['user', 'court', 'status'],
+      relationLoadStrategy: "query",
+      ...(userId ? { where: { user:{ id: userId} } } : {}),
+      // ...(userId ? { where: { idUser: userId } } : {}),
+    };
     this.reservations = await this.reservationRepository.find(criterio);
     // this.reservations = await this.reservationRepository.find();
     if (this.reservations) return this.reservations;
@@ -115,7 +125,8 @@ export class ReservationService {
     // reservation.setUser(datos.user);
     // reservation.setCourt(datos.court);
     // reservation.setTimedate(datos.timedate);
-    reservation.setStatus(datos.status);
+    // reservation.setStatus(datos.status);
+    reservation.setIdStatus(datos.idStatus);
     const reservationUpdated: Reservation =
       await this.reservationRepository.save(reservation);
     //else
@@ -138,7 +149,7 @@ export class ReservationService {
     // la reserva ya expiro, no se puede borrar.
 
     await this.reservationRepository.delete(id);
-// guardar la respuesta y ponerle HttpStatus.NO_CONTENT
+    // guardar la respuesta y ponerle HttpStatus.NO_CONTENT
     return ServiceResponseOk('Reserva borrada exitosamente.');
 
     // return `This action removes a #${id} reservation`;

@@ -11,7 +11,7 @@ export class Reservation {
   private id: number;
 
   // @Column()
-  // private idUser: number;
+  private idUser: number;
 
   // "id": 1,
   // "idUser": 1,
@@ -28,7 +28,7 @@ export class Reservation {
   // puedes generar el codigo del archivo entity correspondiente para nest?
 
   // @Column()
-  // private idCourt: number;
+  private idCourt: number;
 
   // @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   @Column({ type: 'date' })
@@ -41,7 +41,7 @@ export class Reservation {
   // private status: string;
 
   // @Column()
-  // private idStatus: number;
+  private idStatus: number;
   
   @ManyToOne(() => User, user => user.reservations)
   @JoinColumn( { name: 'idUser', referencedColumnName: 'id' })
@@ -56,23 +56,24 @@ export class Reservation {
   public status: StatusOfReservation;
   //---------------------------------------------------------------------------
   constructor(
-    user: User,
-    court: Court,
+    // user: User,
+    // court: Court,
     timedate: Date,
+    idUser: number,
+    idCourt: number,
     price?: number,
-    status?: number,
-    // idUser: number,
-    // idCourt: number,
+    // status?: number,
     // timedate: Date,
     // status: string,
   ) {
-    // this.idUser = idUser;
-    // this.idCourt = idCourt;
+    this.idUser = idUser;
+    this.idCourt = idCourt;
     this.timedate = timedate;
+    this.idStatus = 1;
     // this.price = price; //deberia venir averiguarlo de court.tariff.price
     // this.price = court.tariff.getPrice();
-    this.user=user;
-    this.court =court;
+    // this.user=user;
+    // this.court =court;
     // this.status = status;
   }
   //---------------------------------------------------------------------------
@@ -90,17 +91,17 @@ export class Reservation {
   public setCourt( court:Court): void { this.court = court; }
   public getStatus(): StatusOfReservation { return this.status; }
   public setStatus( status:StatusOfReservation): void { this.status = status; }
-  // getIdUser(): number {
-  //   return this.idUser;
-  // }
+  getIdUser(): number {
+    return this.idUser;
+  }
 
   // setIdUser(idUser: number): void {
   //   this.idUser = idUser;
   // }
 
-  // getIdCourt(): number {
-  //   return this.idCourt;
-  // }
+  getIdCourt(): number {
+    return this.idCourt;
+  }
 
   // setIdCourt(idCourt: number): void {
   //   this.idCourt = idCourt;
@@ -114,11 +115,11 @@ export class Reservation {
     this.timedate = fecha;
   }
 
-  // getStatus(): string {
-  //   return this.status;
-  // }
+  getIdStatus(): number {
+    return this.idStatus;
+  }
 
-  // setStatus(status: string): void {
-  //   this.status = status;
-  // }
+  setIdStatus(idStatus: number): void {
+    this.idStatus = idStatus;
+  }
 }

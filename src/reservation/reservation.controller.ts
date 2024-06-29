@@ -10,7 +10,7 @@ import { Role } from 'src/auth/role.enum';
 import { Reservation } from './entities/reservation.entity';
 
 @Controller('reservations')
-@Roles(Role.Admin)
+@Roles(Role.Admin, Role.User)
 export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
 
@@ -21,7 +21,14 @@ export class ReservationController {
 //get byDate / bystatus / bycourt /byprice
   @Get()
   // findAll() {
-  async findAll(@Query('userId', ParseIntPipe) userId?: number): Promise<Reservation[]> {
+  async findAll(@Query('userId', new ParseIntPipe({ optional: true })) userId: number=0): Promise<Reservation[]> {
+    // async findAll(@Query('userId') userId: string): Promise<Reservation[]> {
+      // let parsedUserId: number = null;
+  
+      // if (userId && !isNaN(parseInt(userId, 10))) {
+      //   parsedUserId = parseInt(userId, 10);
+      // }
+      // debugger
     return this.reservationService.findAll(userId);
   }
 

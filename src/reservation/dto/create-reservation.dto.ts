@@ -5,16 +5,16 @@ import { StatusOfReservation } from 'src/status-of-reservation/entities/status-o
 import { User } from 'src/user/entities/user.entity';
 
 export class CreateReservationDto {
-  // @IsNumber()
-  // readonly idUser: number;
+  @IsNumber()
+  readonly idUser: number;
 
-  // @IsNumber()
-  // readonly idCourt: number;
+  @IsNumber()
+  readonly idCourt: number;
 
-  readonly user: User;
-  readonly court: Court;
-  @IsOptional()
-  readonly status: StatusOfReservation;
+  // readonly user: User;
+  // readonly court: Court;
+  // @IsOptional()
+  // readonly status: StatusOfReservation;
 
   @IsDate()
   @Type(()=>Date)
@@ -22,9 +22,10 @@ export class CreateReservationDto {
   readonly timedate: Date;
 
   @IsNumber()
-  @IsCurrency()
+  // @IsCurrency()
   readonly price: number;
 
-  // @IsNumber()
-  // readonly idStatus: number;
+  @IsOptional()
+  @IsNumber()
+  readonly idStatus: number;
 }
