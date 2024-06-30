@@ -30,8 +30,8 @@ export class Reservation {
   // @Column()
   private idCourt: number;
 
-  // @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  @Column({ type: 'date' })
+  @Column({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP', nullable: false  })
+  // @Column({ type: 'date' , nullable: false })
   private timedate: Date;
 
   @Column()
@@ -61,17 +61,17 @@ export class Reservation {
     timedate: Date,
     idUser: number,
     idCourt: number,
-    price?: number,
-    // status?: number,
+    price: number,
+    idStatus?: number,
     // timedate: Date,
     // status: string,
   ) {
+    this.timedate = timedate;
+    this.price = price; //deberia venir averiguarlo de court.tariff.price
+    // this.price = court.tariff.getPrice();
     this.idUser = idUser;
     this.idCourt = idCourt;
-    this.timedate = timedate;
-    this.idStatus = 1;
-    // this.price = price; //deberia venir averiguarlo de court.tariff.price
-    // this.price = court.tariff.getPrice();
+    this.idStatus = idStatus || 1;
     // this.user=user;
     // this.court =court;
     // this.status = status;

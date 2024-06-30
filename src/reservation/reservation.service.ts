@@ -65,7 +65,7 @@ export class ReservationService {
         datos.idUser,
         datos.idCourt,
         Number(datos.price),
-        // datos.status
+        datos.idStatus
       ),
     );
 
@@ -77,7 +77,7 @@ export class ReservationService {
     // debugger;
     const criterio: FindManyOptions = {
       relations: ['user', 'court', 'status'],
-      relationLoadStrategy: "query",
+      // relationLoadStrategy: "query",
       ...(userId ? { where: { user:{ id: userId} } } : {}),
       // ...(userId ? { where: { idUser: userId } } : {}),
     };

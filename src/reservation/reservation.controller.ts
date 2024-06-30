@@ -21,7 +21,7 @@ export class ReservationController {
 //get byDate / bystatus / bycourt /byprice
   @Get()
   // findAll() {
-  async findAll(@Query('userId', new ParseIntPipe({ optional: true })) userId: number=0): Promise<Reservation[]> {
+  async findAll(@Query('userId', new ParseIntPipe({ optional: true })) userId: number): Promise<Reservation[]> {
     // async findAll(@Query('userId') userId: string): Promise<Reservation[]> {
       // let parsedUserId: number = null;
   
