@@ -10,9 +10,6 @@ export class Reservation {
   @PrimaryGeneratedColumn()
   private id: number;
 
-  // @Column()
-  private idUser: number;
-
   // "id": 1,
   // "idUser": 1,
   // "idCourt": 1,
@@ -27,9 +24,6 @@ export class Reservation {
   // "estado": "confirmada"
   // puedes generar el codigo del archivo entity correspondiente para nest?
 
-  // @Column()
-  private idCourt: number;
-
   @Column({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP', nullable: false  })
   // @Column({ type: 'date' , nullable: false })
   private timedate: Date;
@@ -37,12 +31,6 @@ export class Reservation {
   @Column()
   private price: number;
 
-  // @Column()
-  // private status: string;
-
-  // @Column()
-  private idStatus: number;
-  
   @ManyToOne(() => User, user => user.reservations)
   @JoinColumn( { name: 'idUser', referencedColumnName: 'id' })
   public user: User;
@@ -54,6 +42,17 @@ export class Reservation {
   @ManyToOne(() => StatusOfReservation, statusOfReservation => statusOfReservation.reservations)
   @JoinColumn( { name: 'idStatus', referencedColumnName: 'id' })
   public status: StatusOfReservation;
+
+  @Column({ nullable: false })
+  private idUser: number;
+
+  @Column({ nullable: false })
+  private idCourt: number;
+  // @Column()
+  // private status: string;
+
+  @Column({ nullable: false })
+  private idStatus: number;
   //---------------------------------------------------------------------------
   constructor(
     // user: User,
