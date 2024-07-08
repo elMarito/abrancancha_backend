@@ -31,11 +31,12 @@ import { AccessControlService } from './auth/access-contorl.service';
 // import { CLOUD_DB } from './auth/constants';
 import { ConfigModule } from '@nestjs/config';
 import { loadEnvFile } from 'process';
+import { CockroachConnectionOptions } from 'typeorm/driver/cockroachdb/CockroachConnectionOptions';
 // import configurationApp from 'config/configuration-app';
 //https://docs.nestjs.com/guards
 
 const DB_ORIGIN = process.env.DB_CONFIG;
-
+const getDB_TYPE = ()=> (process.env.DB_TYPE || "cockroachdb") as CockroachConnectionOptions["type"];
 @Module({
   imports: [
     //https://stackoverflow.com/questions/54308318/how-to-get-the-configurations-from-within-a-module-import-in-nestjs
@@ -61,7 +62,7 @@ const DB_ORIGIN = process.env.DB_CONFIG;
     //   synchronize: false,
     // }),
     TypeOrmModule.forRoot({
-      type: process.env.DB_TYPE as any,
+      type: getDB_TYPE() ,
       host: process.env.DB_HOST,
       port: parseInt(process.env.DB_PORT),
       database: process.env.DB_NAME,
