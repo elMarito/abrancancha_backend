@@ -7,6 +7,7 @@ import { Reservation } from './entities/reservation.entity';
 // import { AuthGuard } from 'src/auth/auth.guard';
 import { Public, Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/role.enum';
+import { QueryReservationDto } from './dto/query-reservation.dto';
 // import { RoleGuard } from 'src/auth/role.guard';
 
 @Controller('reservations')
@@ -21,17 +22,30 @@ export class ReservationController {
   }
 //get byDate / bystatus / bycourt /byprice
   @Get()
-  @Public()
+  // @Public()
+  @Roles(Role.Admin, Role.User)
   // findAll() {
-  async findAll(@Query('userId', new ParseIntPipe({ optional: true })) userId: number): Promise<Reservation[]> {
-    // async findAll(@Query('userId') userId: string): Promise<Reservation[]> {
-      // let parsedUserId: number = null;
+  /* // dado el siguiente controlador de nestjs como modificarlo si el parametro es de tipo Date:
+    async findAll(@Query('idUser', new ParseIntPipe({ optional: true })) idUser: number): Promise<Reservation[]> {
+    return this.reservationService.findAll(idUser);
+  } */
+ 
+    async findAll(
+      // @Query('idUser', new ParseIntPipe({ optional: true })) idUser: number,
+      // @Query('fecha',) fecha?: string, // Parámetro fecha opcional
+      // @Query('orderBy',) orderBy?: string, // Parámetro fecha opcional
+      @Query() params?: QueryReservationDto, // Parámetro fecha opcional
+    ): Promise<Reservation[]> {
+      return this.reservationService.findAll(params);
+  // async findAll(@Query('idUser', new ParseIntPipe({ optional: true })) idUser: number): Promise<Reservation[]> {
+    // async findAll(@Query('idUser') idUser: string): Promise<Reservation[]> {
+      // let parsedIdUser: number = null;
   
-      // if (userId && !isNaN(parseInt(userId, 10))) {
-      //   parsedUserId = parseInt(userId, 10);
+      // if (idUser && !isNaN(parseInt(idUser, 10))) {
+      //   idUser = parseInt(idUser, 10);
       // }
       // debugger
-    return this.reservationService.findAll(userId);
+    // return this.reservationService.findAll(idUser);
   }
 
   @Get(':id')

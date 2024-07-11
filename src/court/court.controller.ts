@@ -1,10 +1,12 @@
-import { Controller, Body, Param, UseGuards } from '@nestjs/common';
-import { Get, Post, Patch, Delete } from '@nestjs/common';
+import { Controller, Body, Query, Param} from '@nestjs/common';
+import { Get, Post, Patch, Delete, UseGuards } from '@nestjs/common';
 import { CourtService } from './court.service';
 import { CreateCourtDto } from './dto/create-court.dto';
 import { UpdateCourtDto } from './dto/update-court.dto';
 import { Public, Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/role.enum';
+import { QueryCourtDto } from './dto/query-court.dto';
+import { Court } from './entities/court.entity';
 
 @Controller('courts')
 // @UseGuards(AuthGuard)
@@ -20,8 +22,8 @@ export class CourtController {
 
   @Get()
   @Public()
-  findAll() {
-    return this.courtService.getAll();
+  findAll(@Query() params?:QueryCourtDto): Promise<Court[]> {
+    return this.courtService.getAll(params);
   }
 
   @Get(':id')

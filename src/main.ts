@@ -20,6 +20,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api'); // Agregar el prefijo '/api' a todas las rutas
   // const loggerInstance = app.get(Logger);
   app.useGlobalPipes(new ValidationPipe());
+  // app.useGlobalPipes(new ValidationPipe({whitelist:true,forbidNonWhitelisted:true,transform:true}));
   // app.useGlobalFilters(new HttpExceptionFilter(loggerInstance));
   app.useGlobalFilters(new HttpExceptionFilter());
   //  app.useGlobalGuards(new AuthGuard());
