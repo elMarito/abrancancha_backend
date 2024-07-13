@@ -30,8 +30,8 @@ const ERROR_MSG = {
   },
   INVALID_ID: `El ID de ${ERROR_ENTITY} provisto no es válido.`,
   INVALID_DATA_4: {
-    CREATE: `Los datos para crear ${ERROR_ENTITY_LOWER} no son validos`,
-    UPDATE: `Los datos para modificar ${ERROR_ENTITY_LOWER} no son validos`,
+    CREATE: `Los datos para crear ${ERROR_ENTITY_LOWER} no son válidos`,
+    UPDATE: `Los datos para modificar ${ERROR_ENTITY_LOWER} no son válidos`,
   },
 };
 
@@ -50,9 +50,9 @@ export class TimetableService {
   public async create(datos: CreateTimetableDto): Promise<Timetable> {
     if (await this.existTimetableName(datos.name))
       throw new ConflictException(
-        'Error: Datos repetidos\n',
+        'Error: Datos repetidos.',
         ERROR_MSG.REPEATED +
-          '\nYa existe otro usuario registrado con ese nombre: ' +
+          'Ya existe otro usuario registrado con ese nombre: ' +
           datos.name,
       );
 
@@ -102,7 +102,7 @@ export class TimetableService {
 
     if (timetable) return timetable;
     throw new Error(
-      'Error inesperado' + `\nError creando ${ERROR_ENTITY_LOWER}:`,
+      'Error inesperado.' + `Error creando ${ERROR_ENTITY_LOWER}:`,
     );
   }
   //---------------------------------------------------------------------------

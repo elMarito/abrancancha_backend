@@ -7,11 +7,20 @@ import { ConfigService } from '@nestjs/config';
 // import { RolesGuard } from './auth/roles.guard';
 // import { AuthGuard } from './auth/auth.guard';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  // app.setGlobalPrefix('api'); // Agregar el prefijo '/api' a todas las rutas
+async function bootstrap() {  
+  // require('dotenv').config();
+  // require('dotenv').config({ debug: true })
+  require('dotenv').config({ path: [ '.env',"env/.env.jwtConfig"] })
+  require('dotenv').config({ path: [ `env/.env.dbConfig.${process.env.DB_CONFIG}`] })
+  // const configService = app.get(ConfigService);
+  // const port = configService.get<number>('PORT');
+
+  const app = await NestFactory.create(AppModule, { cors: true });
+  // const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api'); // Agregar el prefijo '/api' a todas las rutas
   // const loggerInstance = app.get(Logger);
   app.useGlobalPipes(new ValidationPipe());
+  // app.useGlobalPipes(new ValidationPipe({whitelist:true,forbidNonWhitelisted:true,transform:true}));
   // app.useGlobalFilters(new HttpExceptionFilter(loggerInstance));
   app.useGlobalFilters(new HttpExceptionFilter());
   //  app.useGlobalGuards(new AuthGuard());
@@ -25,10 +34,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
-
-  // require('dotenv').config();
-  // const configService = app.get(ConfigService);
-  // const port = configService.get<number>('PORT');
 
   await app.listen(3000);
 }

@@ -33,8 +33,8 @@ const ERROR_MSG = {
   },
   INVALID_ID: `El ID de ${ERROR_ENTITY} provisto no es válido.`,
   INVALID_DATA_4: {
-    CREATE: `Los datos para crear ${ERROR_ENTITY_LOWER} no son validos`,
-    UPDATE: `Los datos para modificar ${ERROR_ENTITY_LOWER} no son validos`,
+    CREATE: `Los datos para crear ${ERROR_ENTITY_LOWER} no son válidos`,
+    UPDATE: `Los datos para modificar ${ERROR_ENTITY_LOWER} no son válidos`,
   },
 };
 
@@ -76,7 +76,7 @@ export class ScheduleService {
     );
 
     if (schedule) return schedule;
-    throw new Error('Error inesperado:\n' + ERROR_MSG.CANT_CREATE);
+    throw new Error('Error inesperado: ' + ERROR_MSG.CANT_CREATE);
   }
   //---------------------------------------------------------------------------
   public async findAll(): Promise<Schedule[]> {
