@@ -33,8 +33,8 @@ const ERROR_MSG = {
   },
   INVALID_ID: `El ID de ${ERROR_ENTITY} provisto no es válido.`,
   INVALID_DATA_4: {
-    CREATE: `Los datos para crear ${ERROR_ENTITY_LOWER} no son validos`,
-    UPDATE: `Los datos para modificar ${ERROR_ENTITY_LOWER} no son validos`,
+    CREATE: `Los datos para crear ${ERROR_ENTITY_LOWER} no son válidos`,
+    UPDATE: `Los datos para modificar ${ERROR_ENTITY_LOWER} no son válidos`,
   },
 };
 
@@ -56,15 +56,15 @@ export class UserService {
     // if (user)
     return user;
     // throw new NotFoundException(
-    //   'Error buscando usuario por email: \n' +
+    //   'Error buscando usuario por email: ' +
     //   ERROR_MSG.NOT_FOUND,
     //   `No existe un ${ERROR_ENTITY} registrado con el email: ` + email,
     // );
-    // throw new Error( 'Error buscando usuario por email: \n' +"Error inesperado");
+    // throw new Error( 'Error buscando usuario por email: ' +"Error inesperado");
     // } catch (error) {
     //   if (error instanceof QueryFailedError) {
     //     throw new InternalServerErrorException(
-    //       'Error buscando usuario por email: \n' +
+    //       'Error buscando usuario por email: ' +
     //       'Error en la consulta a la base de datos',
     //     );
     //   }
@@ -78,14 +78,14 @@ export class UserService {
   public async create(datos: CreateUserDto): Promise<User> {
     try {
       // if (datos) //<---esto si devuelve Promise<string>
-      // if (!datos.email) throw new Error(ERROR_MSG.INVALID_DATA_4.CREATE+"\nFaltó proporcionar el email");
+      // if (!datos.email) throw new Error(ERROR_MSG.INVALID_DATA_4.CREATE+" Faltó proporcionar el email");
 
       // if (datos.email)
       if (await this.existUserEmail(datos.email))
         throw new ConflictException(
-          'Error: Datos repetidos\n',
+          'Error: Datos repetidos',
           ERROR_MSG.REPEATED +
-            '\nYa existe otro usuario registrado con el email: ' +
+            'Ya existe otro usuario registrado con el email: ' +
             datos.email,
         );
 
@@ -101,7 +101,7 @@ export class UserService {
       );
 
       if (user) return user;
-      throw new Error('Error creando el usuario: \n' + 'Error inesperado');
+      throw new Error('Error creando el usuario: ' + 'Error inesperado');
       // if (user.getId()) return user;
       // else throw new Error(ERROR_MSG.CANT_CREATE);
       //
@@ -112,7 +112,7 @@ export class UserService {
     } catch (error) {
       if (error instanceof QueryFailedError) {
         throw new InternalServerErrorException(
-          'Error: creando el usuario \n',
+          'Error: creando el usuario. ',
           'Error en la consulta a la base de datos',
         );
       } else throw error;
@@ -169,7 +169,7 @@ export class UserService {
       // throw new NotFoundException(ERROR_MSG.NOT_FOUND);
       // throw new NotFoundException(ERROR_MSG.NOT_FOUND);
       throw new NotFoundException(
-        'Error en la busqueda: \n' + ERROR_MSG.NOT_FOUND,
+        'Error en la busqueda: ' + ERROR_MSG.NOT_FOUND,
         {
           cause: new Error('Error en la busqueda de usuario ' + idUser + ' : '),
           description: 'Some error description',

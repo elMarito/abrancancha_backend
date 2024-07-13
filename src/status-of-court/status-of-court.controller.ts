@@ -1,38 +1,50 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Body, Param, UseGuards} from '@nestjs/common';
+import { Get, Post, Patch, Delete} from '@nestjs/common';
 import { StatusOfCourtService } from './status-of-court.service';
 import { CreateStatusOfCourtDto } from './dto/create-status-of-court.dto';
 import { UpdateStatusOfCourtDto } from './dto/update-status-of-court.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { Roles } from 'src/auth/roles.decorator';
+import { Public, Roles } from 'src/auth/roles.decorator';
 import { Role } from 'src/auth/role.enum';
 
 @Controller('status-of-court')
 // @UseGuards(AuthGuard)
-@Roles(Role.Admin)
+// @Roles(Role.Admin)
 export class StatusOfCourtController {
   constructor(private readonly statusOfCourtService: StatusOfCourtService) {}
 
   @Post()
+  @Roles(Role.Admin)
   create(@Body() createStatusOfCourtDto: CreateStatusOfCourtDto) {
     return this.statusOfCourtService.create(createStatusOfCourtDto);
   }
 
   @Get()
+  @Public()
   findAll() {
     return this.statusOfCourtService.findAll();
   }
 
   @Get(':id')
+  @Public()
   findOne(@Param('id') id: string) {
     return this.statusOfCourtService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStatusOfCourtDto: UpdateStatusOfCourtDto) {
-    return this.statusOfCourtService.update({...updateStatusOfCourtDto , id:Number(id)});
+  @Roles(Role.Admin)
+  update(
+    @Param('id') id: string,
+    @Body() updateStatusOfCourtDto: UpdateStatusOfCourtDto,
+  ) {
+    return this.statusOfCourtService.update({
+      ...updateStatusOfCourtDto,
+      id: Number(id),
+    });
   }
 
   @Delete(':id')
+  @Roles(Role.Admin)
   remove(@Param('id') id: string) {
     return this.statusOfCourtService.remove(+id);
   }

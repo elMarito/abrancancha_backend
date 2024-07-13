@@ -1,7 +1,11 @@
+import { HttpStatus } from '@nestjs/common';
+import { Repository } from 'typeorm';
+
 export type ResponseObject = {
   statusOk: boolean;
   message: string;
   data?: any;
+  // type: keyof typeof HttpStatus;
 };
 
 export function ServiceResponseOk(
@@ -23,11 +27,11 @@ export function today(completa: boolean = false): Date {
   return fechaSinHora;
 }
 
-export function dateEstractGMT( timeFrom: string): Date {   
-  return new Date( timeFrom.toString().replace(/GMT.*$/, ''));  
+export function dateEstractGMT(timeFrom: string): Date {
+  return new Date(timeFrom.toString().replace(/GMT.*$/, ''));
 }
 
-//como convertir un hash para que sea valido en una URL
+//como convertir un hash para que sea válido en una URL
 //hash: $2a$10$OAAgeChoe7oWWeqwuihHH.G//nxvmhl.zFhf41w09dspxu0JYPE.S'
 
 // const bcrypt = require('bcrypt');
@@ -67,7 +71,6 @@ export function urlUnsafeHash(encodedHash: string): string {
 }
 // console.log(decodedHash); // Output: $2a$10$OAAgeChoe7oWWeqwuihHH.G//nxvmhl.zFhf41w09dspxu0JYPE.S
 
-
 // const fecha: Date = new Date();
 // const fechaString1: string = fecha.toString();
 // console.log(fechaString1); // Ejemplo de salida: "Thu May 13 2024 15:30:00 GMT+0530 (hora de India estándar)"
@@ -77,3 +80,7 @@ export function urlUnsafeHash(encodedHash: string): string {
 
 // const fechaString: string = fecha.toUTCString();
 // console.log(fechaString); // Ejemplo de salida: "Thu, 13 May 2024 10:00:00 GMT"
+
+export function getCols<T>(repository: Repository<T>): (keyof T)[] {
+  return (repository.metadata.columns.map(col => col.propertyName) as (keyof T)[]);
+}

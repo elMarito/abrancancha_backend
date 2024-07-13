@@ -29,7 +29,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
   //---------------------------------------------------------------------------
-  async registerUser({ fullname, email, password }: RegisterDto) {
+  async registerUser({ fullname, email, password, phone, avatar }: RegisterDto) {
     // console.log({fullname});
     // const user = await this.userService.getUserByEmail(email);
     // if (user)
@@ -41,6 +41,8 @@ export class AuthService {
       fullname,
       email,
       password,
+      phone,
+      avatar,
     });
 
     return newUser;
@@ -52,7 +54,7 @@ export class AuthService {
     const user: User = await this.userService.getUserByEmail(email);
     if (!user)
       throw new UnauthorizedException(
-        'Email inválido.\n El email proporcionado no se encuentra resitrado.',
+        'Email inválido. El email proporcionado no se encuentra registrado.',
       );
 
     const isPasswordValid = await bcryptjs.compare(
@@ -75,7 +77,7 @@ export class AuthService {
     return {
       token: await this.jwtService.signAsync(payload),
       user: {role: payload.role, ...(user.getPublicData())},
-    }
+    };
     // return {
     //   token: await this.jwtService.signAsync(payload),
     //   user: {...(user.getPublicData()),token: "algo"},
@@ -90,14 +92,14 @@ export class AuthService {
   async resetPassword(email: string): Promise<any> {
     // try {
     if (!email)
-      throw new BadRequestException('El email proporcionado no es valido');
+      throw new BadRequestException('El email proporcionado no es válido');
     const user = await this.userService.getUserByEmail(email);
     // console.log("++++",user);
     if (!user)
       throw new NotFoundException(
-        'Email inválido.\n El email proporcionado no se encuentra resitrado.',
+        'Email inválido. El email proporcionado no se encuentra registrado.',
       );
-    // if (!user) throw new UnauthorizedException('Email inválido.\n El email proporcionado no se encuentra resitrado.');
+    // if (!user) throw new UnauthorizedException('Email inválido. El email proporcionado no se encuentra registrado.');
     // const payload = {
     //   sub: user.getId(),
     //   email: user.getEmail(),
@@ -110,7 +112,7 @@ export class AuthService {
     user.setPasswordHash(safehash);
     const response = await this.userService.changePassword(user);
     return ServiceResponseOk(
-      'La contraseña a sido reseteada y el token es valido hasta medianoche.',
+      'La contraseña a sido reseteada y el token es válido hasta medianoche.',
       { resetToken: safehash },
     );
     // return { ...response, resetToken: safehash };

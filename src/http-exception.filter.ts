@@ -3,7 +3,7 @@ import {
   Catch,
   ArgumentsHost,
   HttpException,
-  Logger,
+  // Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
@@ -18,12 +18,22 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const details = exception.getResponse();
     // this.logger.error(`${request.method} ${request.originalUrl} ${status} error: ${exception.message}`)
 
+    // let message = exception.message || 'Ha ocurrido un error inesperado';
+    let message = details['message'];
+    if (Array.isArray(message) && message.length > 0)
+      message = message.join('. ') + '.';
     response.status(status).json({
-      path: request.url,
+      statusCode: status,
+      message: message || exception.message,
       timestamp: new Date().toISOString(),
-      // statusCode: status,
-      // message: exception.message,
-      details,
+      path: ctx.getRequest().url,
     });
+    // response.status(status).json({
+    //   path: request.url,
+    //   timestamp: new Date().toISOString(),
+    //   // statusCode: status,
+    //   // message: exception.message,
+    //   details,
+    // });
   }
 }

@@ -1,14 +1,19 @@
-import {  BadRequestException,  ConflictException} from '@nestjs/common';
-import {  GoneException,  InternalServerErrorException} from '@nestjs/common';
-import {  NotFoundException,  Injectable} from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpStatus,
+} from '@nestjs/common';
+import { GoneException, InternalServerErrorException } from '@nestjs/common';
+import { NotFoundException, Injectable } from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import {  FindManyOptions,  FindOneOptions} from 'typeorm';
-import {  QueryFailedError,  Repository} from 'typeorm';
+import { Between, Equal, FindManyOptions, FindOneOptions } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { Reservation } from './entities/reservation.entity';
-import { ResponseObject, ServiceResponseOk } from 'src/utilities';
+import { getCols, ResponseObject, ServiceResponseOk } from 'src/utilities';
 import { Court } from 'src/court/entities/court.entity';
+import { QueryReservationDto } from './dto/query-reservation.dto';
 
 const ERROR_ENTITY = 'reserva';
 const ERROR_ENTITY_LOWER = `la ${ERROR_ENTITY}`;
@@ -28,8 +33,8 @@ const ERROR_MSG = {
   },
   INVALID_ID: `El ID de ${ERROR_ENTITY} provisto no es válido.`,
   INVALID_DATA_4: {
-    CREATE: `Los datos para crear ${ERROR_ENTITY_LOWER} no son validos`,
-    UPDATE: `Los datos para modificar ${ERROR_ENTITY_LOWER} no son validos`,
+    CREATE: `Los datos para crear ${ERROR_ENTITY_LOWER} no son válidos`,
+    UPDATE: `Los datos para modificar ${ERROR_ENTITY_LOWER} no son válidos`,
   },
 };
 
@@ -45,40 +50,94 @@ export class ReservationService {
     // private readonly userRepository: Repository<User>,
   ) {}
   //---------------------------------------------------------------------------
- //---------------------------------------------------------------------------
- public async create(datos: CreateReservationDto): Promise<Reservation> {
-  console.log('Datos recibidos para crear reserva:', datos);
-  try {
-    const formattedDate = new Date(datos.timedate).toISOString().slice(0, 19).replace('T', ' ');
-    const reservation: Reservation = await this.reservationRepository.save(
+  public async create(datos: CreateReservationDto): Promise<Reservation> {
+    // if (await this.existUserEmail(datos.email))
+    //   throw new ConflictException(
+    //     'Error: Datos repetidos. ',
+    //     ERROR_MSG.REPEATED +
+    //       ' Ya existe otro usuario registrado con el email: ' +
+    //       datos.email,
+    //   );
+
+    let reservation: Reservation = await this.reservationRepository.save(
       new Reservation(
-        datos.user,
-        datos.court,
-        formattedDate,
+        // datos.user,
+        // datos.court,
+        datos.timedate,
+        datos.idUser,
+        datos.idCourt,
         Number(datos.price),
-        // datos.status
+        datos.idStatus,
       ),
     );
 
     if (reservation) return reservation;
-    throw new Error('Error creando la reserva: \n' + 'Error inesperado');
-  } catch (error) {
-    console.error('Error al crear la reserva:', error);
-    throw new InternalServerErrorException('Error inesperado al crear la reserva');
+    throw new Error('Error creando la reserva: ' + 'Error inesperado');
   }
 }
 
   //---------------------------------------------------------------------------
-  public async findAll(id?:string): Promise<Reservation[]> {
-    if(id){
-      const criterio:FindOneOptions ={where:{id:id}};
-      let reservationForUser:Reservation=
-      await this.reservationRepository.findOne(criterio)
-      this.reservationsForUsers=[];
-      this.reservationsForUsers.push(reservationForUser)
-    return this.reservationsForUsers
-    }
-    this.reservations = await this.reservationRepository.find();
+  public async findAll(
+    queryParams: QueryReservationDto,
+  ): Promise<Reservation[]> {
+    // const {idUser,timedate}= queryParams;
+    const {
+      idUser = null,
+      idCourt = null,
+      idStatus = null,
+      timedate = null,
+      search = null /* para buscar por court */,
+      orderBy = 'timedate',
+      sort = 'ASC',
+      page = 1,
+      perPage = 10,
+    }: any = queryParams;
+
+    // debugger
+    const startDate = new Date(timedate);
+    startDate.setUTCHours(0, 0, 0, 0); // Establecer a las 00:00:00 UTC del día
+    const endDate = new Date(timedate);
+    endDate.setUTCHours(23, 59, 59, 999);
+    // const algo =getCols<Reservation>(this.reservationRepository);
+    const criterio: FindManyOptions = {
+      relations: ['user', 'court', 'status'],
+      // ...(idUser ? { where: { user: { id: idUser } } } : {}),
+      // ...(idCourt ? { where: { court: { id: idCourt } } } : {}),
+      // ...(idStatus ? { where: { status: { id: idStatus } } } : {}),
+      where: {
+        ...(idUser ? { idUser: idUser } : {}),
+        ...(idCourt ? { idCourt: idCourt } : {}),
+        ...(idStatus ? { idStatus: idStatus } : {}),
+        ...(timedate ? { timedate: Between(startDate, endDate) } : {}),
+      },
+      ...(orderBy ? { order: { [orderBy]: sort } } : {}),
+      // skip: page*perPage,
+      // skip: (current - 1) * pageSize,
+      // take: perPage,
+      select: {
+        user: {
+          // id: true,
+          fullname: true,
+          // passwordHash:false,
+          email: true,
+          phone: true,
+          avatar: true,
+          idStatus: true,
+        },
+      },
+      // select: ["id", "nameSpace", "title", "description" ,"status" ,"idUser" ,"createdAt" ,"updatedAt"],
+      // para seleccionar casi todas las columnas https://github.com/typeorm/typeorm/issues/5816
+    };
+    //***************************************** */
+    // public async findAll(idUser?: number): Promise<Reservation[]> {
+    // debugger;
+    // const criterio: FindManyOptions = {
+    //   relations: ['user', 'court', 'status'],
+    //   // relationLoadStrategy: "query",
+    //   ...(idUser ? { where: { user: { id: idUser } } } : {}),
+    // };
+    this.reservations = await this.reservationRepository.find(criterio);
+    // this.reservations = await this.reservationRepository.find();
     if (this.reservations) return this.reservations;
     throw new NotFoundException(
       'Error en la busqueda: ',
@@ -126,7 +185,8 @@ export class ReservationService {
     // reservation.setUser(datos.user);
     // reservation.setCourt(datos.court);
     // reservation.setTimedate(datos.timedate);
-    reservation.setStatus(datos.status);
+    // reservation.setStatus(datos.status);
+    reservation.setIdStatus(datos.idStatus);
     const reservationUpdated: Reservation =
       await this.reservationRepository.save(reservation);
     //else
@@ -144,12 +204,12 @@ export class ReservationService {
     const userExists = await this.existReservationId(id);
     if (!userExists) throw new GoneException(ERROR_MSG.NOT_FOUND);
 
-// TODO
-//chequear: si la fecha ya paso no se puede borrar
-// la reserva ya expiro, no se puede borrar.
+    // TODO
+    //chequear: si la fecha ya paso no se puede borrar
+    // la reserva ya expiro, no se puede borrar.
 
     await this.reservationRepository.delete(id);
-
+    // guardar la respuesta y ponerle HttpStatus.NO_CONTENT
     return ServiceResponseOk('Reserva borrada exitosamente.');
 
     // return `This action removes a #${id} reservation`;

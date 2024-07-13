@@ -1,14 +1,14 @@
-import { Controller,  Get,  Post,  Body,  Patch,  Param,  Delete} from '@nestjs/common';
-import { UseGuards} from '@nestjs/common';
+import { Controller, Body, Param, UseGuards } from '@nestjs/common';
+import { Get, Post, Patch, Delete } from '@nestjs/common';
 import { AdministratorService } from './administrator.service';
 import { CreateAdministratorDto } from './dto/create-administrator.dto';
 import { UpdateAdministratorDto } from './dto/update-administrator.dto';
 import { Administrator } from './entities/administrator.entity';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
-import { Role } from 'src/auth/role.enum';
+// import { AuthGuard } from 'src/auth/auth.guard';
 import { Roles } from 'src/auth/roles.decorator';
-import { RoleGuard } from 'src/auth/role.guard';
+import { Role } from 'src/auth/role.enum';
+// import { CreateUserDto } from 'src/user/dto/create-user.dto';
+// import { RoleGuard } from 'src/auth/role.guard';
 import { UserService } from 'src/user/user.service';
 
 @Controller('administrators')
@@ -16,9 +16,9 @@ import { UserService } from 'src/user/user.service';
 @Roles(Role.Admin)
 // @UseGuards(AuthGuard, RoleGuard)
 export class AdministratorController {
-  constructor(private readonly administratorService: AdministratorService
-    ,private readonly userService: UserService
-
+  constructor(
+    private readonly administratorService: AdministratorService,
+    private readonly userService: UserService,
   ) {}
 
   @Post()
@@ -29,7 +29,7 @@ export class AdministratorController {
   @Get()
   findAll() {
     // return this.administratorService.getAll();
-    return this.userService.findAll(Role.Admin)
+    return this.userService.findAll(Role.Admin);
   }
 
   @Get(':id')

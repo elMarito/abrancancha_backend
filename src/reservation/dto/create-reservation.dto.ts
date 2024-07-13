@@ -5,30 +5,33 @@ import { StatusOfReservation } from 'src/status-of-reservation/entities/status-o
 import { User } from 'src/user/entities/user.entity';
 
 export class CreateReservationDto {
-  // @IsNumber()
-  // readonly idUser: number;
+  @IsNotEmpty()
+  @IsNumber()
+  readonly idUser: number;
 
-  // @IsNumber()
-  // readonly idCourt: number;
+  @IsNotEmpty()
+  @IsNumber()
+  readonly idCourt: number;
 
-  readonly user: User;
-  readonly court: Court;
-  
-  @IsOptional()
-  readonly status: StatusOfReservation;
+  // readonly user: User;
+  // readonly court: Court;
+  // @IsOptional()
+  // readonly status: StatusOfReservation;
 
+  @IsNotEmpty()
+  @IsDate()
+  @Transform(({ value }) => new Date(value), { toClassOnly: true })
+  @Type(()=>Date)
+  // @IsDateString({},{ message: 'El campo "Fecha y Hora" debe ser una cadena de texto.' })
+  readonly timedate: Date;
 
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()
+  // @IsCurrency()
   readonly price: number;
 
-  @IsNotEmpty()
-  @IsDateString()
-  readonly timedate: string;
-
-  
- 
-  // @IsNumber()
-  // readonly idStatus: number;
+  @IsOptional()
+  @IsNumber()
+  readonly idStatus: number;
 }

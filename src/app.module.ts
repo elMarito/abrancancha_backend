@@ -28,20 +28,22 @@ import { URL } from 'url';
 import { AuthGuard } from './auth/auth.guard';
 import { RoleGuard } from './auth/role.guard';
 import { AccessControlService } from './auth/access-contorl.service';
-// import { CLOUD_DB } from './auth/constants';
+import { DB } from './auth/constants';
 import { ConfigModule } from '@nestjs/config';
 import { loadEnvFile } from 'process';
 import { CockroachConnectionOptions } from 'typeorm/driver/cockroachdb/CockroachConnectionOptions';
 // import configurationApp from 'config/configuration-app';
 //https://docs.nestjs.com/guards
 
-const DB_ORIGIN = process.env.DB_CONFIG;
+const DB_ORIGIN = process.env.DB_CONFIG || "remote";
 const getDB_TYPE = ()=> (process.env.DB_TYPE || "cockroachdb") as CockroachConnectionOptions["type"];
+
 @Module({
   imports: [
     //https://stackoverflow.com/questions/54308318/how-to-get-the-configurations-from-within-a-module-import-in-nestjs
     //
     ConfigModule.forRoot({
+      // expandVariables: true,
       envFilePath: [
         `.env`,
         `env/.env.jwtConfig`,
@@ -51,6 +53,7 @@ const getDB_TYPE = ()=> (process.env.DB_TYPE || "cockroachdb") as CockroachConne
           ? 'env/.env.dbConfig.local'
           : `env/.env.dbConfig.${DB_ORIGIN}`,
       ],
+      // envFilePath: [`env/.env.dbConfig.remote`],
       // envFilePath: [`env/.env.development.local`],
       // load: [configurationApp],
       isGlobal: true,
@@ -68,11 +71,23 @@ const getDB_TYPE = ()=> (process.env.DB_TYPE || "cockroachdb") as CockroachConne
       database: process.env.DB_NAME,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
-      // (!DB_ORIGIN? null: (ssl: true)),
+      ...(DB_ORIGIN &&  {ssl: true}),
       // ssl: true as any,
+      // ssl: true,
       entities: ['dist/**/**.entity{.ts,.js}'],
       synchronize: false,
     }),
+    //     TypeOrmModule.forRoot({
+    //   type: "cockroachdb",
+    //   host: DB.HOST,
+    //   port: DB.PORT,
+    //   username: DB.USERNAME,
+    //   password: DB.PASSWORD,
+    //   database: DB.NAME,
+    //   ssl: true,
+    //   entities: ['dist/**/**.entity{.ts,.js}'],
+    //   synchronize: false,
+    // }),
     AuthModule,
     UserModule,
     AdministratorModule,
