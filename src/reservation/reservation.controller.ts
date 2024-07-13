@@ -55,6 +55,11 @@ export class ReservationController {
     return this.reservationService.findOne(+id);
   }
 
+  @Get(':userId')
+  findAllUser(@Param('idUser')id:string){
+    return this.reservationService.findAll(id);
+  }
+
   @Patch(':id')
   @Roles(Role.Admin, Role.User)
   async update(

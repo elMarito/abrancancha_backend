@@ -308,7 +308,7 @@ export class CourtService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-  }
+  
 
   public async remove(idCourt: number): Promise<string> {
     try {
