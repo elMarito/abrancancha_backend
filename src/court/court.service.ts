@@ -2,19 +2,21 @@ import {
   BadRequestException,
   GoneException,
   HttpException,
+  NotFoundException,
 } from '@nestjs/common';
-import { HttpStatus, Inject, Injectable, Type } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCourtDto } from './dto/create-court.dto';
 import { UpdateCourtDto } from './dto/update-court.dto';
 import { Court } from './entities/court.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOneOptions, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, ILike, Repository } from 'typeorm';
 import { ResponseObject, ServiceResponseOk } from 'src/utilities';
 import { TypeOfCourt } from 'src/type-of-court/entities/type-of-court.entity';
 import { Timetable } from 'src/timetable/entities/timetable.entity';
 import { Tariff } from 'src/tariff/entities/tariff.entity';
 import { StatusOfCourt } from 'src/status-of-court/entities/status-of-court.entity';
 import { CreateTimetableDto } from 'src/timetable/dto/create-timetable.dto';
+import { QueryCourtDto } from './dto/query-court.dto';
 
 const ERROR_ENTITY = 'cancha';
 const ERROR_ENTITY_LOWER = `la ${ERROR_ENTITY}`;
@@ -132,19 +134,72 @@ export class CourtService {
     }
   }
 
-  public async getAll(): Promise<Court[]> {
-    try {
-      this.courts = await this.courtRepository.find();
+  public async getAll({
+    idType = null,
+    idTimetable = null,
+    idTariff = null,
+    idStatus = null,
+    observations=null,
+    rating = null,
+    active = null,
+
+    search = null,
+    orderBy = 'name',
+    sort = 'ASC',
+    page = 1,
+    perPage = 10,
+  }: QueryCourtDto): Promise<Court[]> {
+
+    const criterio: FindManyOptions = {
+      relations: ['type', 'timetable', 'tariff', 'status'],
+      where: {
+        ...(idType ? { idType: idType } : {}),
+        ...(idTimetable ? { idTimetable: idTimetable } : {}),
+        ...(idStatus ? { idStatus: idStatus } : {}),
+        ...(idTariff ? { idTariff: idTariff } : {}),
+        ...(rating ? { rating: rating } : {}),
+        ...(observations ? { observations: ILike(`%${observations}%`) } : {}),
+        ...(search
+          ? {
+               ...([
+                { numb: ILike(`%${search}%`) },
+                { name: ILike(`%${search}%`) },
+                { observations: ILike(`%${search}%`) },
+              ])
+            }
+          : {}),
+      },
+      ...(orderBy ? { order: { [orderBy]: sort } } : {}),
+      // skip: page*perPage,
+      // skip: (current - 1) * pageSize,
+      // take: perPage,
+      // select: {
+      //   type: { name: true },
+      //   timetable: { name: true },
+      //   tariff: { name: true },
+      //   status: { name: true },
+      //   idStatus: false,
+      //   idTimetable: false,
+      //   idTariff: false,
+      //   idStatus: false,
+      // },
+    };
+    try {      
+      this.courts = await this.courtRepository.find(criterio);
       if (this.courts) return this.courts;
       else throw new Error('no se encuentran Canchas');
     } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          error: 'Error en la busqueda :)' + error,
-        },
-        HttpStatus.NOT_FOUND,
+      throw new NotFoundException(
+        'Error en la busqueda: ',
+        ERROR_MSG.NOT_FOUND_ANY,
       );
+      // throw new HttpException(
+      //   {
+      //     status: HttpStatus.NOT_FOUND,
+      //     error: 'Error en la busqueda :)' + error,
+      //   },
+      //   HttpStatus.NOT_FOUND,
+      // );
     }
   }
 
@@ -253,7 +308,7 @@ export class CourtService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-  }
+  
 
   public async remove(idCourt: number): Promise<string> {
     try {

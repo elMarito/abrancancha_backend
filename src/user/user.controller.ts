@@ -21,12 +21,14 @@ export class UserController {
   }
 
   @Get()
+  // @Roles(Role.Admin)
   findAll() {
     return this.userService.findAll(Role.User);
   }
 
   // @UseGuards(AuthGuard)
   @Get(':id')
+  // @Roles(Role.Admin)
   findOne(@Param('id') id: string)/* :User */ {
     return this.userService.findOne(+id);
   }

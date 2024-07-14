@@ -26,7 +26,11 @@ export class RegisterDto {
     // pointsForContainingSymbol: 10 }
     readonly password: string
     
-  // @IsOptional()
-  // @IsString()
-  // readonly phone?: string;
+  @IsOptional()
+  @IsString()
+  readonly phone?: string;
+
+  @IsOptional()
+  @IsString()
+  readonly avatar?: string;
 }

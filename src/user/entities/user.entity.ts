@@ -1,3 +1,4 @@
+import { Exclude, Expose } from 'class-transformer';
 import { IsEmail, IsHash, IsNotEmpty, MaxLength } from 'class-validator';
 import { Administrator } from 'src/administrator/entities/administrator.entity';
 import { Reservation } from 'src/reservation/entities/reservation.entity';
@@ -16,6 +17,7 @@ export class User {
   // @ApiProperty({ description: 'Una o mas palabras separadas por espacios' })
   private fullname: string;
 
+  // @Exclude() // aparentemente esto solo funciona con: https://docs.nestjs.com/techniques/serialization
   @Column({ nullable: false })
   // @Column({select: false}) //<-si uso esto no funciona el getPasswordHash
   // @Column({ nullable: false, select: false })
@@ -41,7 +43,7 @@ export class User {
   private avatar: string;
 
   // @Column()
-  private idStatus: number;
+  // private idStatus: number;
   // @Column()
   // private role: string | enum;
 
@@ -54,7 +56,13 @@ export class User {
 
   @OneToMany(() => Reservation, (reservation) => reservation.user)
   public reservations: Reservation[];
+
+  @Column({ nullable: false })
+  private idStatus: number;
   //---------------------------------------------------------------------------
+  // constructor(partial: Partial<UserEntity>) {
+  //   Object.assign(this, partial);
+  // }
   constructor(
     fullname: string,
     passwordHash: string,
@@ -108,6 +116,10 @@ export class User {
   public setPasswordHash(value: string): void {
     this.passwordHash = value;
   }
+  // @Expose()
+  // get getPasswordHash(): string {
+  //   return `${this.passwordHash}`;
+  // }
 
   // public getSalt(): string {    return this.salt;  }
   // public  setSalt(value: string): void {    this.salt = value;  }

@@ -1,4 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
+import { Repository } from 'typeorm';
 
 export type ResponseObject = {
   statusOk: boolean;
@@ -79,3 +80,7 @@ export function urlUnsafeHash(encodedHash: string): string {
 
 // const fechaString: string = fecha.toUTCString();
 // console.log(fechaString); // Ejemplo de salida: "Thu, 13 May 2024 10:00:00 GMT"
+
+export function getCols<T>(repository: Repository<T>): (keyof T)[] {
+  return (repository.metadata.columns.map(col => col.propertyName) as (keyof T)[]);
+}

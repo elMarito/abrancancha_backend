@@ -29,7 +29,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
   //---------------------------------------------------------------------------
-  async registerUser({ fullname, email, password }: RegisterDto) {
+  async registerUser({ fullname, email, password, phone, avatar }: RegisterDto) {
     // console.log({fullname});
     // const user = await this.userService.getUserByEmail(email);
     // if (user)
@@ -41,6 +41,8 @@ export class AuthService {
       fullname,
       email,
       password,
+      phone,
+      avatar,
     });
 
     return newUser;

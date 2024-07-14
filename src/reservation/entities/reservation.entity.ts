@@ -1,4 +1,4 @@
-// #Region IMPORT
+
 
 import { Court } from 'src/court/entities/court.entity';
 import { StatusOfReservation } from 'src/status-of-reservation/entities/status-of-reservation.entity';
@@ -62,7 +62,6 @@ export class Reservation {
     idCourt: number,
     price: number,
     idStatus?: number,
-    // timedate: Date,
     // status: string,
   ) {
     this.timedate = timedate;
@@ -106,12 +105,13 @@ export class Reservation {
   //   this.idCourt = idCourt;
   // }
 
-  getTimedate(): Date {
+  
+  getTimedate(): string {
     return this.timedate;
   }
 
-  setTimedate(fecha: Date): void {
-    this.timedate = fecha;
+  setTimedate(timedate: string): void {
+    this.timedate = timedate;
   }
 
   getIdStatus(): number {
