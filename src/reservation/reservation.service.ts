@@ -41,7 +41,6 @@ const ERROR_MSG = {
 @Injectable()
 export class ReservationService {
   private reservations: Reservation[] = [];
-  reservationsForUsers: any[];
 
   constructor(
     @InjectRepository(Reservation)
@@ -74,8 +73,6 @@ export class ReservationService {
     if (reservation) return reservation;
     throw new Error('Error creando la reserva: ' + 'Error inesperado');
   }
-}
-
   //---------------------------------------------------------------------------
   public async findAll(
     queryParams: QueryReservationDto,
@@ -142,7 +139,6 @@ export class ReservationService {
     throw new NotFoundException(
       'Error en la busqueda: ',
       ERROR_MSG.NOT_FOUND_ANY,
-      
     );
   }
   //---------------------------------------------------------------------------
@@ -156,10 +152,6 @@ export class ReservationService {
     else throw new Error(ERROR_MSG.NOT_FOUND);
     return this.reservations;
   }
-
-  //--------------------------------------------------------------------------- 
-  
-
   //---------------------------------------------------------------------------
   public async update(
     idReservation: number,
