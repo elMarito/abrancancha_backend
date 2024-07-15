@@ -57,7 +57,7 @@ export class CourtService {
     @InjectRepository(StatusOfCourt)
     private readonly statusOfCourtRepository: Repository<StatusOfCourt>,
   ) {}
-
+//----------------------------------------------------------------------------
   // ESTO Funciona pero no corrobora las otras entidades--
   //  public async create(createCourtDto: CreateCourtDto): Promise<Court> {
   //   let court: Court = await this.courtRepository.save(new Court(
@@ -133,7 +133,7 @@ export class CourtService {
       throw new BadRequestException('Error al crear la cancha');
     }
   }
-
+//----------------------------------------------------------------------------
   public async getAll({
     idType = null,
     idTimetable = null,
@@ -202,7 +202,7 @@ export class CourtService {
       // );
     }
   }
-
+//----------------------------------------------------------------------------
   public async findOne(idCourt: number): Promise<Court[]> {
     try {
       const court = await this.getCourtById(idCourt);
@@ -223,7 +223,7 @@ export class CourtService {
       );
     }
   }
-
+//----------------------------------------------------------------------------
   public async updateCourt(
     idCourt: number,
     datos: UpdateCourtDto,
@@ -309,7 +309,7 @@ export class CourtService {
       );
     }
   }
-
+//----------------------------------------------------------------------------
   public async remove(idCourt: number): Promise<string> {
     try {
       let criterio: FindOneOptions = { where: { id: idCourt } };
@@ -327,7 +327,6 @@ export class CourtService {
       );
     }
   }
-
   //---------------------------------------------------------------------------
   private async getCourtById(idCourt: number): Promise<Court> {
     const criterio: FindOneOptions = { where: { id: idCourt } };

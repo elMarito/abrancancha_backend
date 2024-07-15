@@ -1,4 +1,4 @@
-import { Controller, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Body, Param, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { Get, Post, Patch, Delete } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
@@ -26,19 +26,19 @@ export class ScheduleController {
 
   @Get(':id')
   @Public()
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.scheduleService.findOne(+id);
   }
 
   @Patch(':id')
   @Roles(Role.Admin)
-  update(@Param('id') id: string, @Body() updateScheduleDto: UpdateScheduleDto) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateScheduleDto: UpdateScheduleDto) {
     return this.scheduleService.update(+id, updateScheduleDto);
   }
 
   @Delete(':id')
   @Roles(Role.Admin)
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.scheduleService.remove(+id);
   }
 }

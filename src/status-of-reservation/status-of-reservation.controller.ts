@@ -1,4 +1,4 @@
-import { Controller, Body, Param, UseGuards} from '@nestjs/common';
+import { Controller, Body, Param, UseGuards, ParseIntPipe} from '@nestjs/common';
 import { Get, Post, Patch, Delete} from '@nestjs/common';
 import { StatusOfReservationService } from './status-of-reservation.service';
 import { CreateStatusOfReservationDto } from './dto/create-status-of-reservation.dto';
@@ -29,14 +29,14 @@ export class StatusOfReservationController {
 
   @Get(':id')
   @Public()
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.statusOfReservationService.findOne(+id);
   }
 
   @Patch(':id')
   @Roles(Role.Admin)
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateStatusOfReservationDto: UpdateStatusOfReservationDto,
   ) {
     return this.statusOfReservationService.updateStatusOfReservation({
@@ -48,7 +48,7 @@ export class StatusOfReservationController {
   @Delete(':id')
   @Roles(Role.Admin)
   deleteStatusOfReservation(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
   ): StatusOfReservation[] | any {
     return this.statusOfReservationService.deleteStatusOfReservation(
       Number(id),

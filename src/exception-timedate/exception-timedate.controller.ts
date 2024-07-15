@@ -1,4 +1,4 @@
-import { Controller, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Body, Param, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { Get, Post, Patch, Delete } from '@nestjs/common';
 import { ExceptionTimedateService } from './exception-timedate.service';
 import { CreateExceptionTimedateDto } from './dto/create-exception-timedate.dto';
@@ -27,19 +27,19 @@ export class ExceptionTimedateController {
 
   @Get(':id')
   @Public()
-  findOne(@Param('id') id: number) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.exceptionTimedateService.findOne(+id);
   }
 
   @Patch(':id')
   @Roles(Role.Admin)
-  update(@Param('id') id: number, @Body() updateExceptionTimedateDto: UpdateExceptionTimedateDto) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateExceptionTimedateDto: UpdateExceptionTimedateDto) {
     return this.exceptionTimedateService.updateExceptionTimedate( {...updateExceptionTimedateDto,id:Number(id)});
   }
 
   @Delete(':id')
   @Roles(Role.Admin)
-  eliminarExceptionTimeDate(@Param('id') id: string):ExceptionTimedate[]|any {
+  eliminarExceptionTimeDate(@Param('id', ParseIntPipe) id: number):ExceptionTimedate[]|any {
     return this.exceptionTimedateService.eliminarexceptionTimedate(Number(id));
   }
 }

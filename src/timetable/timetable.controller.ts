@@ -1,4 +1,4 @@
-import { Controller, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Body, Param, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { Get, Post, Patch, Delete } from '@nestjs/common';
 import { TimetableService } from './timetable.service';
 import { CreateTimetableDto } from './dto/create-timetable.dto';
@@ -24,22 +24,22 @@ export class TimetableController {
     return this.timetableService.findAll();
   }
 
-  // @Get('withSchedules')
-  // @Public()
-  // findAllwithSchedules() {
-  //   return this.timetableService.findAllwithSchedules();
-  // }
+  @Get('withSchedules')
+  @Public()
+  findAllwithSchedules() {
+    return this.timetableService.findAllwithSchedules();
+  }
 
   @Get(':id')
   @Public()
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id' , ParseIntPipe) id: number) {
     return this.timetableService.findOne(+id);
   }
 
   @Patch(':id')
   @Roles(Role.Admin)
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateTimetableDto: UpdateTimetableDto,
   ) {
     return this.timetableService.update(+id, updateTimetableDto);
@@ -47,7 +47,7 @@ export class TimetableController {
 
   @Delete(':id')
   @Roles(Role.Admin)
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.timetableService.remove(+id);
   }
 }

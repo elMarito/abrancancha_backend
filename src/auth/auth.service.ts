@@ -93,8 +93,8 @@ export class AuthService {
     // try {
     if (!email)
       throw new BadRequestException('El email proporcionado no es válido');
+
     const user = await this.userService.getUserByEmail(email);
-    // console.log("++++",user);
     if (!user)
       throw new NotFoundException(
         'Email inválido. El email proporcionado no se encuentra registrado.',

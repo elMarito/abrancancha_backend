@@ -1,4 +1,4 @@
-import { Controller, Body, Param, UseGuards} from '@nestjs/common';
+import { Controller, Body, Param, UseGuards, ParseIntPipe} from '@nestjs/common';
 import { Get, Post, Patch, Delete} from '@nestjs/common';
 import { StatusOfCourtService } from './status-of-court.service';
 import { CreateStatusOfCourtDto } from './dto/create-status-of-court.dto';
@@ -27,14 +27,14 @@ export class StatusOfCourtController {
 
   @Get(':id')
   @Public()
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.statusOfCourtService.findOne(+id);
   }
 
   @Patch(':id')
   @Roles(Role.Admin)
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateStatusOfCourtDto: UpdateStatusOfCourtDto,
   ) {
     return this.statusOfCourtService.update({
@@ -45,7 +45,7 @@ export class StatusOfCourtController {
 
   @Delete(':id')
   @Roles(Role.Admin)
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.statusOfCourtService.remove(+id);
   }
 }

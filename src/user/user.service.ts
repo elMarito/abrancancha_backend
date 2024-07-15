@@ -51,7 +51,10 @@ export class UserService {
   //---------------------------------------------------------------------------
   async getUserByEmail(email: string): Promise<User> {
     // try { //aca va relarions para que funcione use.isAdministrator()
-    const criteria: FindOneOptions = { relations: ['administrator'], where: { email: email } };
+    const criteria: FindOneOptions = {
+      relations: ['administrator'],
+      where: { email: email },
+    };
     const user: User = await this.userRepository.findOne(criteria);
     // if (user)
     return user;
@@ -118,17 +121,21 @@ export class UserService {
       } else throw error;
     }
   }
-  //---------------------------------------------------------------------------
+  //----------------------------------------------------------------------------
   public async findAll(role: Role): Promise<User[]> {
     try {
-      let filterRole;
-      if ((role === Role.Admin)) filterRole = { administrator: { id: Not(IsNull())  } };
-      else filterRole = { administrator: { id: IsNull() } };
+      let filterRole =
+        role === Role.Admin
+          ? { administrator: { id: Not(IsNull()) } }
+          : { administrator: { id: IsNull() } };
 
       const criterio: FindManyOptions = {
         relations: ['administrator'],
         where: filterRole,
-        select: {passwordHash:false, administrator: { id: false, idUser: false } },
+        select: {
+          passwordHash: false,
+          administrator: { id: false, idUser: false },
+        },
       };
       this.users = await this.userRepository.find(criterio);
 

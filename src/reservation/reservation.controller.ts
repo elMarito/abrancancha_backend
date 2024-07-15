@@ -51,14 +51,14 @@ export class ReservationController {
   @Get(':id')
   @Public()
   // @Roles(Role.Admin, Role.User)
-  async findOne(@Param('id') id: string): Promise<Reservation[]> {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Reservation[]> {
     return this.reservationService.findOne(+id);
   }
 
   @Patch(':id')
   @Roles(Role.Admin, Role.User)
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateReservationDto: UpdateReservationDto,
   ) {
     return this.reservationService.update(+id, updateReservationDto);  //deberia devolver el recurso actualizado
@@ -66,7 +66,7 @@ export class ReservationController {
 
   @Delete(':id')
   @Roles(Role.Admin, Role.User)
-  async remove(@Param('id') id: string)/* : Promise<void> ResponseObject*/ {
+  async remove(@Param('id', ParseIntPipe) id: number)/* : Promise<void> ResponseObject*/ {
     return this.reservationService.remove(+id);  //deberia devolver 204 HttpStatus.NO_CONTENT
     // return HttpStatus.NO_CONTENT; // aparentemente lo hace automaticamente
   }

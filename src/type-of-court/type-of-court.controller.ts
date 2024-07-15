@@ -1,4 +1,4 @@
-import { Controller, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Body, Param, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { Get, Post, Patch, Delete } from '@nestjs/common';
 import { TypeOfCourtService } from './type-of-court.service';
 import { CreateTypeOfCourtDto } from './dto/create-type-of-court.dto';
@@ -28,14 +28,14 @@ export class TypeOfCourtController {
 
   @Get(':id')
   @Public()
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.typeOfCourtService.findOne(+id);
   }
 
   @Patch(':id')
   @Roles(Role.Admin)
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateTypeOfCourtDto: UpdateTypeOfCourtDto,
   ) {
     return this.typeOfCourtService.updateTypeOfCourt({
@@ -46,7 +46,7 @@ export class TypeOfCourtController {
 
   @Delete(':id')
   @Roles(Role.Admin)
-  eliminartypeOfCourt(@Param('id') id: string): TypeOfCourt[] | any {
+  eliminartypeOfCourt(@Param('id', ParseIntPipe) id: number): TypeOfCourt[] | any {
     return this.typeOfCourtService.eliminarTypeOfCourt(Number(id));
   }
 }

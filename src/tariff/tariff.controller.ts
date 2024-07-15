@@ -1,4 +1,4 @@
-import { Controller, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Body, Param, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { Get, Post, Patch, Delete } from '@nestjs/common';
 import { TariffService } from './tariff.service';
 import { CreateTariffDto } from './dto/create-tariff.dto';
@@ -23,18 +23,18 @@ export class TariffController {
   @Get()
   @Public()
   findAll() {
-    return this.tariffService.getAll();
+    return this.tariffService.findAll();
   }
 
   @Get(':id')
   @Public()
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.tariffService.findOne(+id);
   }
 
   @Patch(':id')
   @Roles(Role.Admin)
-  update(@Param('id') id: string, @Body() updateTariffDto: UpdateTariffDto) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateTariffDto: UpdateTariffDto) {
     return this.tariffService.updateTariff({
       ...updateTariffDto,
       id: Number(id),
@@ -43,7 +43,7 @@ export class TariffController {
 
   @Delete(':id')
   @Roles(Role.Admin)
-  deleteTariff(@Param('id') id: number): Tariff[] | any {
-    return this.tariffService.deleteTariff(id);
+  deleteTariff(@Param('id', ParseIntPipe) id: number): Tariff[] | any {
+    return this.tariffService.remove(id);
   }
 }

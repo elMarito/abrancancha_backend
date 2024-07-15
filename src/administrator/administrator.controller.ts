@@ -1,4 +1,4 @@
-import { Controller, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Body, Param, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { Get, Post, Patch, Delete } from '@nestjs/common';
 import { AdministratorService } from './administrator.service';
 import { CreateAdministratorDto } from './dto/create-administrator.dto';
@@ -33,13 +33,13 @@ export class AdministratorController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.administratorService.findOne(+id);
   }
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateAdministratorDto: UpdateAdministratorDto,
   ) {
     return this.administratorService.updateAdministrator(
@@ -51,7 +51,7 @@ export class AdministratorController {
 
   @Delete(':id')
   private eliminaradministrator(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
   ): Administrator[] | any {
     return this.administratorService.deleteAdministrator(Number(id));
   }

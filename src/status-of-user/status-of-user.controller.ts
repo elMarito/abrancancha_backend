@@ -1,4 +1,4 @@
-import { Controller, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Body, Param, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { Get, Post, Patch, Delete } from '@nestjs/common';
 import { StatusOfUserService } from './status-of-user.service';
 import { CreateStatusOfUserDto } from './dto/create-status-of-user.dto';
@@ -27,14 +27,14 @@ export class StatusOfUserController {
 
   @Get(':id')
   @Public()
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.statusOfUserService.findOne(+id);
   }
 
   @Patch(':id')
   @Roles(Role.Admin)
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateStatusOfUserDto: UpdateStatusOfUserDto,
   ) {
     return this.statusOfUserService.update({
@@ -45,7 +45,7 @@ export class StatusOfUserController {
 
   @Delete(':id')
   @Roles(Role.Admin)
-  remove(@Param('id') id: number) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.statusOfUserService.remove(+id);
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Body, Param, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { Get, Post, Patch, Delete } from '@nestjs/common';
 import { ClubService } from './club.service';
 import { CreateClubDto } from './dto/create-club.dto';
@@ -28,19 +28,19 @@ export class ClubController {
 
   @Get(':id')
   @Public()
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.clubService.findOne(+id);
   }
 
   @Patch(':id')
   @Roles(Role.Admin)
-  update(@Param('id') id: string, @Body() updateClubDto: UpdateClubDto) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateClubDto: UpdateClubDto) {
   return this.clubService.updateClub({...updateClubDto, id:Number(id)  });
   }
 
   @Delete(':id')
   @Roles(Role.Admin)
-  eliminarClub(@Param('id') id:string): Club[]|any{
+  eliminarClub(@Param('id', ParseIntPipe) id: number): Club[]|any{
     return this.clubService.eliminarClub(Number(id))  
   }
 }
